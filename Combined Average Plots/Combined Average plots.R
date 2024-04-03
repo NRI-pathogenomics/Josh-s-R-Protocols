@@ -108,51 +108,67 @@ if(file.exists("/Users/joshhoti/Library/CloudStorage/
 ## Calculate and save the Averaged AUPDC results
 Genotypes <- c(unique(Path_Assay$Genotype))
 GenoNumber <- length(Genotypes)
+Mock_Average_Path_Scores <- matrix(data = NA, nrow=1, ncol=6, dimnames = NULL)
 for(i in 1:GenoNumber){
+  New_Row <- data.frame()
   Mockotype <- subset(Mock_Sub, Genotype==Genotypes[i])
   #Calculate audpc using agricolae on the subset then leave room for the plots, same for innoculated
-  print(paste0("Averages for ", Genotypes[i]))
+  print(paste0("Calculating averages for Mock ", Genotypes[i]))
   dates <- c(28,35,49,56)
   means <- colMeans(Mockotype[5:8])
-  print(means)
-  Mock_means <- append(Mock_means, cbind(Genotypes[i], means))
+  New_Row <- means
+  New_Row$Genotype <- Genotypes[i]
+  New_Row$Treatment <- c(unique(Mockotype$treatment.))
+  Mock_Average_Path_Scores <- rbind(Mock_Average_Path_Scores, New_Row, deparse.level = 0)
   ##get it to add the means as it goes to the means dataframe
   AUDPC <- audpc(means, dates, type="absolute")
   print(paste0("AUDPC for ",Genotypes[i], " is: ", AUDPC))
   Mock_AUDPC <-append(Mock_AUDPC,AUDPC)
   
-  #PLOT AS THE LOOP RUNS - TEMPORARY
-  plot_data <- as.data.frame(cbind(dates, means))
-  plot <- ggplot(data=plot_data, mapping=aes(x=dates, y=means, )) + geom_line() + geom_point() + 
-    annotate("text", x = 35, y = 3.5, label = paste0("AUDPC: ", as.character(AUDPC))) +
-    geom_ribbon(aes(ymin = min(means), ymax = means), fill = "#1b98e0")
-  plot <- plot + labs(title = paste0(Genotypes[i], " Mock Innoculation Average Disease Progression"))
-  show(plot)
+  # #PLOT AS THE LOOP RUNS - TEMPORARY
+  # plot_data <- as.data.frame(cbind(dates, means))
+  # plot <- ggplot(data=plot_data, mapping=aes(x=dates, y=means, )) + geom_line() + geom_point() + 
+  #   annotate("text", x = 35, y = 3.5, label = paste0("AUDPC: ", as.character(AUDPC))) +
+  #   geom_ribbon(aes(ymin = min(means), ymax = means), fill = "#1b98e0")
+  # plot <- plot + labs(title = paste0(Genotypes[i], " Mock Innoculation Average Disease Progression"))
+  # show(plot)
 }
+Mock_Average_Path_Scores <- Mock_Average_Path_Scores[-1, ]
+print(Mock_Average_Path_Scores)
 
 
 # Innoculated means
+Inno_Average_Path_Scores <- matrix(data = NA, nrow=1, ncol=6, dimnames = NULL)
 for(i in 1:GenoNumber){
+  New_Row <- data.frame()
   Innotype <- subset(Inno_Sub, Genotype==Genotypes[i])
   #Calculate audpc using agricolae on the subset then leave room for the plots, same for innoculated
-  print(paste0("Averages for ", Genotypes[i]))
+  print(paste0("Calculating averages for Innoculated", Genotypes[i]))
   dates <- c(28,35,49,56)
   means <- colMeans(Innotype[5:8])
-  print(means)
+  New_Row <- means
+  New_Row$Genotype <- Genotypes[i]
+  New_Row$Treatment <- c(unique(Innotype$treatment.))
+  Inno_Average_Path_Scores <- rbind(Inno_Average_Path_Scores, New_Row, deparse.level = 0)
   AUDPC <- audpc(means, dates, type="absolute")
   print(paste0("AUDPC for ",Genotypes[i], " is: ", AUDPC))
   Inno_AUDPC <-append(Inno_AUDPC,AUDPC)
-  #PLOT AS THE LOOP RUNS - TEMPORARY
-  plot_data <- as.data.frame(cbind(dates, means))
-  plot <- ggplot(data=plot_data, mapping=aes(x=dates, y=means, )) + geom_line() + geom_point() + 
-    annotate("text", x = 35, y = 3.5, label = paste0("AUDPC: ", as.character(AUDPC))) +
-    geom_ribbon(aes(ymin = min(means), ymax = means), fill = "#1b98e0")
-  plot <- plot + labs(title = paste0(Genotypes[i], " Verticilium Innoculation Average Disease Progression"))
-  show(plot)
+  # #PLOT AS THE LOOP RUNS - TEMPORARY
+  # plot_data <- as.data.frame(cbind(dates, means))
+  # plot <- ggplot(data=plot_data, mapping=aes(x=dates, y=means, )) + geom_line() + geom_point() + 
+  #   annotate("text", x = 35, y = 3.5, label = paste0("AUDPC: ", as.character(AUDPC))) +
+  #   geom_ribbon(aes(ymin = min(means), ymax = means), fill = "#1b98e0")
+  # plot <- plot + labs(title = paste0(Genotypes[i], " Verticilium Innoculation Average Disease Progression"))
+  # show(plot)
 }
-#Create results data frames
+Inno_Average_Path_Scores <- Inno_Average_Path_Scores[-1, ]
+print(Inno_Average_Path_Scores)
+
+#Create AUDPC results data frames
 Mock_results <- cbind(Genotypes, Mock_AUDPC)
 Inno_results <- cbind(Genotypes, Inno_AUDPC)
+print(Mock_results)
+print(Inno_results)
 #Save Results
 Save_File_Mock <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/GitHub-Josh-s-R-Protocols/Combined Average Plots/MockAUDPC.csv"
 Save_File_Inno <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/GitHub-Josh-s-R-Protocols/Combined Average Plots/InnoAUDPC.csv"
