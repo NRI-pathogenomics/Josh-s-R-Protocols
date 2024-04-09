@@ -12,6 +12,7 @@ library(agricolae)
 library(agricolaeplotr)
 library(dplyr)
 library(ggplot2)
+library(tidyr)
 Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/GitHub-Josh-s-R-Protocols/Input Files/NEWPT2.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
@@ -325,5 +326,28 @@ polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', 
 legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
 # Add AUDPC values
 legend("topright",legend=Inno_AUDPCs, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="AUDPC Values")
-#Insert Historgram of AUDPC and Standard Deviation
+
+## Historgram of AUDPC and Standard Deviation
+#prepare the AUDPC barplot data frame
+combo_barplotdata <- cbind(Mock_results, Inno_results[2])
+colnames(combo_barplotdata) <- c("Genotypes","Mock AUDPC", "Inoculated AUDPC")
+
+# convert the results into suitable formats for ggplot:
+# categorical data for Genotypes
+# Convert to character vector and then to factor if needed
+combo_barplotdata$Genotypes <- as.factor(as.character(combo_barplotdata$Genotypes))
+
+# Check the structure of Genotypes
+str(combo_barplotdata$Genotypes)
+# numerical data 
+combo_barplotdata$`Mock AUDPC` <- as.numeric(combo_barplotdata$`Mock AUDPC`)
+combo_barplotdata$`Inoculated AUDPC` <- as.numeric(combo_barplotdata$`Inoculated AUDPC`)
+# Plot the bar plot
+ggplot(data = combo_barplotdata, aes(x = Genotypes)) +
+  geom_bar(aes(y = `Mock AUDPC`), stat = "identity", fill = "blue", position = "dodge") +
+  geom_bar(aes(y = `Inoculated AUDPC`), stat = "identity", fill = "red", position = "dodge") +
+  labs(title = "AUDPC of Mock vs Inocculated",
+       x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
+  scale_fill_manual(values = c("blue", "red"), labels = c("Mock", "Inoculated"))
+# ## Boxplots of Individual replicate AUDPCs
 
