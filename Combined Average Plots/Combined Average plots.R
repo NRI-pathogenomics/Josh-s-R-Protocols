@@ -243,17 +243,19 @@ polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', 
 # Add labels for each curve
 Mock_AUDPCs <- Mock_results$Mock_AUDPC
 Mock_AUDPCs <- round(as.numeric(Mock_AUDPC), digits = 2)
-text(x[length(x)], y1[length(y1)], Mock_AUDPCs[1], pos=4, col='red')
-text(x[length(x)], y2[length(y2)], Mock_AUDPCs[2], pos=4, col='yellow')
-text(x[length(x)], y3[length(y3)], Mock_AUDPCs[3], pos=4, col='orange')
-text(x[length(x)], y4[length(y4)], Mock_AUDPCs[4], pos=4, col='green')
-text(x[length(x)], y5[length(y5)], Mock_AUDPCs[5], pos=4, col='pink')
-text(x[length(x)], y6[length(y6)], Mock_AUDPCs[6], pos=4, col='black')
-text(x[length(x)], y7[length(y7)], Mock_AUDPCs[7], pos=4, col='blue')
-text(x[length(x)], y8[length(y8)], Mock_AUDPCs[8], pos=4, col='purple')
+# text(x[length(x)], y1[length(y1)], Mock_AUDPCs[1], pos=4, col='red')
+# text(x[length(x)], y2[length(y2)], Mock_AUDPCs[2], pos=4, col='yellow')
+# text(x[length(x)], y3[length(y3)], Mock_AUDPCs[3], pos=4, col='orange')
+# text(x[length(x)], y4[length(y4)], Mock_AUDPCs[4], pos=4, col='green')
+# text(x[length(x)], y5[length(y5)], Mock_AUDPCs[5], pos=4, col='pink')
+# text(x[length(x)], y6[length(y6)], Mock_AUDPCs[6], pos=4, col='black')
+# text(x[length(x)], y7[length(y7)], Mock_AUDPCs[7], pos=4, col='blue')
+# text(x[length(x)], y8[length(y8)], Mock_AUDPCs[8], pos=4, col='purple')
 
 # Add legend
 legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
+# Add AUDPC values
+legend("topright",legend=Mock_AUDPCs, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="AUDPC Values")
 
 ##Inno AUDPC plot
 #define data to plot
@@ -308,18 +310,20 @@ polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', 
 
 # Label with AUDPC values
 # Add labels for each curve
-Inno_AUDPCs <- Inno_results$Inno_AUDPC
-Inno_AUDPCs <- round(as.numeric(Inno_AUDPCs), digits = 2)
-text(x[length(x)], y1[length(y1)], Inno_AUDPCs[1], pos=4, col='red')
-text(x[length(x)], y2[length(y2)], Inno_AUDPCs[2], pos=4, col='yellow')
-text(x[length(x)], y3[length(y3)], Inno_AUDPCs[3], pos=4, col='orange')
-text(x[length(x)], y4[length(y4)], Inno_AUDPCs[4], pos=4, col='green')
-text(x[length(x)], y5[length(y5)], Inno_AUDPCs[5], pos=4, col='pink')
-text(x[length(x)], y6[length(y6)], Inno_AUDPCs[6], pos=4, col='black')
-text(x[length(x)], y7[length(y7)], Inno_AUDPCs[7], pos=4, col='blue')
-text(x[length(x)], y8[length(y8)], Inno_AUDPCs[8], pos=4, col='purple')
+# Inno_AUDPCs <- Inno_results$Inno_AUDPC
+# Inno_AUDPCs <- round(as.numeric(Inno_AUDPCs), digits = 2)
+# text(x[length(x)], y1[length(y1)], Inno_AUDPCs[1], pos=4, col='red')
+# text(x[length(x)], y2[length(y2)], Inno_AUDPCs[2], pos=4, col='yellow')
+# text(x[length(x)], y3[length(y3)], Inno_AUDPCs[3], pos=4, col='orange')
+# text(x[length(x)], y4[length(y4)], Inno_AUDPCs[4], pos=4, col='green')
+# text(x[length(x)], y5[length(y5)], Inno_AUDPCs[5], pos=4, col='pink')
+# text(x[length(x)], y6[length(y6)], Inno_AUDPCs[6], pos=4, col='black')
+# text(x[length(x)], y7[length(y7)], Inno_AUDPCs[7], pos=4, col='blue')
+# text(x[length(x)], y8[length(y8)], Inno_AUDPCs[8], pos=4, col='purple')
+
 # Add legend
 legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
-
+# Add AUDPC values
+legend("topright",legend=Inno_AUDPCs, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="AUDPC Values")
 #Insert Historgram of AUDPC and Standard Deviation
 
