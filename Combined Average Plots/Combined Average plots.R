@@ -217,14 +217,14 @@ y8 <- subset(Mock_Average_Path_Scores, Genotype=="FP6-P4")
 y8 <- unlist(y8[1:4])
 
 #plot first line
-plot(x, y1, type='b', col='red', xlab='day', ylab='Disease Index Score', main='Mock Innoculation Disease Progression')
+plot(x, y1, type='b', col='red', xlab='day', ylab='Disease Index Score', main='Mock Innoculation Disease Progression', xlim=c(28,63), ylim=c(1,5))
 
 #add other lines to plot
 lines(x, y2, col='yellow', type = 'b')
 lines(x, y3, col='orange', type = 'b')
 lines(x, y4, col='green', type = 'b')
 lines(x, y5, col='pink', type = 'b')
-lines(x, y6, col='beige', type = 'b')
+lines(x, y6, col='black', type = 'b')
 lines(x, y7, col='blue', type = 'b')
 lines(x, y8, col='purple', type = 'b')
 
@@ -234,15 +234,26 @@ polygon(c(x, rev(x)), c(y2, rev(rep(0, length(y2)))), col=adjustcolor('yellow', 
 polygon(c(x, rev(x)), c(y3, rev(rep(0, length(y3)))), col=adjustcolor('orange', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y4, rev(rep(0, length(y4)))), col=adjustcolor('green', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y5, rev(rep(0, length(y5)))), col=adjustcolor('pink', alpha.f=0.1), border=NA)
-polygon(c(x, rev(x)), c(y6, rev(rep(0, length(y6)))), col=adjustcolor('beige', alpha.f=0.1), border=NA)
+polygon(c(x, rev(x)), c(y6, rev(rep(0, length(y6)))), col=adjustcolor('black', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y7, rev(rep(0, length(y7)))), col=adjustcolor('blue', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', alpha.f=0.1), border=NA)
 # alpha.f adjusts the transparency
 
-# Add legend
-legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "beige", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
-legend("left", legend=Mock_results$Mock_AUDPC, col=c("red", "yellow", "orange", "green", "pink", "beige", "blue", "purple"), lty=1, cex=0.8, title="AUDPC values")
+# Label with AUDPC values
+# Add labels for each curve
+Mock_AUDPCs <- Mock_results$Mock_AUDPC
+Mock_AUDPCs <- round(as.numeric(Mock_AUDPC), digits = 2)
+text(x[length(x)], y1[length(y1)], Mock_AUDPCs[1], pos=4, col='red')
+text(x[length(x)], y2[length(y2)], Mock_AUDPCs[2], pos=4, col='yellow')
+text(x[length(x)], y3[length(y3)], Mock_AUDPCs[3], pos=4, col='orange')
+text(x[length(x)], y4[length(y4)], Mock_AUDPCs[4], pos=4, col='green')
+text(x[length(x)], y5[length(y5)], Mock_AUDPCs[5], pos=4, col='pink')
+text(x[length(x)], y6[length(y6)], Mock_AUDPCs[6], pos=4, col='black')
+text(x[length(x)], y7[length(y7)], Mock_AUDPCs[7], pos=4, col='blue')
+text(x[length(x)], y8[length(y8)], Mock_AUDPCs[8], pos=4, col='purple')
 
+# Add legend
+legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
 
 ##Inno AUDPC plot
 #define data to plot
@@ -271,15 +282,16 @@ y7 <- unlist(y7[1:4])
 y8 <- subset(Inno_Average_Path_Scores, Genotype=="FP6-P4")
 y8 <- unlist(y8[1:4])
 
+
 #plot first line
-plot(x, y1, type='b', col='red', xlab='day', ylab='Disease Index Score', main='Verticilium Innoculation Disease Progression')
+plot(x, y1, type='b', col='red', xlab='day', ylab='Disease Index Score', main='Verticilium Innoculation Disease Progression', xlim=c(28,63), ylim=c(1,5))
 
 #add other lines to plot
 lines(x, y2, col='yellow', type = 'b')
 lines(x, y3, col='orange', type = 'b')
 lines(x, y4, col='green', type = 'b')
 lines(x, y5, col='pink', type = 'b')
-lines(x, y6, col='beige', type = 'b')
+lines(x, y6, col='black', type = 'b')
 lines(x, y7, col='blue', type = 'b')
 lines(x, y8, col='purple', type = 'b')
 
@@ -289,14 +301,25 @@ polygon(c(x, rev(x)), c(y2, rev(rep(0, length(y2)))), col=adjustcolor('yellow', 
 polygon(c(x, rev(x)), c(y3, rev(rep(0, length(y3)))), col=adjustcolor('orange', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y4, rev(rep(0, length(y4)))), col=adjustcolor('green', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y5, rev(rep(0, length(y5)))), col=adjustcolor('pink', alpha.f=0.1), border=NA)
-polygon(c(x, rev(x)), c(y6, rev(rep(0, length(y6)))), col=adjustcolor('beige', alpha.f=0.1), border=NA)
+polygon(c(x, rev(x)), c(y6, rev(rep(0, length(y6)))), col=adjustcolor('black', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y7, rev(rep(0, length(y7)))), col=adjustcolor('blue', alpha.f=0.1), border=NA)
 polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', alpha.f=0.1), border=NA)
 # alpha.f adjusts the transparency
 
+# Label with AUDPC values
+# Add labels for each curve
+Inno_AUDPCs <- Inno_results$Inno_AUDPC
+Inno_AUDPCs <- round(as.numeric(Inno_AUDPCs), digits = 2)
+text(x[length(x)], y1[length(y1)], Inno_AUDPCs[1], pos=4, col='red')
+text(x[length(x)], y2[length(y2)], Inno_AUDPCs[2], pos=4, col='yellow')
+text(x[length(x)], y3[length(y3)], Inno_AUDPCs[3], pos=4, col='orange')
+text(x[length(x)], y4[length(y4)], Inno_AUDPCs[4], pos=4, col='green')
+text(x[length(x)], y5[length(y5)], Inno_AUDPCs[5], pos=4, col='pink')
+text(x[length(x)], y6[length(y6)], Inno_AUDPCs[6], pos=4, col='black')
+text(x[length(x)], y7[length(y7)], Inno_AUDPCs[7], pos=4, col='blue')
+text(x[length(x)], y8[length(y8)], Inno_AUDPCs[8], pos=4, col='purple')
 # Add legend
-legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "beige", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
-legend("top", legend=Mock_results$Mock_AUDPC, col=c("red", "yellow", "orange", "green", "pink", "beige", "blue", "purple"), lty=1, cex=0.8, title="AUDPC values")
+legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="Genotypes")
 
 #Insert Historgram of AUDPC and Standard Deviation
 
