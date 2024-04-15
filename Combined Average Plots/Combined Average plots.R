@@ -13,6 +13,7 @@ library(agricolaeplotr)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(reshape2)
 Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/GitHub-Josh-s-R-Protocols/Input Files/NEWPT2.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
@@ -342,12 +343,24 @@ str(combo_barplotdata$Genotypes)
 # numerical data 
 combo_barplotdata$`Mock AUDPC` <- as.numeric(combo_barplotdata$`Mock AUDPC`)
 combo_barplotdata$`Inoculated AUDPC` <- as.numeric(combo_barplotdata$`Inoculated AUDPC`)
-# Plot the bar plot
-ggplot(data = combo_barplotdata, aes(x = Genotypes)) +
-  geom_bar(aes(y = `Mock AUDPC`), stat = "identity", fill = "blue", position = "dodge") +
-  geom_bar(aes(y = `Inoculated AUDPC`), stat = "identity", fill = "red", position = "dodge") +
-  labs(title = "AUDPC of Mock vs Inocculated",
+
+## Corrected Bar Plot
+# Reshape data into long format
+combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
+# melt function from reshape2 package converts the data from a wide to a long format (A long format contains values that do repeat in the first column)
+# Plot the side-by-side stacked bar plot
+
+# Calculate Standard Deviation:
+SD_values <- combo_barplotdata %>%
+  summarise(Mock_SD = sd(`Mock AUDPC`, na.rm=TRUE),
+            Inno_SD = sd(`Inoculated AUDPC`, na.rm=TRUE))
+# Convert dose to a factor variable
+df2$dose=as.factor(df2$dose)
+head(df2)
+
+ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 1)) +
+  labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("blue", "red"), labels = c("Mock", "Inoculated"))
-# ## Boxplots of Individual replicate AUDPCs
+  scale_fill_manual(values = c("blue", "red")) + geom_errorbarh(...)
 
