@@ -7,6 +7,8 @@ if(("agricolae" %in% all_packages)==FALSE){
   install.packages("agricolae")}
 if(("agricolaeplotr" %in% all_packages)==FALSE){
   install.packages("agricolaeplotr")}
+if(("tidyverse" %in% all_packages)==FALSE){
+  install.packages("tidyverse")}
 
 library(agricolae)
 library(agricolaeplotr)
@@ -14,6 +16,8 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(reshape2)
+library(tidyverse)
+library(magrittr)
 Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/GitHub-Josh-s-R-Protocols/Input Files/NEWPT2.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
@@ -350,17 +354,25 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 # melt function from reshape2 package converts the data from a wide to a long format (A long format contains values that do repeat in the first column)
 # Plot the side-by-side stacked bar plot
 
-# Calculate Standard Deviation:
-SD_values <- combo_barplotdata %>%
-  summarise(Mock_SD = sd(`Mock AUDPC`, na.rm=TRUE),
-            Inno_SD = sd(`Inoculated AUDPC`, na.rm=TRUE))
-Mean_values <- combo_barplotdata %>%
-  summarise(Mock_SD = mean(`Mock AUDPC`),
-            Inno_SD = mean(`Inoculated AUDPC`))
+# Calculate Standard Error:
+
+# Define custom function to calculate standard error
+calculate_se <- function(data, variable) {
+  se <- sd(data[[variable]]) / sqrt(nrow(data))
+  return(se)
+}
+# Calculate SE for Mock AUDPC
+mock_se <- calculate_se(combo_barplotdata, Mock_AUDPC)
+print(mock_se)
+
+# Calculate SE for Inoculated AUDPC
+inoculated_se <- calculate_se(df, "Inoculated_AUDPC")
+print(inoculated_se)
+
 
 ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("blue", "red"))
+  scale_fill_manual(values = c("blue", "red")) 
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
