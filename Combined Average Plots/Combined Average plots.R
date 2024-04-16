@@ -354,13 +354,13 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 SD_values <- combo_barplotdata %>%
   summarise(Mock_SD = sd(`Mock AUDPC`, na.rm=TRUE),
             Inno_SD = sd(`Inoculated AUDPC`, na.rm=TRUE))
-# Convert dose to a factor variable
-df2$dose=as.factor(df2$dose)
-head(df2)
+Mean_values <- combo_barplotdata %>%
+  summarise(Mock_SD = mean(`Mock AUDPC`),
+            Inno_SD = mean(`Inoculated AUDPC`))
 
 ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("blue", "red")) + geom_errorbarh(...)
-
+  scale_fill_manual(values = c("blue", "red"))
+#geomerrorbar() needs to be used but it needs to be able to work on both bars
