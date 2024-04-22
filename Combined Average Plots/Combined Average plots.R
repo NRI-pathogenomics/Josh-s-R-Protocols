@@ -355,18 +355,14 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 # Plot the side-by-side stacked bar plot
 
 # Calculate Standard Error:
+# sd(product_tests)/sqrt(length(product_tests))
 
-# Define custom function to calculate standard error
-calculate_se <- function(data, variable) {
-  se <- sd(data[[variable]]) / sqrt(nrow(data))
-  return(se)
-}
 # Calculate SE for Mock AUDPC
-mock_se <- calculate_se(combo_barplotdata, Mock_AUDPC)
+mock_se <- sd(combo_barplotdata$`Mock AUDPC`)/sqrt(length(combo_barplotdata$`Mock AUDPC`))
 print(mock_se)
 
 # Calculate SE for Inoculated AUDPC
-inoculated_se <- calculate_se(df, "Inoculated_AUDPC")
+inoculated_se <- sd(combo_barplotdata$`Inoculated AUDPC`)/sqrt(length(combo_barplotdata$`Inoculated AUDPC`))
 print(inoculated_se)
 
 
