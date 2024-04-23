@@ -365,10 +365,15 @@ print(mock_se)
 inoculated_se <- sd(combo_barplotdata$`Inoculated AUDPC`)/sqrt(length(combo_barplotdata$`Inoculated AUDPC`))
 print(inoculated_se)
 
+# calculate the length of the datasets using Genotypes
+
+Data_len <- length(Genotypes)
 
 ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("blue", "red")) 
+  scale_fill_manual(values = c("blue", "red")) +
+  geom_errorbar(aes(ymin = Data_len - mock_se, ymax = Data_len + mock_se), width = 0.2, position = position_dodge(0.9))
+
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
