@@ -369,7 +369,7 @@ print(inoculated_se)
 
 Data_len <- length(Genotypes)
 
-ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
+AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
@@ -378,4 +378,5 @@ ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = varia
                     ymax = value + ifelse(variable == "Mock AUDPC", mock_se, inoculated_se)),
                 position = position_dodge(width = 1), width = 0.25)
 
+show(AUDPC_Plot)
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
