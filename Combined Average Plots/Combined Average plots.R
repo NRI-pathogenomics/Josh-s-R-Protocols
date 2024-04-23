@@ -92,9 +92,10 @@ for(i in 1:Tail_Value){
 }
 #Generate the Results and reform the original data frame
 Results <- cbind(Result_Genotype,Result_Type,Result_Treatment, Result_AUDPC)
-Indv_Mock_Results <- subset(Results, Result_Type=="M")
-Indv_Inno_Results <- subset(Results, Result_Type=="I")
-
+Results <- as.data.frame(Results, row.names = NULL)
+#remove the rownames
+Indv_Mock_Results <- as.data.frame(subset(Results, Result_Type=="M"))
+Indv_Inno_Results <- as.data.frame(subset(Results, Result_Type=="I"))
 ## Calculate the Mean values
 # reuse Mock_sub and Inno_sub
 Mock_means <- data.frame()
@@ -358,16 +359,39 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 # sd(product_tests)/sqrt(length(product_tests))
 #Need to change the SE functions so that they calculate the SE for the datasets for each genotype using the individual replicates
 
-# Calculate SE for Mock AUDPC
-mock_se <- sd(combo_barplotdata$`Mock AUDPC`)/sqrt(length(combo_barplotdata$`Mock AUDPC`))
-print(mock_se)
+# Calculate SE for Mock AUDPC using Ind_Mock_AUDC
+Mock_SE <- list()
 
-# Calculate SE for Inoculated AUDPC
-inoculated_se <- sd(combo_barplotdata$`Inoculated AUDPC`)/sqrt(length(combo_barplotdata$`Inoculated AUDPC`))
-print(inoculated_se)
+for(i in 1:GenoNumber){
+  subset1 <- subset(Indv_Mock_Results, Result_Genotype==Genotypes[i])
+  subset2 <- subset1$Result_AUDPC
+  subset2 <- unlist(subset2)
+  mock_se <- sd(subset2)/sqrt(length(subset2))
+  print(mock_se)
+  Mock_SE <- append(Mock_SE, mock_se)
+}
 
+combo_barplotdata <- cbind(combo_barplotdata, unlist(Mock_SE))
+combo_barplotdata <-  combo_barplotdata %>% rename_at('unlist(Mock_SE)', ~'Mock SE')
+
+# Calculate SE for Innoculated AUDPC using Ind_Inno_AUDC
+Inno_SE <- list()
+
+for(i in 1:GenoNumber){
+  subset1 <- subset(Indv_Inno_Results, Result_Genotype==Genotypes[i])
+  subset2 <- subset1$Result_AUDPC
+  subset2 <- unlist(subset2)
+  mock_se <- sd(subset2)/sqrt(length(subset2))
+  print(mock_se)
+  Inno_SE <- append(Inno_SE, mock_se)
+}
+
+combo_barplotdata <- cbind(combo_barplotdata, unlist(Inno_SE))
+combo_barplotdata <-  combo_barplotdata %>% rename_at('unlist(Inno_SE)', ~'Innoculated SE')
+
+print(combo_barplotdata)
 # calculate the length of the datasets using Genotypes
-
+## Now need to figure out how to add error bars using the SE values held in the combobarplot table
 Data_len <- length(Genotypes)
 
 AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
