@@ -356,6 +356,7 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 
 # Calculate Standard Error:
 # sd(product_tests)/sqrt(length(product_tests))
+#Need to change the SE functions so that they calculate the SE for the datasets for each genotype using the individual replicates
 
 # Calculate SE for Mock AUDPC
 mock_se <- sd(combo_barplotdata$`Mock AUDPC`)/sqrt(length(combo_barplotdata$`Mock AUDPC`))
