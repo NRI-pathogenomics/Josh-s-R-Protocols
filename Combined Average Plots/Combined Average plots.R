@@ -373,7 +373,9 @@ ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = varia
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("blue", "red")) +
-  geom_errorbar(aes(ymin = Data_len - mock_se, ymax = Data_len + mock_se))
+  scale_fill_manual(values = c("green", "red")) +
+  geom_errorbar(aes(ymin = value - ifelse(variable == "Mock AUDPC", mock_se, inoculated_se), 
+                    ymax = value + ifelse(variable == "Mock AUDPC", mock_se, inoculated_se)),
+                position = position_dodge(width = 1), width = 0.25)
 
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
