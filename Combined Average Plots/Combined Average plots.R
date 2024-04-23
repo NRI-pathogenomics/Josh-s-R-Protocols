@@ -316,8 +316,8 @@ polygon(c(x, rev(x)), c(y8, rev(rep(0, length(y8)))), col=adjustcolor('purple', 
 
 # Label with AUDPC values
 # Add labels for each curve
-# Inno_AUDPCs <- Inno_results$Inno_AUDPC
-# Inno_AUDPCs <- round(as.numeric(Inno_AUDPCs), digits = 2)
+Inno_AUDPCs <- Inno_results$Inno_AUDPC
+Inno_AUDPCs <- round(as.numeric(Inno_AUDPCs), digits = 2)
 # text(x[length(x)], y1[length(y1)], Inno_AUDPCs[1], pos=4, col='red')
 # text(x[length(x)], y2[length(y2)], Inno_AUDPCs[2], pos=4, col='yellow')
 # text(x[length(x)], y3[length(y3)], Inno_AUDPCs[3], pos=4, col='orange')
