@@ -371,9 +371,6 @@ for(i in 1:GenoNumber){
   Mock_SE <- append(Mock_SE, mock_se)
 }
 
-combo_barplotdata <- cbind(combo_barplotdata, unlist(Mock_SE))
-combo_barplotdata <-  combo_barplotdata %>% rename_at('unlist(Mock_SE)', ~'Mock SE')
-
 # Calculate SE for Innoculated AUDPC using Ind_Inno_AUDC
 Inno_SE <- list()
 
@@ -381,15 +378,13 @@ for(i in 1:GenoNumber){
   subset1 <- subset(Indv_Inno_Results, Result_Genotype==Genotypes[i])
   subset2 <- subset1$Result_AUDPC
   subset2 <- unlist(subset2)
-  mock_se <- sd(subset2)/sqrt(length(subset2))
-  print(mock_se)
-  Inno_SE <- append(Inno_SE, mock_se)
+  inno_se <- sd(subset2)/sqrt(length(subset2))
+  print(inno_se)
+  Inno_SE <- append(Inno_SE, inno_se)
 }
 
-combo_barplotdata <- cbind(combo_barplotdata, unlist(Inno_SE))
-combo_barplotdata <-  combo_barplotdata %>% rename_at('unlist(Inno_SE)', ~'Innoculated SE')
 
-print(combo_barplotdata)
+print(Mock_SE, Inno_SE)
 # calculate the length of the datasets using Genotypes
 ## Now need to figure out how to add error bars using the SE values held in the combobarplot table
 Data_len <- length(Genotypes)
@@ -399,9 +394,9 @@ AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
   scale_fill_manual(values = c("green", "red")) +
-  geom_errorbar(aes(ymin = value - ifelse(variable == "Mock AUDPC", mock_se, inoculated_se), 
-                    ymax = value + ifelse(variable == "Mock AUDPC", mock_se, inoculated_se)),
-                position = position_dodge(width = 1), width = 0.25)
+  geom_errorbar(data = Mock_SE, aes(ymin = value - Mock_SE, ymax = value + Mock_SE), width = 0.4) +
+  geom_errorbar(data = Inno_SE, aes(ymin = value - Inno_SE, ymax = value + Inno_SE), width = 0.4) 
+
 
 show(AUDPC_Plot)
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
