@@ -396,6 +396,8 @@ Error_Bar_data <- cbind(Combo_Genotype, Combo_Mean, Combo_SE)
 
 Error_Bar_data <- as.data.frame(Error_Bar_data)
 
+#calculate the ymin and ymax values, put them in the Error_Bar_Data frame and try to just set ymin and ymax to these columns
+
 
 # calculate the length of the datasets using Genotypes
 ## Now need to figure out how to add error bars using the SE values held in the combobarplot table
@@ -406,7 +408,7 @@ AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
   scale_fill_manual(values = c("green", "red")) +
-  geom_errorbar(data = Error_Bar_data, aes(ymin = Combo_Mean - Combo_SE, ymax = Combo_Mean + Combo_SE), width = 0.4) 
+  geom_errorbar(data = Error_Bar_data, aes(ymin = as.numeric(Combo_Mean - Combo_SE), ymax = as.numeric(Combo_Mean + Combo_SE)), width = 0.4) 
 
 
 show(AUDPC_Plot)
