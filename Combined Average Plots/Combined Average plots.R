@@ -356,45 +356,12 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 # Plot the side-by-side stacked bar plot
 
 # Calculate Standard Error:
-# sd(product_tests)/sqrt(length(product_tests))
-#Need to change the SE functions so that they calculate the SE for the datasets for each genotype using the individual replicates
+standard_error_data <- combo_barplotdata_long %>%
+  group_by(variable) %>%
+  summarise(Standard_Error = sd(value, na.rm = TRUE) / sqrt(sum(!is.na(value))))
 
-# Calculate SE for Mock AUDPC using Ind_Mock_AUDC
-Mock_SE <- list()
-
-for(i in 1:GenoNumber){
-  subset1 <- subset(Indv_Mock_Results, Result_Genotype==Genotypes[i])
-  subset2 <- subset1$Result_AUDPC
-  subset2 <- unlist(subset2)
-  mock_se <- sd(subset2)/sqrt(length(subset2))
-  print(mock_se)
-  Mock_SE <- append(Mock_SE, mock_se)
-}
-
-Mock_SE
-
-# Calculate SE for Innoculated AUDPC using Ind_Inno_AUDC
-Inno_SE <- list()
-
-for(i in 1:GenoNumber){
-  subset1 <- subset(Indv_Inno_Results, Result_Genotype==Genotypes[i])
-  subset2 <- subset1$Result_AUDPC
-  subset2 <- unlist(subset2)
-  inno_se <- sd(subset2)/sqrt(length(subset2))
-  print(inno_se)
-  Inno_SE <- append(Inno_SE, inno_se)
-}
-
-Inno_SE
-
-Combo_Genotype <- append(Genotypes, Genotypes)
-
-Combo_SE <- append(Mock_SE, Inno_SE)
-Combo_Mean <- append(Mock_AUDPC, Inno_AUDPC)
-
-Error_Bar_data <- cbind(Combo_Genotype, Combo_Mean, Combo_SE)
-
-Error_Bar_data <- as.data.frame(Error_Bar_data)
+# Merge Standard Error data back into combo_barplotdata_long dataset
+combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "variable", all.x = TRUE)
 
 #calculate the ymin and ymax values, put them in the Error_Bar_Data frame and try to just set ymin and ymax to these columns
 
@@ -408,7 +375,8 @@ AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
   scale_fill_manual(values = c("green", "red")) +
-  geom_errorbar(data = Error_Bar_data, aes(ymin = as.numeric(Combo_Mean - Combo_SE), ymax = as.numeric(Combo_Mean + Combo_SE)), width = 0.4) 
+  geom_errorbar(aes(ymin = value - Standard_Error, ymax = value + Standard_Error),position = position_dodge(width = 1), 
+                width=0.2, colour="black", alpha=0.5, linewidth=0.5)
 
 
 show(AUDPC_Plot)
