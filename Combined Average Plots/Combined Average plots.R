@@ -357,11 +357,11 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 
 # Calculate Standard Error:
 standard_error_data <- combo_barplotdata_long %>%
-  group_by(variable) %>%
+  group_by(Genotypes) %>%
   summarise(Standard_Error = sd(value, na.rm = TRUE) / sqrt(sum(!is.na(value))))
 
 # Merge Standard Error data back into combo_barplotdata_long dataset
-combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "variable", all.x = TRUE)
+combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "Genotypes", all.x = TRUE)
 
 #calculate the ymin and ymax values, put them in the Error_Bar_Data frame and try to just set ymin and ymax to these columns
 
