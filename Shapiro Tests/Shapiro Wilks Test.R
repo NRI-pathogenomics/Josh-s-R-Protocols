@@ -12,11 +12,11 @@ if(exists("GenoNumber") == FALSE){
   GenoNumber <- length(Genotypes)
 }
 
-if(exists(Indv_Mock_Results) == FALSE){
+if(exists("Indv_Mock_Results") == FALSE){
   Indv_Mock_Results <- subset(Results, Result_Type == "M")
 }
 
-if(exists(Indv_Mock_Results) == FALSE){
+if(exists("Indv_Mock_Results") == FALSE){
   Indv_Inno_Results <- subset(Results, Result_Type == "I")
 }
 
