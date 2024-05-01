@@ -21,7 +21,7 @@ if(exists("Indv_Mock_Results") == FALSE){
 }
 
 Mock_SW_test <- matrix(data = NA, nrow=GenoNumber, ncol=2, dimnames = NULL)
-
+SW_Test_Results <- list()
 for(i in 1:GenoNumber){
  Mockotype <- subset(Indv_Mock_Results, Result_Genotype == Genotypes[i])
  print(paste("Results for Mock Treatment of Genotype ", Genotypes[i]))
@@ -32,6 +32,8 @@ for(i in 1:GenoNumber){
    if (length(unique(Mockotype$Result_AUDPC)) == 1) {
      print(paste("All Values Identical. The mock group for ", Genotypes[i], "Has a Non-Normal Distribution"))
    } else {
+     write(x = c("Mock Treatment: ", Genotypes[i],SW_Test), file = paste("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/", 
+                                                                         "Mock Treatment ", Genotypes[i], ".txt"))
      stop(e)
    }
  })
@@ -44,6 +46,8 @@ for(i in 1:GenoNumber){
    if (length(unique(Innotype$Result_AUDPC)) == 1) {
      print(paste("All Values Identical. The inocculated group for ", Genotypes[i], "Has a Non-Normal Distribution"))
    } else {
+     write(x = c("Innoculated Treatment: ", Genotypes[i],SW_Test), file = paste("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/", 
+                                                                         "Inoculated Treatment ", Genotypes[i], ".txt"))
      stop(e)
    }
  })
