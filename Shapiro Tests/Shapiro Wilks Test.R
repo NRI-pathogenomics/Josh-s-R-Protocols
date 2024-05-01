@@ -20,10 +20,32 @@ if(exists("Indv_Mock_Results") == FALSE){
   Indv_Inno_Results <- subset(Results, Result_Type == "I")
 }
 
-Mock_SW_test <- matrix(data = NA, nrow=GenoNumber, ncol=2, dimnames = c("Genotype", "Normal Distribution?"))
+Mock_SW_test <- matrix(data = NA, nrow=GenoNumber, ncol=2, dimnames = NULL)
 
 for(i in 1:GenoNumber){
  Mockotype <- subset(Indv_Mock_Results, Result_Genotype == Genotypes[i])
- SW_Test <- shapiro.test(Mockotype)
- Mock_SW_test <- append(Mock_SW_test, cbind(Genotypes[i], SW_test))
+ print(paste("Results for Mock Treatment of Genotype ", Genotypes[i]))
+ tryCatch({
+   SW_Test <- shapiro.test(as.numeric(Mockotype$Result_AUDPC))
+   print(SW_Test)
+ }, error = function(e) {
+   if (length(unique(Mockotype$Result_AUDPC)) == 1) {
+     print(paste("All Values Identical. The mock group for ", Genotypes[i], "Has a Non-Normal Distribution"))
+   } else {
+     stop(e)
+   }
+ })
+ Innotype <- subset(Indv_Inno_Results, Result_Genotype == Genotypes[i])
+ print(paste("Results for Inocculated Treatment of Genotype ", Genotypes[i]))
+ tryCatch({
+   SW_Test <- shapiro.test(as.numeric(Innotype$Result_AUDPC))
+   print(SW_Test)
+ }, error = function(e) {
+   if (length(unique(Innotype$Result_AUDPC)) == 1) {
+     print(paste("All Values Identical. The inocculated group for ", Genotypes[i], "Has a Non-Normal Distribution"))
+   } else {
+     stop(e)
+   }
+ })
+
 }
