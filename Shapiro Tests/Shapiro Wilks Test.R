@@ -34,6 +34,7 @@ for(i in 1:GenoNumber){
    } else {
      write(x = c("Mock Treatment: ", Genotypes[i],SW_Test), file = paste("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/", 
                                                                          "Mock Treatment ", Genotypes[i], ".txt"))
+     print("saved")
      stop(e)
    }
  })
@@ -48,6 +49,7 @@ for(i in 1:GenoNumber){
    } else {
      write(x = c("Innoculated Treatment: ", Genotypes[i],SW_Test), file = paste("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/", 
                                                                          "Inoculated Treatment ", Genotypes[i], ".txt"))
+     print("saved")
      stop(e)
    }
  })
