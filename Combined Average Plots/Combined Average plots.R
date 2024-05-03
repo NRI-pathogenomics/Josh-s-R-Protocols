@@ -9,6 +9,8 @@ if(("agricolaeplotr" %in% all_packages)==FALSE){
   install.packages("agricolaeplotr")}
 if(("tidyverse" %in% all_packages)==FALSE){
   install.packages("tidyverse")}
+if(("plotrix" %in% all_packages)==FALSE){
+  install.packages("plotrix")}
 
 library(agricolae)
 library(agricolaeplotr)
@@ -18,6 +20,7 @@ library(tidyr)
 library(reshape2)
 library(tidyverse)
 library(magrittr)
+library(plotrix)
 Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Input Files/NEWPT2.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
@@ -352,6 +355,13 @@ print(Inno_column)
 
 combo_barplotdata <- rbind(Mock_column, Inno_column)
 
+# When it comes to the Standard Error I need to filter through the individual AUDPC replicates data to get the number of observations per per genotype
+# add a number of replicates per treatment to the data set
+
+# Calculate Standard Error:
+
+standard_error_data <- list()
+
 # Reshape data into long format
 combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotype + Treatment")
 combo_barplotdata$`Genotype + Treatment` <- as.factor(as.character(combo_barplotdata$`Genotype + Treatment`))
@@ -361,18 +371,49 @@ str(combo_barplotdata_long$`Genotype + Treatment`)
 # numerical data 
 combo_barplotdata_long$value <- as.numeric(combo_barplotdata_long$value)
 
+# Check the structure of Genotypes
+str(combo_barplotdata_long$`Genotype + Treatment`)
+# convert value to numerical data 
+combo_barplotdata_long$value <- as.numeric(combo_barplotdata_long$value)
+
+#use the loop reliably calculate the SE value for each treatment using the INDVIDUAL AUDPC data
+
+# In the loop create a subset of the Results data frame, first for the Mock then for the Innoculated
+
+standard_error_data <- list()
+mock_se <- list()
+inno_se <- list()
+for(i in 1:GenoNumber){
+  #Mock
+  subset2 <- subset(Results, Result_Genotype == Genotypes[i])
+  mock.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
+  mock.no.of.reps <- length(subset2)
+  mock.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
+  mock_se <- append(mock_se, mock.SE.value)
+  #Inocculated
+  subset3 <- subset(Results, Result_Genotype == Genotypes[i])
+  inno.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
+  inno.no.of.reps <- length(subset2)
+  inno.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
+  inno_se <- append(inno_se, inno.SE.value)
+}
+standard_error_data <- append(mock_se, inno_se)
 ## Corrected Bar Plot
 
 # melt function from reshape2 package converts the data from a wide to a long format (A long format contains values that do repeat in the first column)
 # Plot the side-by-side stacked bar plot
 
-# Calculate Standard Error:
-standard_error_data <- combo_barplotdata_long %>%
-  group_by(`Genotype + Treatment`) %>%
-  summarise(Standard_Error = sd(combo_barplotdata_long$value, na.rm = TRUE) / sqrt(sum(!is.na((combo_barplotdata_long$value)))))
+## Corrected Bar Plot
+
+# melt function from reshape2 package converts the data from a wide to a long format (A long format contains values that do repeat in the first column)
+# Plot the side-by-side stacked bar plot
 
 # Merge Standard Error data back into combo_barplotdata_long dataset
-combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "Genotype + Treatment", all.x = TRUE)
+combo_barplotdata_long$SE <- standard_error_data
+
+#convert SE to numeric data
+
+combo_barplotdata_long$SE <- as.numeric(combo_barplotdata_long$SE)
 
 # Get unique levels of Treatment
 treatment_levels <- unique(combo_barplotdata_long$`Genotype + Treatment`)
@@ -390,7 +431,7 @@ AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = `Genotype + Treatmen
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
   scale_fill_manual(values = color_mapping) +  # Use color_mapping
-  geom_errorbar(aes(ymin = value - Standard_Error, ymax = value + Standard_Error), position = position_dodge(width = 1), 
+  geom_errorbar(aes(ymin = value - SE, ymax = value + SE), position = position_dodge(width = 1), 
                 width = 0.2, colour = "black", alpha = 0.5, linewidth = 0.5) +
   theme(axis.text.x = element_blank())  # Remove x-axis labels
 
