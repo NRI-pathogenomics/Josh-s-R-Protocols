@@ -392,8 +392,8 @@ for(i in 1:GenoNumber){
   mock_se <- append(mock_se, mock.SE.value)
   #Inocculated
   subset3 <- subset(Results, Result_Genotype == Genotypes[i])
-  inno.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
-  inno.no.of.reps <- length(subset2)
+  inno.st.dev <- sd(as.numeric(subset3$Result_AUDPC))
+  inno.no.of.reps <- length(subset3)
   inno.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
   inno_se <- append(inno_se, inno.SE.value)
 }
