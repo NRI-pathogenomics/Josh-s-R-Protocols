@@ -334,50 +334,66 @@ legend("topleft", legend=Genotypes, col=c("red", "yellow", "orange", "green", "p
 legend("topright",legend=Inno_AUDPCs, col=c("red", "yellow", "orange", "green", "pink", "black", "blue", "purple"), lty=1, cex=0.8, title="AUDPC Values")
 
 ## Historgram of AUDPC and Standard Deviation
-#prepare the AUDPC barplot data frame
-combo_barplotdata <- cbind(Mock_results, Inno_results[2])
-colnames(combo_barplotdata) <- c("Genotypes","Mock AUDPC", "Inoculated AUDPC")
+#Reshape the data to have column stating both the Genotype and the treatment and then merge the AUDPC values (In a new combo_data plot)
+Mock_column <- as.data.frame(paste(Genotypes, " Mock Treatment"))
 
-# convert the results into suitable formats for ggplot:
-# categorical data for Genotypes
-# Convert to character vector and then to factor if needed
-combo_barplotdata$Genotypes <- as.factor(as.character(combo_barplotdata$Genotypes))
+Mock_column$AUDPC <- unlist(Mock_results$Mock_AUDPC)
+
+Mock_column <- setNames(Mock_column, nm = c("Genotype + Treatment", "AUDPC"))
+
+Inno_column <- as.data.frame(paste(Genotypes, " Inocculated Treatment"))
+
+Inno_column$AUDPC <- unlist(Inno_results$Inno_AUDPC)
+
+Inno_column <- setNames(Inno_column, nm = c("Genotype + Treatment", "AUDPC"))
+
+print(Mock_column)
+print(Inno_column)
+
+combo_barplotdata <- rbind(Mock_column, Inno_column)
+
+# Reshape data into long format
+combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotype + Treatment")
+combo_barplotdata$`Genotype + Treatment` <- as.factor(as.character(combo_barplotdata$`Genotype + Treatment`))
 
 # Check the structure of Genotypes
-str(combo_barplotdata$Genotypes)
+str(combo_barplotdata_long$`Genotype + Treatment`)
 # numerical data 
-combo_barplotdata$`Mock AUDPC` <- as.numeric(combo_barplotdata$`Mock AUDPC`)
-combo_barplotdata$`Inoculated AUDPC` <- as.numeric(combo_barplotdata$`Inoculated AUDPC`)
+combo_barplotdata_long$value <- as.numeric(combo_barplotdata_long$value)
 
 ## Corrected Bar Plot
-# Reshape data into long format
-combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
+
 # melt function from reshape2 package converts the data from a wide to a long format (A long format contains values that do repeat in the first column)
 # Plot the side-by-side stacked bar plot
 
 # Calculate Standard Error:
 standard_error_data <- combo_barplotdata_long %>%
-  group_by(variable) %>%
-  summarise(Standard_Error = sd(value, na.rm = TRUE) / sqrt(sum(!is.na(value))))
+  group_by(`Genotype + Treatment`) %>%
+  summarise(Standard_Error = sd(combo_barplotdata_long$value, na.rm = TRUE) / sqrt(sum(!is.na((combo_barplotdata_long$value)))))
 
 # Merge Standard Error data back into combo_barplotdata_long dataset
-combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "Genotypes", all.x = TRUE)
+combo_barplotdata_long <- merge(combo_barplotdata_long, standard_error_data, by = "Genotype + Treatment", all.x = TRUE)
 
-#calculate the ymin and ymax values, put them in the Error_Bar_Data frame and try to just set ymin and ymax to these columns
+# Get unique levels of Treatment
+treatment_levels <- unique(combo_barplotdata_long$`Genotype + Treatment`)
 
+# Generate colors for each unique level of Treatment
+colors <- rainbow(length(treatment_levels))
 
-# calculate the length of the datasets using Genotypes
-## Now need to figure out how to add error bars using the SE values held in the combobarplot table
-Data_len <- length(Genotypes)
+# Map colors to Treatment levels
+color_mapping <- setNames(colors, treatment_levels)
 
-AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = Genotypes, y = value, fill = variable)) +
+# Plot with updated scale_fill_manual
+# Plot with updated theme to remove x-axis labels
+AUDPC_Plot <- ggplot(data = combo_barplotdata_long, aes(x = `Genotype + Treatment`, y = value, fill = `Genotype + Treatment`)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1)) +
   labs(title = "AUDPC of Mock vs Inoculated",
        x = "Genotypes", y = "Average AUDPC", fill = "Treatment") +
-  scale_fill_manual(values = c("green", "red")) +
-  geom_errorbar(aes(ymin = value - Standard_Error, ymax = value + Standard_Error),position = position_dodge(width = 1), 
-                width=0.2, colour="black", alpha=0.5, linewidth=0.5)
-
+  scale_fill_manual(values = color_mapping) +  # Use color_mapping
+  geom_errorbar(aes(ymin = value - Standard_Error, ymax = value + Standard_Error), position = position_dodge(width = 1), 
+                width = 0.2, colour = "black", alpha = 0.5, linewidth = 0.5) +
+  theme(axis.text.x = element_blank())  # Remove x-axis labels
 
 show(AUDPC_Plot)
+
 #geomerrorbar() needs to be used but it needs to be able to work on both bars
