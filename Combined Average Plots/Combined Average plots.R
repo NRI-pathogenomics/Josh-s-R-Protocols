@@ -357,7 +357,7 @@ combo_barplotdata_long <- melt(combo_barplotdata, id.vars = "Genotypes")
 
 # Calculate Standard Error:
 standard_error_data <- combo_barplotdata_long %>%
-  group_by(Genotypes) %>%
+  group_by(variable) %>%
   summarise(Standard_Error = sd(value, na.rm = TRUE) / sqrt(sum(!is.na(value))))
 
 # Merge Standard Error data back into combo_barplotdata_long dataset
