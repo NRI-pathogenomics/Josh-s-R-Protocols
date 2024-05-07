@@ -7,7 +7,7 @@ if(("MASS" %in% all_packages)==FALSE){
   install.packages("MASS")}
 library(MASS)
 
-print(anv.data<-read.table("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Master's/Research/Bioinformatic work/iDEP trainin/Helen Data/NEWPT2.csv", header = T, sep = ","))
+print(anv.data<-read.table("/NEWPT2.csv", header = T, sep = ","))
 attach(anv.data)
 # Create a variable for boxcox
  anv.model<-aov(formula=X~Y*Z,data=anv.data)
