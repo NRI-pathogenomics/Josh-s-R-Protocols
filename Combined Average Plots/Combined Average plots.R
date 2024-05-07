@@ -386,15 +386,17 @@ inno_se <- list()
 for(i in 1:GenoNumber){
   #Mock
   subset2 <- subset(Results, Result_Genotype == Genotypes[i])
+  subset2 <- subset(subset2, Result_Type == "M")
   mock.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
   mock.no.of.reps <- length(subset2)
   mock.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
   mock_se <- append(mock_se, mock.SE.value)
   #Inocculated
   subset3 <- subset(Results, Result_Genotype == Genotypes[i])
+  subset3 <- subset(subset3, Result_Type == "I")
   inno.st.dev <- sd(as.numeric(subset3$Result_AUDPC))
   inno.no.of.reps <- length(subset3)
-  inno.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
+  inno.SE.value <- inno.st.dev/sqrt(inno.no.of.reps)
   inno_se <- append(inno_se, inno.SE.value)
 }
 standard_error_data <- append(mock_se, inno_se)
