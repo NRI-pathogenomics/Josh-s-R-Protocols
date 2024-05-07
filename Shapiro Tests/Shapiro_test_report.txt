@@ -1,0 +1,62 @@
+[1] "Results for Mock Treatment of Genotype  Col0"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Mockotype$Result_AUDPC)
+W = 0.48508, p-value = 5.965e-07
+
+[1] "Results for Inocculated Treatment of Genotype  Col0"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Innotype$Result_AUDPC)
+W = 0.26222, p-value = 2.167e-08
+
+[1] "Results for Mock Treatment of Genotype  FP34-P1"
+[1] "All Values Identical. The mock group for  FP34-P1 Has a Non-Normal Distribution"
+[1] "Results for Inocculated Treatment of Genotype  FP34-P1"
+[1] "All Values Identical. The inocculated group for  FP34-P1 Has a Non-Normal Distribution"
+[1] "Results for Mock Treatment of Genotype  GG2-272"
+[1] "All Values Identical. The mock group for  GG2-272 Has a Non-Normal Distribution"
+[1] "Results for Inocculated Treatment of Genotype  GG2-272"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Innotype$Result_AUDPC)
+W = 0.55218, p-value = 0.000131
+
+[1] "Results for Mock Treatment of Genotype  FP6-P1"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Mockotype$Result_AUDPC)
+W = 0.45297, p-value = 4.136e-06
+
+[1] "Results for Inocculated Treatment of Genotype  FP6-P1"
+[1] "All Values Identical. The inocculated group for  FP6-P1 Has a Non-Normal Distribution"
+[1] "Results for Mock Treatment of Genotype  FP1-P1"
+[1] "All Values Identical. The mock group for  FP1-P1 Has a Non-Normal Distribution"
+[1] "Results for Inocculated Treatment of Genotype  FP1-P1"
+[1] "All Values Identical. The inocculated group for  FP1-P1 Has a Non-Normal Distribution"
+[1] "Results for Mock Treatment of Genotype  GG1-64"
+[1] "All Values Identical. The mock group for  GG1-64 Has a Non-Normal Distribution"
+[1] "Results for Inocculated Treatment of Genotype  GG1-64"
+[1] "All Values Identical. The inocculated group for  GG1-64 Has a Non-Normal Distribution"
+[1] "Results for Mock Treatment of Genotype  FP4-P1"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Mockotype$Result_AUDPC)
+W = 0.49609, p-value = 2.073e-05
+
+[1] "Results for Inocculated Treatment of Genotype  FP4-P1"
+[1] "All Values Identical. The inocculated group for  FP4-P1 Has a Non-Normal Distribution"
+[1] "Results for Mock Treatment of Genotype  FP6-P4"
+
+	Shapiro-Wilk normality test
+
+data:  as.numeric(Mockotype$Result_AUDPC)
+W = 0.49609, p-value = 2.073e-05
+
+[1] "Results for Inocculated Treatment of Genotype  FP6-P4"
+[1] "All Values Identical. The inocculated group for  FP6-P4 Has a Non-Normal Distribution"
