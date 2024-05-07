@@ -7,32 +7,28 @@ if(("MASS" %in% all_packages)==FALSE){
   install.packages("MASS")}
 library(MASS)
 library(tidyverse)
-print(anv.data<-read.table("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Input Files/NEWPT2.csv", header = T, sep = ","))
+
+print(anv.data<-Results)
 attach(anv.data)
 
-
-
-# Reshape the data to long format
-anv.data_long <- anv.data %>%
-  pivot_longer(cols = starts_with("X"), names_to = "Week", values_to = "Score")
-
-# Convert Week to a factor
-anv.data_long$Week <- factor(anv.data_long$Week)
-
+anv.data$Result_AUDPC <- as.numeric(anv.data$Result_AUDPC)
+anv.data$Result_Genotype <- as.character(Result_Genotype)
+anv.data$Result_Type <- as.character(Result_Type)
 # Create a variable for boxcox
 # Run aov
-anv.model <- aov(Score ~ Genotype * treatment. * Week, data = anv.data_long)
+anv.model <- aov(Result_AUDPC ~ Result_Type * Result_Genotype, data = anv.data)
+
 # here x would be disease score, y would be genotype z could be included as block or run without for a one way anova
 
 print(anv.model)
 
 # Check normality with hist, qqplots
  par(mfrow=c(4,2))
- hist(anv.data_long$Score)
- qqnorm(anv.data_long$Score)
- qqline(anv.data_long$Score)
+ hist(anv.data$Result_AUDPC)
+ qqnorm(anv.data$Result_AUDPC)
+ qqline(anv.data$Result_AUDPC)
 # Check normalitly with shapiro-wilks
- shapiro.test(anv.data_long$Score)
+ shapiro.test(anv.data$Result_AUDPC)
 
 # If data isnt normal Run a Box-Cox proceedure to obtain optimal transformation
  boxcox(anv.model)
@@ -48,14 +44,14 @@ print(anv.model)
  boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
 
 # Add data to original data set
- lamEx1<-cbind(anv.data_long, anv.data_long$Score^0.17)
- lamEx2<-cbind(anv.data_long, anv.data_long$Score^0.26)
- lamEx3<-cbind(anv.data_long, anv.data_long$Score^0.35)
+ lamEx1<-cbind(anv.data, anv.data$Result_AUDPC^0.17)
+ lamEx2<-cbind(anv.data, anv.data$Result_AUDPC^0.26)
+ lamEx3<-cbind(anv.data, anv.data$Result_AUDPC^0.35)
 
 # Create a variable with transformed values
- Ex1<-(anv.data_long$Score^0.17)
- Ex2<-(anv.data_long$Score^0.26)
- Ex3<-(anv.data_long$Score^0.35)
+ Ex1<-(anv.data$Result_AUDPC^0.17)
+ Ex2<-(anv.data$Result_AUDPC^0.26)
+ Ex3<-(anv.data$Result_AUDPC^0.35)
 
 # Check normality with hist, qqplots
  par(mfrow=c(4,2))
@@ -73,10 +69,10 @@ print(anv.model)
  shapiro.test(Ex1)
 
 # Run 2-way Anova with normalised data Ex2 was the best transformation
- anv.mod<-aov(Ex2~ Genotype * treatment. * Week, data = anv.data_long)
+ anv.mod<-aov(Ex2 ~ Result_Type * Result_Genotype, data = anv.data)
  print(anv.mod)
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
- print(posthoc<-TukeyHSD(anv.mod,"Genotype"))
- print(posthoc<-TukeyHSD(anv.mod,"treatment."))
+ print(posthoc<-TukeyHSD(anv.mod,"Result_Type"))
+ 
