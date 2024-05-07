@@ -19,7 +19,7 @@ if(exists("Indv_Mock_Results") == FALSE){
 if(exists("Indv_Mock_Results") == FALSE){
   Indv_Inno_Results <- subset(Results, Result_Type == "I")
 }
-
+sink(file = "~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/Shapiro_test_report.txt", append = FALSE)
 Mock_SW_test <- matrix(data = NA, nrow=GenoNumber, ncol=2, dimnames = NULL)
 SW_Test_Results <- list()
 for(i in 1:GenoNumber){
@@ -55,3 +55,4 @@ for(i in 1:GenoNumber){
  })
 
 }
+sink()
