@@ -398,9 +398,13 @@ for(i in 1:GenoNumber){
   #Inocculated
   subset3 <- subset(Results, Result_Genotype == Genotypes[i])
   subset3 <- subset(subset3, Result_Type == "I")
+  print(subset3)
   inno.st.dev <- sd(as.numeric(subset3$Result_AUDPC))
+  print(inno.st.dev)
   inno.no.of.reps <- length(subset3) + 1
+  print(inno.no.of.reps)
   inno.SE.value <- inno.st.dev/sqrt(inno.no.of.reps)
+  print(inno.SE.value)
   inno_se <- append(inno_se, inno.SE.value)
 }
 standard_error_data <- append(mock_se, inno_se)
