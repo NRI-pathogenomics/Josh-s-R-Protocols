@@ -5,8 +5,35 @@ all_packages <- installed.packages()
 
 if(("MASS" %in% all_packages)==FALSE){
   install.packages("MASS")}
+if(("ggpmisc" %in% all_packages)==FALSE){
+  install.packages("ggpmisc")}
+if(("jmv" %in% all_packages)==FALSE){
+  install.packages("jmv")}
+if(("Rmisc" %in% all_packages)==FALSE){
+  install.packages("Rmisc")}
+if(("emmeans" %in% all_packages)==FALSE){
+  install.packages("emmeans")}
+if(("multcomp" %in% all_packages)==FALSE){
+  install.packages("multcomp")}
+if(("Hmisc" %in% all_packages)==FALSE){
+  install.packages("Hmisc")}
+if(("lattice" %in% all_packages)==FALSE){
+  install.packages("lattice")}
+if(("multcompView" %in% all_packages)==FALSE){
+  install.packages("multcompView")}
 library(MASS)
 library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggpmisc)
+library(jmv)
+library(Rmisc)
+library(emmeans) 
+library(multcomp)
+library(Hmisc)
+library(lattice)
+library(multcompView)
+library(agricolae)
 
 print(anv.data<-Results)
 attach(anv.data)
@@ -72,6 +99,20 @@ print(anv.model)
  anv.mod<-aov(Ex2 ~ Result_Type * Result_Genotype, data = anv.data)
  print(anv.mod)
 
+ # Significant differences
+lm_ex1 <- lm(Ex1 ~ Result_Type * Result_Genotype, data = anv.data)
+l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
+cld(l1, Letters=letters, alpha=0.05, reversed=T)
+
+lm_ex2 <- lm(Ex2 ~ Result_Genotype * Result_Type, data = anv.data)
+summary(lm_ex2)
+l2 <- emmeans(lm_ex2, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
+cld(l2, Letters=letters, alpha=0.05, reversed=T)
+
+lm_ex3 <- lm(Ex3 ~ Result_Type * Result_Genotype, data = anv.data)
+l3 <- emmeans(lm_ex3, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
+cld(l3, Letters=letters, alpha=0.05, reversed=T)
+ 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
  print(posthoc<-TukeyHSD(anv.mod,"Result_Type"))
