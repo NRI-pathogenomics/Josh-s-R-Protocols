@@ -387,15 +387,19 @@ for(i in 1:GenoNumber){
   #Mock
   subset2 <- subset(Results, Result_Genotype == Genotypes[i])
   subset2 <- subset(subset2, Result_Type == "M")
+  print(subset2)
   mock.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
-  mock.no.of.reps <- length(subset2)
+  print(mock.st.dev)
+  mock.no.of.reps <- length(subset2$Result_Type) + 1
+  print(mock.no.of.reps)
   mock.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
+  print(mock.SE.value)
   mock_se <- append(mock_se, mock.SE.value)
   #Inocculated
   subset3 <- subset(Results, Result_Genotype == Genotypes[i])
   subset3 <- subset(subset3, Result_Type == "I")
   inno.st.dev <- sd(as.numeric(subset3$Result_AUDPC))
-  inno.no.of.reps <- length(subset3)
+  inno.no.of.reps <- length(subset3) + 1
   inno.SE.value <- inno.st.dev/sqrt(inno.no.of.reps)
   inno_se <- append(inno_se, inno.SE.value)
 }
