@@ -1,12 +1,8 @@
 ##REML test
-if(("fields" %in% all_packages)==FALSE){
-  install.packages("fields")}
+if(("metaSEM" %in% all_packages)==FALSE){
+  install.packages("metaSEM")}
 
-if(("spam" %in% all_packages)==FALSE){
-  install.packages("spam")}
-
-library("fields")
-library("spam")
+library("metaSEM")
 
 # Load the Data
 if(exists("Results") == FALSE){
@@ -29,4 +25,4 @@ if(exists("Indv_Mock_Results") == FALSE){
   Indv_Inno_Results <- subset(Results, Result_Type == "I")
 }
 
-REML_Results <- REML.test(x, y, rho, sigma2, theta, nu = 1.5)
+reml(y, v, x, data, RE.constraints = NULL, RE.startvalues = 0.1)
