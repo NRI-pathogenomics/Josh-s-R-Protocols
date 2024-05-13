@@ -1,6 +1,6 @@
 ##REML test
-if(("metaSEM" %in% all_packages)==FALSE){
-  install.packages("metaSEM")}
+# if(("metaSEM" %in% all_packages)==FALSE){
+#   install.packages("metaSEM")}
 
 library("metaSEM")
 
