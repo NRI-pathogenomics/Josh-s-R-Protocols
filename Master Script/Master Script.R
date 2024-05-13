@@ -6,10 +6,11 @@ source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Pro
 
 source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/Shapiro Wilks Test.R")
 
+# ANOVA tests
+source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/ANOVA/Anova example.R")
+
 # Residuals test
 
 source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/Residuals Test.R")
 
-# ANOVA tests
-source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/ANOVA/Anova example.R")
 
