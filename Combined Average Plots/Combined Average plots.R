@@ -390,7 +390,7 @@ for(i in 1:GenoNumber){
   print(subset2)
   mock.st.dev <- sd(as.numeric(subset2$Result_AUDPC))
   print(mock.st.dev)
-  mock.no.of.reps <- length(subset2$Result_Type) + 1
+  mock.no.of.reps <- length(subset2$Result_Type)
   print(mock.no.of.reps)
   mock.SE.value <- mock.st.dev/sqrt(mock.no.of.reps)
   print(mock.SE.value)
@@ -401,7 +401,7 @@ for(i in 1:GenoNumber){
   print(subset3)
   inno.st.dev <- sd(as.numeric(subset3$Result_AUDPC))
   print(inno.st.dev)
-  inno.no.of.reps <- length(subset3) + 1
+  inno.no.of.reps <- length(subset3)
   print(inno.no.of.reps)
   inno.SE.value <- inno.st.dev/sqrt(inno.no.of.reps)
   print(inno.SE.value)
