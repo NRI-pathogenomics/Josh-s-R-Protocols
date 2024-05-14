@@ -76,9 +76,9 @@ print(anv.model)
  lamEx3<-cbind(anv.data, anv.data$Result_AUDPC^0.35)
 
 # Create a variable with transformed values
- Ex1<-(anv.data$Result_AUDPC^2)
- Ex2<-log10(anv.data$Result_AUDPC)
- Ex3<-(1/anv.data$Result_AUDPC^2)
+ Ex1<-(anv.data$Result_AUDPC^0.17)
+ Ex2<-(anv.data$Result_AUDPC^0.26)
+ Ex3<-(anv.data$Result_AUDPC^0.35)
 
 # Check normality with hist, qqplots
  par(mfrow=c(4,2))
