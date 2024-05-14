@@ -99,19 +99,38 @@ print(anv.model)
  anv.mod<-aov(Ex2 ~ Result_Type * Result_Genotype, data = anv.data)
  print(anv.mod)
 
- # Significant differences
+# Significant differences
 lm_ex1 <- lm(Ex1 ~ Result_Type * Result_Genotype, data = anv.data)
 l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
-cld(l1, Letters=letters, alpha=0.05, reversed=T)
+
+# Extract the variance-covariance matrix from the model object
+V1 <- vcov(lm_ex1)
+
+# Create an "emmGrid" object
+l1_emmgrid <- emmGrid(lattice = l1, var = V1)
+
+cld(l1_emmgrid, Letters=letters, alpha=0.05, reversed=T)
 
 lm_ex2 <- lm(Ex2 ~ Result_Genotype * Result_Type, data = anv.data)
 summary(lm_ex2)
 l2 <- emmeans(lm_ex2, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
-cld(l2, Letters=letters, alpha=0.05, reversed=T)
+# Extract the variance-covariance matrix from the model object
+V2 <- vcov(lm_ex2)
+
+# Create an "emmGrid" object
+l2_emmgrid <- emmGrid(lattice = l2, var = V2)
+
+cld(l2_emmgrid, Letters=letters, alpha=0.05, reversed=T)
 
 lm_ex3 <- lm(Ex3 ~ Result_Type * Result_Genotype, data = anv.data)
 l3 <- emmeans(lm_ex3, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
-cld(l3, Letters=letters, alpha=0.05, reversed=T)
+# Extract the variance-covariance matrix from the model object
+V3 <- vcov(lm_ex3)
+
+# Create an "emmGrid" object
+l3_emmgrid <- emmGrid(lattice = l3, var = V3)
+
+cld(l3_emmgrid, Letters=letters, alpha=0.05, reversed=T)
  
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
