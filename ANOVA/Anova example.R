@@ -100,16 +100,24 @@ print(anv.model)
  print(anv.mod)
 
 # Significant differences
+
+# Fit the linear model
 lm_ex1 <- lm(Ex1 ~ Result_Type * Result_Genotype, data = anv.data)
-l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype ), adjust =c("tukey"))
+
+# Compute estimated marginal means
+l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
 
 # Extract the variance-covariance matrix from the model object
 V1 <- vcov(lm_ex1)
 
-# Create an "emmGrid" object
-l1_emmgrid <- emmGrid(lattice = l1, var = V1)
+# Coerce the object `l1` to class "emmGrid"
+l1 <- as.emmGrid(l1)
 
-cld(l1_emmgrid, Letters=letters, alpha=0.05, reversed=T)
+#set the variance level, by setting the "var" attribute of L1 to V1
+attr(l1, "var") <- V1
+# Assign the variance-covariance matrix to the `var` slot
+
+cld(l1, Letters=letters, alpha=0.05, reversed=T)
 
 lm_ex2 <- lm(Ex2 ~ Result_Genotype * Result_Type, data = anv.data)
 summary(lm_ex2)
