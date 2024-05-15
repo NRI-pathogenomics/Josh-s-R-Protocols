@@ -23,6 +23,8 @@ if(("lattice" %in% all_packages)==FALSE){
   install.packages("lattice")}
 if(("multcompView" %in% all_packages)==FALSE){
   install.packages("multcompView")}
+if(("bestNormalize" %in% all_packages)==FALSE){
+  install.packages("bestNormalize")}
 library(MASS)
 library(tidyverse)
 library(dplyr)
@@ -36,6 +38,9 @@ library(Hmisc)
 library(lattice)
 library(multcompView)
 library(agricolae)
+library(bestNormalize)
+# Load the package
+## Power Of - Transformations
 
 # Create empty lists to store models and transformed data
 lm_models <- list()
@@ -65,6 +70,16 @@ for (power in seq(-2, 2, by = 0.1)) {
     cat("Error occurred for power", power, ": ", conditionMessage(e), "\n")
   })
 }
+
+# BestNormalize transformations
+# Perform the Johnson transformation
+transformed_data <- jn(anv.data)
+
+# Assess the normality of the transformed data
+hist(transformed_data)
+qqnorm(transformed_data)
+qqline(transformed_data)
+shapiro.test(transformed_data)
 
 # save all Models and transformed data
 lm_Ex_all <- lm_models
