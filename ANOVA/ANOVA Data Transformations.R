@@ -72,10 +72,12 @@ for (power in seq(-2, 2, by = 0.1)) {
 }
 
 # BestNormalize transformations
-# Perform the Johnson transformation
-transformed_data <- jn(anv.data)
+# Best Normalize
 
-# Assess the normality of the transformed data
+transformed_AUDPC <- bestNormalize(anv.data$Result_AUDPC)
+
+transformed_data <- transformed_AUDPC$x.t
+
 hist(transformed_data)
 qqnorm(transformed_data)
 qqline(transformed_data)
@@ -85,9 +87,9 @@ shapiro.test(transformed_data)
 lm_Ex_all <- lm_models
 Ex_all <- Ex_values
 
-#redo ANOVA test by selecting a set of selected data in EX1
-anv.mod<-aov(Ex_all[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
-print(anv.mod)
+# #redo ANOVA test by selecting a set of selected data in EX1
+# anv.mod<-aov(Ex_all[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
+# print(anv.mod)
 
 # Significant differences
 
@@ -96,7 +98,8 @@ print(anv.mod)
 anv.data$Result_Type <- factor(anv.data$Result_Type)
 # Fit the linear models
 
-lm_ex_selected <- lm(Ex_[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
+# lm_ex_selected <- lm(Ex_[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
+lm_ex_selected <- lm(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
 
 # Compute estimated marginal means
 l_selected <- emmeans(lm_ex_selected, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
@@ -114,6 +117,10 @@ glht_ex_selected
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
 cld_ex1
 
+#remake the anv model usig the transformed data
+
+# Run anv.mod for the transformed data
+anv.mod <- aov(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
