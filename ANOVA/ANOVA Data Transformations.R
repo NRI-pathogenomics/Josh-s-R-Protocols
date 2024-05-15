@@ -94,9 +94,11 @@ glht_ex3
 #Here, mcp(Result_Type = "Tukey") specifies that we want Tukey's method for pairwise comparisons between levels of Result_Type.
 
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
+cld_ex1
 cld_ex2 <- cld(glht_ex2, Letters=letters, alpha=0.05, reversed=T)
+cld_ex2
 cld_ex3 <- cld(glht_ex3, Letters=letters, alpha=0.05, reversed=T)
-
+cld_ex3
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
