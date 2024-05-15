@@ -37,34 +37,41 @@ library(lattice)
 library(multcompView)
 library(agricolae)
 
-# Add data to original data set
-lamEx1<-cbind(anv.data, anv.data$Result_AUDPC^(-2))
-lamEx2<-cbind(anv.data, anv.data$Result_AUDPC^(-1.5))
-lamEx3<-cbind(anv.data, anv.data$Result_AUDPC^1)
+# Create empty lists to store models and transformed data
+lm_models <- list()
+Ex_values <- list()
 
-# Create a variable with transformed values
-Ex1<-(anv.data$Result_AUDPC^(-2))
-Ex2<-(anv.data$Result_AUDPC^(-1.5))
-Ex3<-(anv.data$Result_AUDPC^1)
+# Loop through the powers from -2 to 2 going up by 0.1 each time
+for (power in seq(-2, 2, by = 0.1)) {
+  # Try to transform data with the current power
+  tryCatch({
+    # Add data to original data set
+    lamEx <- cbind(anv.data, anv.data$Result_AUDPC^power)
+    Ex <- anv.data$Result_AUDPC^power
+    
+    # Append lm model and transformed data to lists
+    lm_models[[as.character(power)]] <- lm(Ex ~ Result_Type * Result_Genotype, data = lamEx)
+    Ex_values[[as.character(power)]] <- Ex
+    
+    # Plot histogram
+    hist(Ex, main = paste("Distribution of AUDPC Values^", power))
+    qqnorm(Ex)
+    qqline(Ex)
+    
+    # Check normality with Shapiro-Wilk test
+    shapiro.test(Ex)
+  }, error = function(e) {
+    # If an error occurs (e.g., data is transformed by the power of 0), print a message
+    cat("Error occurred for power", power, ": ", conditionMessage(e), "\n")
+  })
+}
 
-# Check normality with hist, qqplots
-par(mfrow=c(4,2))
-hist(Ex1, main = "Distribution of AUDPC Values^-2")
-qqnorm(Ex1)
-qqline(Ex1)
-hist(Ex2, main = "Distribution of AUDPC Values^-1.5")
-qqnorm(Ex2)
-qqline(Ex2)
-hist(Ex3, main = "Distribution of AUDPC Values^1")
-qqnorm(Ex3)
-qqline(Ex3)
+# save all Models and transformed data
+lm_Ex1 <- lm_models
+Ex1 <- Ex_values
 
-# Check normalitly with shapiro-wilks on all transformed data eg Ex1 Ex2 Ex3
-shapiro.test(Ex1)
-
-# Run 2-way Anova with normalised data Ex2 was the best transformation
-
-anv.mod<-aov(Ex2 ~ Result_Type * Result_Genotype, data = anv.data)
+#redo ANOVA test by selecting a set of selected data in EX1
+anv.mod<-aov(Ex1[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
 print(anv.mod)
 
 # Significant differences
