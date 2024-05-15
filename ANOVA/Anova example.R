@@ -107,6 +107,8 @@ lm_ex1 <- lm(Ex1 ~ Result_Type * Result_Genotype, data = anv.data)
 # Compute estimated marginal means
 l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
 
+# need to convert to ghlt!
+
 # Extract the variance-covariance matrix from the model object
 V1 <- vcov(lm_ex1)
 
