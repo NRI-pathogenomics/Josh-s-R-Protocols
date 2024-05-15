@@ -46,30 +46,30 @@ library(bestNormalize)
 lm_models <- list()
 Ex_values <- list()
 
-# Loop through the powers from -2 to 2 going up by 0.1 each time
-for (power in seq(-2, 2, by = 0.1)) {
-  # Try to transform data with the current power
-  tryCatch({
-    # Add data to original data set
-    lamEx <- cbind(anv.data, anv.data$Result_AUDPC^power)
-    Ex <- anv.data$Result_AUDPC^power
-    
-    # Append lm model and transformed data to lists
-    lm_models[[as.character(power)]] <- lm(Ex ~ Result_Type * Result_Genotype, data = lamEx)
-    Ex_values[[as.character(power)]] <- Ex
-    
-    # Plot histogram
-    hist(Ex, main = paste("Distribution of AUDPC Values^", power))
-    qqnorm(Ex)
-    qqline(Ex)
-    
-    # Check normality with Shapiro-Wilk test
-    shapiro.test(Ex)
-  }, error = function(e) {
-    # If an error occurs (e.g., data is transformed by the power of 0), print a message
-    cat("Error occurred for power", power, ": ", conditionMessage(e), "\n")
-  })
-}
+# # Loop through the powers from -2 to 2 going up by 0.1 each time
+# for (power in seq(-2, 2, by = 0.1)) {
+#   # Try to transform data with the current power
+#   tryCatch({
+#     # Add data to original data set
+#     lamEx <- cbind(anv.data, anv.data$Result_AUDPC^power)
+#     Ex <- anv.data$Result_AUDPC^power
+#     
+#     # Append lm model and transformed data to lists
+#     lm_models[[as.character(power)]] <- lm(Ex ~ Result_Type * Result_Genotype, data = lamEx)
+#     Ex_values[[as.character(power)]] <- Ex
+#     
+#     # Plot histogram
+#     hist(Ex, main = paste("Distribution of AUDPC Values^", power))
+#     qqnorm(Ex)
+#     qqline(Ex)
+#     
+#     # Check normality with Shapiro-Wilk test
+#     shapiro.test(Ex)
+#   }, error = function(e) {
+#     # If an error occurs (e.g., data is transformed by the power of 0), print a message
+#     cat("Error occurred for power", power, ": ", conditionMessage(e), "\n")
+#   })
+# }
 
 # BestNormalize transformations
 # Best Normalize
@@ -89,7 +89,9 @@ Ex_all <- Ex_values
 
 # #redo ANOVA test by selecting a set of selected data in EX1
 # anv.mod<-aov(Ex_all[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
-# print(anv.mod)
+# Run anv.mod for the transformed data
+anv.mod <- aov(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
+print(anv.mod)
 
 # Significant differences
 
@@ -117,10 +119,6 @@ glht_ex_selected
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
 cld_ex1
 
-#remake the anv model usig the transformed data
-
-# Run anv.mod for the transformed data
-anv.mod <- aov(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
