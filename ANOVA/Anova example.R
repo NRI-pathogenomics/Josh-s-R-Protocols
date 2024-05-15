@@ -51,7 +51,7 @@ print(anv.model)
 
 # Check normality with hist, qqplots
  par(mfrow=c(4,2))
- hist(anv.data$Result_AUDPC)
+ hist(anv.data$Result_AUDPC, main = "Distribution of AUDPC values for Each Genotype")
  qqnorm(anv.data$Result_AUDPC)
  qqline(anv.data$Result_AUDPC)
 # Check normalitly with shapiro-wilks
