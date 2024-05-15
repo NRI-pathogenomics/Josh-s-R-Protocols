@@ -78,6 +78,7 @@ transformed_AUDPC <- bestNormalize(anv.data$Result_AUDPC)
 
 transformed_data <- transformed_AUDPC$x.t
 
+par(mfrow=c(2,1))
 hist(transformed_data)
 qqnorm(transformed_data)
 qqline(transformed_data)
