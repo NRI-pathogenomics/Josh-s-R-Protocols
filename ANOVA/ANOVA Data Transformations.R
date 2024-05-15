@@ -49,13 +49,13 @@ Ex3<-(anv.data$Result_AUDPC^1)
 
 # Check normality with hist, qqplots
 par(mfrow=c(4,2))
-hist(Ex1)
+hist(Ex1, main = "Distribution of AUDPC Values^-2")
 qqnorm(Ex1)
 qqline(Ex1)
-hist(Ex2)
+hist(Ex2, main = "Distribution of AUDPC Values^-1.5")
 qqnorm(Ex2)
 qqline(Ex2)
-hist(Ex3)
+hist(Ex3, main = "Distribution of AUDPC Values^1")
 qqnorm(Ex3)
 qqline(Ex3)
 
@@ -72,23 +72,30 @@ print(anv.mod)
 # convert Result_Type in the anv.data to a factor
 
 anv.data$Result_Type <- factor(anv.data$Result_Type)
-# Fit the linear model
+# Fit the linear models
 
 lm_ex1 <- lm(Ex1 ~ Result_Type * Result_Genotype, data = anv.data)
-
+lm_ex2 <- lm(Ex2 ~ Result_Type * Result_Genotype, data = anv.data)
+lm_ex3 <- lm(Ex3 ~ Result_Type * Result_Genotype, data = anv.data)
 # Compute estimated marginal means
 l1 <- emmeans(lm_ex1, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
-
+l2 <- emmeans(lm_ex2, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
+l3 <- emmeans(lm_ex3, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
 # need to convert to ghlt!
 
 glht_ex1 <- glht(lm_ex1, linfct = mcp(Result_Type = "Tukey"))
+glht_ex2 <- glht(lm_ex2, linfct = mcp(Result_Type = "Tukey"))
+glht_ex3 <- glht(lm_ex3, linfct = mcp(Result_Type = "Tukey"))
 
 glht_ex1
+glht_ex2
+glht_ex3
 #We use glht() to compute the linear hypothesis tests based on the linear model lm_ex1. 
 #Here, mcp(Result_Type = "Tukey") specifies that we want Tukey's method for pairwise comparisons between levels of Result_Type.
 
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
-
+cld_ex2 <- cld(glht_ex2, Letters=letters, alpha=0.05, reversed=T)
+cld_ex3 <- cld(glht_ex3, Letters=letters, alpha=0.05, reversed=T)
 
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
