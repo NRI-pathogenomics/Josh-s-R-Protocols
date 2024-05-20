@@ -2,27 +2,24 @@
 # AUDPC
 source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average Plots/Combined Average plots.R")
 
-#Shapiro tests
-
-#source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/Shapiro Wilks Test.R")
 
 # ANOVA tests
 source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/ANOVA/Anova example.R")
 
-question_1 <- readline("Do you want to try transform the data?")
 
-if(question_1 == "Y"){
-  source("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/ANOVA/ANOVA Data Transformations.R")
+User_Input <- readline("Do you want to transform the data using the BestNormalize function? Y/N")
+
+if(User_Input == "Y"){
+  source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/ANOVA/ANOVA With Transformation.R")
+  User_Input2 <- readline("Do you want to run non-parametric tests? Y/N")
+  if(User_Input2 == "Y"){
+    source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Mixed Models Test/glht linear model test.R")
+    }
+  if(User_Input2 == "N"){
+    exit()
+  }
 }
-if(question_1 == "N"){
-  # REML test
-  
-  source("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/REML Test.R") 
+
+if(User_Input == "N"){
+  source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Mixed Models Test/glht linear model test.R")
 }
-
-
-
-# Residuals test
-
-source("~/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Shapiro Tests/Residuals Test.R")
-
