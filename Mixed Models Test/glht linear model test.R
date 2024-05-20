@@ -69,21 +69,24 @@ options(warn=-1)
 anv.data$Result_Type <- factor(anv.data$Result_Type)
 
 
-# Fit the linear models
-
+# Fit the linear models 
+#this is our hypothesis and the formula for each test below is written to compare the effect of treatment on the different genotypes, pairing the two and analysing the AUDPCs
+# here the model is set here
 lm_ex_selected <- lm(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
 
 # Compute estimated marginal means
 l_selected <- emmeans(lm_ex_selected, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
 
-# need to convert to ghlt!
+#Convert the model to ghlt format for the cld() function
 
 glht_ex_selected <- glht(lm_ex_selected, linfct = mcp(Result_Type = "Tukey"))
 
 
 print(glht_ex_selected)
 
-#We use glht() to compute the linear hypothesis tests based on the linear model lm_ex1. 
+#if there's different letters then the linear model predicts that there will be significant difference between M and I
+
+#We use glht() to compute the linear hypothesis tests based on the linear model lm_ex_selected. 
 #Here, mcp(Result_Type = "Tukey") specifies that we want Tukey's method for pairwise comparisons between levels of Result_Type.
 
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
@@ -94,6 +97,9 @@ print(cld_ex1)
 non_para_result <- kruskal.test(Result_AUDPC ~ Result_Type, data = anv.data)
 base::summary(non_para_result)
 print(non_para_result)
+
+# if the p-value is greater than 0.05, this suggests there is no significant difference between the groups.
+
 
 #Friedman test
 
@@ -107,11 +113,12 @@ friedman_result <- aggregated_data %>%
   friedman_test(Result_AUDPC ~ Result_Type | Result_Genotype)
 base::summary(friedman_result)
 print(friedman_result)
+# if the p-value is greater than 0.05, this suggests there is no significant difference between the groups.
 
-# Poisson distribution (general linearisation model)
-
-Pois_model <- glm(Result_AUDPC ~ Result_Type * Result_Genotype, family = poisson(), data = anv.data)
-base::summary(Pois_model)
-print(Pois_model)
+# # Poisson distribution (general linearisation model)
+# 
+# Pois_model <- glm(Result_AUDPC ~ Result_Type * Result_Genotype, family = poisson(), data = anv.data)
+# base::summary(Pois_model)
+# print(Pois_model)
 
 
