@@ -130,7 +130,7 @@ if((KW_pvalue > 0.05)== TRUE){
 }
 
 
-if(KW_pvalue > 0.05 == FALSE){
+if((KW_pvalue > 0.05) == FALSE){
 
   print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
 }
@@ -143,7 +143,7 @@ if((Fman_pvalue > 0.05) == TRUE){
   print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
 }
 
-if(Fman_pvalue > 0.05 == FALSE){
+if((Fman_pvalue > 0.05) == FALSE){
 
   print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
 }
