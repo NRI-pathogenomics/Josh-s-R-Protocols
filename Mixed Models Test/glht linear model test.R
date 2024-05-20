@@ -92,6 +92,7 @@ print(cld_ex1)
 # The actual non-parametric tests
 #Kruskal-Wallis rank sum test
 non_para_result <- kruskal.test(Result_AUDPC ~ Result_Type, data = anv.data)
+base::summary(non_para_result)
 print(non_para_result)
 
 #Friedman test
@@ -104,11 +105,13 @@ aggregated_data <- anv.data %>%
 # Perform the Friedman test
 friedman_result <- aggregated_data %>%
   friedman_test(Result_AUDPC ~ Result_Type | Result_Genotype)
-
+base::summary(friedman_result)
 print(friedman_result)
 
-# Poisson distribution
+# Poisson distribution (general linearisation model)
 
 Pois_model <- glm(Result_AUDPC ~ Result_Type * Result_Genotype, family = poisson(), data = anv.data)
-summary(Pois_model)
+base::summary(Pois_model)
+print(Pois_model)
+
 
