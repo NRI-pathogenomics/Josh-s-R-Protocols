@@ -40,7 +40,7 @@ x <- matrix(1, nrow = length(y), ncol = 1)  # If you are not including any predi
 # Run reml() function
 reml_result <- reml(y = y, v = v, x = x, data = NULL, RE.constraints = NULL, RE.startvalues = 0.1)
 
-print(reml_result)
+base::summary(reml_result)
 
-# add intepretation lines below:
+print(reml_result)
 
