@@ -120,4 +120,25 @@ print(friedman_result)
 # base::summary(Pois_model)
 # print(Pois_model)
 
+# User friendly summary of results
+#KW-test results:
+KW_pvalue <- as.numeric(non_para_result$p.value)
+print(paste("P-Value for the Kruskal-Wallis rank sum test is: ", KW_pvalue))
+if(KW_pvalue > 0.05 == TRUE){
+  print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
+}
+if(KW_pvalue > 0.05 == FALSE){
+  print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
+}
+
+# Friedman test results
+Fman_pvalue <- as.numeric(friedman_result$p)
+print(paste("P-Value for the Friedman test is: ", Fman_pvalue))
+if(Fman_pvalue > 0.05 == TRUE){
+  print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
+}
+if(Fman_pvalue > 0.05 == FALSE){
+  print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
+}
+
 
