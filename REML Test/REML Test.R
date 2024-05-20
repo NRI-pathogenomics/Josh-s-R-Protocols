@@ -34,9 +34,13 @@ reshaped_data <- Results %>%
 # Extract necessary variables
 y <- Results$Result_AUDPC
 v <- rep(var(y), nrow(reshaped_data))  # Variance vector (assuming homogeneous variance)
-x <- NULL  # If you're not including any predictors
+x <- matrix(1, nrow = length(y), ncol = 1)  # If you are not including any predictors, provide a design matrix of ones
+
 
 # Run reml() function
 reml_result <- reml(y = y, v = v, x = x, data = NULL, RE.constraints = NULL, RE.startvalues = 0.1)
 
+print(reml_result)
+
+# add intepretation lines below:
 
