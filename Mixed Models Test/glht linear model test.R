@@ -60,6 +60,8 @@ if(exists("transformed_data") == FALSE){
   transformed_data <- transformed_AUDPC$x.t
 }
 
+options(warn=-1)
+
 # Significant differences - this part is the hypothesis
 
 # convert Result_Type in the anv.data to a factor
