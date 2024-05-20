@@ -72,10 +72,10 @@ l_selected <- emmeans(lm_ex_selected, list(pairwise ~ Result_Type | Result_Genot
 glht_ex_selected <- glht(lm_ex_selected, linfct = mcp(Result_Type = "Tukey"))
 
 
-glht_ex_selected
+print(glht_ex_selected)
 
 #We use glht() to compute the linear hypothesis tests based on the linear model lm_ex1. 
 #Here, mcp(Result_Type = "Tukey") specifies that we want Tukey's method for pairwise comparisons between levels of Result_Type.
 
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
-cld_ex1
+print(cld_ex1)
