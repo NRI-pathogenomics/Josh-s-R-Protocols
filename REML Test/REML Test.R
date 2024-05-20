@@ -7,7 +7,7 @@ library("dplyr")
 
 # Load the Data
 if(exists("Results") == FALSE){
-  Results <- read.csv(file = "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh-R-Protocols/Output Files/AUDPC values.csv")
+  Results <- read.csv(file = "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Output Files/AUDPC values.csv")
 }
 
 if(exists("Genotypes") == FALSE){
@@ -22,7 +22,7 @@ if(exists("GenoNumber") == FALSE){
 library(tidyr)
 Results$Result_Type <- as.character(Results$Result_Type)
 Results$Result_Genotype <- as.character(Results$Result_Genotype)
-
+Results$Result_AUDPC <- as.numeric(Results$Result_AUDPC)
 # Pivot the data wider
 reshaped_data <- Results %>%
   pivot_wider(
