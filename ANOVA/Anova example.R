@@ -58,15 +58,15 @@ print(anv.model)
  shapiro.test(anv.data$Result_AUDPC)
 
 # If data isnt normal Run a Box-Cox proceedure to obtain optimal transformation
- boxcox(anv.model)
+MASS::boxcox(anv.model)
 # Produces a plot of likelihood of the parameter lambda against values of lambda
 # from -2 to 2
 # Dotted vertical lines indicate the ideal value of lambda
 # Refine range of lambda eg from 0 to 0.5 in increments of 0.1
- boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
+MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
 
 # Plot boxcoxs
  par(mfrow=c(2,1))
- boxcox(anv.model)
- boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
+ MASS::boxcox(anv.model)
+ MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  
