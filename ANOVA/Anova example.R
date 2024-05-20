@@ -70,3 +70,11 @@ MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  MASS::boxcox(anv.model)
  MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  
+# Residuals Test
+x<-resid(lm(Result_AUDPC ~ Result_Type * Result_Genotype, data=anv.data))
+hist(x, main = "Residual Distribution of Regression Model for AUDPC by Type and Genotype")
+shapiro.test(x)
+m <- mean(x)
+s <- sd(x)
+ks.test(x,"pnorm",m,s)
+ 
