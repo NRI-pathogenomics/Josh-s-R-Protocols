@@ -18,20 +18,13 @@ if(exists("GenoNumber") == FALSE){
   GenoNumber <- length(Genotypes)
 }
 
-if(exists("Indv_Mock_Results") == FALSE){
-  Indv_Mock_Results <- subset(Results, Result_Type == "M")
-}
-
-if(exists("Indv_Mock_Results") == FALSE){
-  Indv_Inno_Results <- subset(Results, Result_Type == "I")
-}
-# mock REML
+#  REML
 library(tidyr)
-Indv_Mock_Results$Result_Type <- as.character(Indv_Mock_Results$Result_Type)
-Indv_Mock_Results$Result_Genotype <- as.character(Indv_Mock_Results$Result_Genotype)
+Results$Result_Type <- as.character(Results$Result_Type)
+Results$Result_Genotype <- as.character(Results$Result_Genotype)
 
 # Pivot the data wider
-reshaped_data <- Indv_Mock_Results %>%
+reshaped_data <- Results %>%
   pivot_wider(
     id_cols = c(Result_Type, Result_Genotype),
     names_from = Result_Treatment,
@@ -39,7 +32,7 @@ reshaped_data <- Indv_Mock_Results %>%
   )
 
 # Extract necessary variables
-y <- Mock_column$AUDPC
+y <- Results$Result_AUDPC
 v <- rep(var(y), nrow(reshaped_data))  # Variance vector (assuming homogeneous variance)
 x <- NULL  # If you're not including any predictors
 
