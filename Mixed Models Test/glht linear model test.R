@@ -124,20 +124,34 @@ print(friedman_result)
 #KW-test results:
 KW_pvalue <- as.numeric(non_para_result$p.value)
 print(paste("P-Value for the Kruskal-Wallis rank sum test is: ", KW_pvalue))
+<<<<<<< HEAD
 if((KW_pvalue > 0.05)== TRUE){
   print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
 }
 if((KW_pvalue > 0.05) == FALSE){
+=======
+if(KW_pvalue > 0.05 == TRUE){
+  print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
+}
+if(KW_pvalue > 0.05 == FALSE){
+>>>>>>> 47955ce6685ebe67a0ae3750b2a62193948baf08
   print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
 }
 
 # Friedman test results
 Fman_pvalue <- as.numeric(friedman_result$p)
 print(paste("P-Value for the Friedman test is: ", Fman_pvalue))
+<<<<<<< HEAD
 if((Fman_pvalue > 0.05) == TRUE){
   print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
 }
 if((Fman_pvalue > 0.05) == FALSE){
+=======
+if(Fman_pvalue > 0.05 == TRUE){
+  print("based on the results of this test, Mock and Innoculated groups do NOT differ significantly")
+}
+if(Fman_pvalue > 0.05 == FALSE){
+>>>>>>> 47955ce6685ebe67a0ae3750b2a62193948baf08
   print("based on the results of this test, Mock and Innoculated groups do differ significantly") 
 }
 
