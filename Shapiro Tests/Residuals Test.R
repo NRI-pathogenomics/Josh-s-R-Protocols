@@ -50,6 +50,4 @@ shapiro.test(anv.data$Result_Invsq_AUDPC)
 #still don't have normally-distributed residuals
 #check residuals
 hist()
-=======
 ks.test(x,"pnorm",m,s)
->>>>>>> 8e0a3d371fa981273f9e121772fb64ab69d978b7
