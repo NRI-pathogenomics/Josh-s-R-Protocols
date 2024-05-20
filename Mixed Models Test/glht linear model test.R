@@ -21,6 +21,11 @@ if(("multcompView" %in% all_packages)==FALSE){
   install.packages("multcompView")}
 if(("bestNormalize" %in% all_packages)==FALSE){
   install.packages("bestNormalize")}
+if(("ggpubr" %in% all_packages)==FALSE){
+  install.packages("ggpubr")}
+if(("rstatix" %in% all_packages)==FALSE){
+  install.packages("rstatix")}
+
 library(MASS)
 library(tidyverse)
 library(dplyr)
@@ -35,7 +40,9 @@ library(lattice)
 library(multcompView)
 library(agricolae)
 library(bestNormalize)
-
+library(stats)
+library(rstatix)
+library(ggpubr)
 
 if(exists("Results") == FALSE){
   Results <- read.csv(file = "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Output Files/AUDPC values.csv")
@@ -53,7 +60,7 @@ if(exists("transformed_data") == FALSE){
   transformed_data <- transformed_AUDPC$x.t
 }
 
-# Significant differences
+# Significant differences - this part is the hypothesis
 
 # convert Result_Type in the anv.data to a factor
 
@@ -79,3 +86,21 @@ print(glht_ex_selected)
 
 cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
 print(cld_ex1)
+
+# The actual non-parametric tests
+#Kruskal-Wallis rank sum test
+non_para_result <- kruskal.test(Result_AUDPC ~ Result_Type, data = anv.data)
+print(non_para_result)
+
+#Friedman test
+
+# Aggregate the data to ensure no replicates
+aggregated_data <- anv.data %>%
+  group_by(Result_Genotype, Result_Type) %>%
+  dplyr::summarize(Result_AUDPC = mean(Result_AUDPC), .groups = 'drop')
+
+# Perform the Friedman test
+friedman_result <- aggregated_data %>%
+  friedman_test(Result_AUDPC ~ Result_Type | Result_Genotype)
+
+print(friedman_result)
