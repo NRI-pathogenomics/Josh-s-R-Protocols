@@ -106,3 +106,9 @@ friedman_result <- aggregated_data %>%
   friedman_test(Result_AUDPC ~ Result_Type | Result_Genotype)
 
 print(friedman_result)
+
+# Poisson distribution
+
+Pois_model <- glm(Result_AUDPC ~ Result_Type * Result_Genotype, family = poisson(), data = anv.data)
+summary(Pois_model)
+
