@@ -84,43 +84,12 @@ qqnorm(transformed_data)
 qqline(transformed_data)
 shapiro.test(transformed_data)
 
-# save all Models and transformed data
-lm_Ex_all <- lm_models
-Ex_all <- Ex_values
 
 # #redo ANOVA test by selecting a set of selected data in EX1
 # anv.mod<-aov(Ex_all[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
 # Run anv.mod for the transformed data
 anv.mod <- aov(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
 print(anv.mod)
-
-# Significant differences
-
-# convert Result_Type in the anv.data to a factor
-
-anv.data$Result_Type <- factor(anv.data$Result_Type)
-
-
-# Fit the linear models
-
-# lm_ex_selected <- lm(Ex_[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
-lm_ex_selected <- lm(transformed_data ~ Result_Type * Result_Genotype, data = anv.data)
-
-# Compute estimated marginal means
-l_selected <- emmeans(lm_ex_selected, list(pairwise ~ Result_Type | Result_Genotype), adjust = c("tukey"))
-
-# need to convert to ghlt!
-
-glht_ex_selected <- glht(lm_ex_selected, linfct = mcp(Result_Type = "Tukey"))
-
-
-glht_ex_selected
-
-#We use glht() to compute the linear hypothesis tests based on the linear model lm_ex1. 
-#Here, mcp(Result_Type = "Tukey") specifies that we want Tukey's method for pairwise comparisons between levels of Result_Type.
-
-cld_ex1 <- cld(glht_ex1, Letters=letters, alpha=0.05, reversed=T)
-cld_ex1
 
 
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
