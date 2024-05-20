@@ -100,6 +100,8 @@ print(posthoc<-TukeyHSD(anv.mod,"Result_Type"))
 
 Transformed_Results <- cbind(Results, transformed_data)
 
+Transformed_Results$Result_AUDPC <- as.numeric(Transformed_Results$Result_AUDPC)
+
 x<-resid(lm(Result_AUDPC ~ Result_Type * Result_Genotype, data=Transformed_Results))
 hist(x, main = "Residual Distribution of BestNormalized results for AUDPC by Type and Genotype")
 shapiro.test(x)
