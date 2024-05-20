@@ -114,7 +114,6 @@ friedman_result <- aggregated_data %>%
 base::summary(friedman_result)
 print(friedman_result)
 # if the p-value is greater than 0.05, this suggests there is no significant difference between the groups.
-
 # # Poisson distribution (general linearisation model)
 # 
 # Pois_model <- glm(Result_AUDPC ~ Result_Type * Result_Genotype, family = poisson(), data = anv.data)
