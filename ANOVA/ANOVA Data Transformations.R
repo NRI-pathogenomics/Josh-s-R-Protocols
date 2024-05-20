@@ -99,6 +99,8 @@ print(anv.mod)
 # convert Result_Type in the anv.data to a factor
 
 anv.data$Result_Type <- factor(anv.data$Result_Type)
+
+
 # Fit the linear models
 
 # lm_ex_selected <- lm(Ex_[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
@@ -124,3 +126,14 @@ cld_ex1
 # examine differences between specific pairs of treatments, we can use a post-hoc test, 
 #e.g., Tukeys Honest Significant Differences
 print(posthoc<-TukeyHSD(anv.mod,"Result_Type"))
+
+#Test the Residuals again - this is the real test of whether the transformation
+
+Transformed_Results <- cbind(Results, transformed_data)
+
+x<-resid(lm(Result_AUDPC ~ Result_Type * Result_Genotype, data=Transformed_Results))
+hist(x, main = "Residual Distribution of BestNormalized results for AUDPC by Type and Genotype")
+shapiro.test(x)
+m <- mean(x)
+s <- sd(x)
+ks.test(x,"pnorm",m,s)
