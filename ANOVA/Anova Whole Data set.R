@@ -34,6 +34,7 @@ library(Hmisc)
 library(lattice)
 library(multcompView)
 library(agricolae)
+library(reshape2)
 
 print(anv.data<-Results)
 attach(anv.data)
@@ -43,11 +44,15 @@ anv.data$Result_Genotype <- as.character(Result_Genotype)
 anv.data$Result_Type <- as.character(Result_Type)
 #create comb variable combining both datasets
 
-comb <- paste(anv.data$Result_Genotype, anv.data$Result_Type)
+comb <- paste(anv.data$Result_Genotype, anv.data$Result_Type, sep = "-")
+
+anv.data$comb <- comb
+
+anv.data <- subset(anv.data, select = c("comb", "Result_Treatment", "Result_AUDPC"))
 
 # Create a variable for boxcox
 # Run aov
-anv.model <- aov(anv.data$Result_AUDPC ~ comb)
+anv.model <- aov(Result_AUDPC ~ comb, data = anv.data)
 
 # here x would be disease score, y would be genotype z could be included as block or run without for a one way anova
 
@@ -75,7 +80,7 @@ MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  
 # Residuals Test
-x<-resid(lm(anv.data$Result_AUDPC ~ comb))
+x<-resid(lm(Result_AUDPC ~ comb, data = anv.data))
 hist(x, main = "Residual Distribution of Regression Model for AUDPC by Type and Genotype")
 shapiro.test(x)
 m <- mean(x)
