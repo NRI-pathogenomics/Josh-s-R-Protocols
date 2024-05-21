@@ -104,7 +104,7 @@ Transformed_Results$Result_AUDPC <- as.numeric(Transformed_Results$Result_AUDPC)
 Transformed_Results$Result_Type <- as.character(Transformed_Results$Result_Type)
 Transformed_Results$Result_Genotype <- as.character(Transformed_Results$Result_Genotype)
 
-x<-resid(lm(Result_AUDPC ~ Result_Type * Result_Genotype, data=Transformed_Results))
+x<-resid(lm(transformed_data ~ Result_Type * Result_Genotype, data=Transformed_Results))
 hist(x, main = "Residual Distribution of BestNormalized results for AUDPC by Type and Genotype")
 shapiro.test(x)
 m <- mean(x)
