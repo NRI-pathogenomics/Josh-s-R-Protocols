@@ -22,6 +22,21 @@ data <- data.frame(continuous_var, genotype, treatment)
 art_model <- art(continuous_var ~ genotype * treatment, data = data)
 anova(art_model)
 ```
+# After step 3 eemeans will not work - try this modifacation (you will need to modify this for your data)
+#Extract estimates 
+table<-art_model$estimated.effects
+# Extract aligned ranks
+dataR$aligned_ranks <- art_model$residuals + table$`data$genotype:data$treatment`
+# Fit a linear model on the aligned ranks
+lm_model <- lm(dataR$aligned_ranks ~ genotype * treatment, data = data)
+summary(lm_model)
+# Calculate estimated marginal means and perform pairwise comparisons
+emmeans_results <- emmeans(lm_model, ~ genotype * treatment)
+pairwise_comparisons <- pairs(emmeans_results)
+summary(pairwise_comparisons)
+# Obtain compact letter display (cld) to group treatments
+cld_results <- cld(emmeans_results, Letters = letters)
+print(cld_results)
 ### Step 4: Post-Hoc Test with Pairwise Comparisons
 ```R
 # Perform pairwise comparisons
