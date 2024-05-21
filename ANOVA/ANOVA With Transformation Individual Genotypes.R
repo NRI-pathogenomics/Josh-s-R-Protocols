@@ -39,6 +39,7 @@ library(lattice)
 library(multcompView)
 library(agricolae)
 library(bestNormalize)
+options(warn=-1)
 # Load the package
 ## Power Of - Transformations
 
