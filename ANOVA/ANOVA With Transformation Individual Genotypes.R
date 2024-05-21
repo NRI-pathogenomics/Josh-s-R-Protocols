@@ -73,16 +73,15 @@ Ex_values <- list()
 
 # BestNormalize transformations
 # Best Normalize
-
-transformed_AUDPC <- bestNormalize(anv.data$Result_AUDPC)
+Results$Result_AUDPC <- as.numeric(Results$Result_AUDPC)
+Results$Result_Genotype <- as.character(Results$Result_Genotype)
+Results$Result_Type <- as.character(Results$Result_Type)
+transformed_AUDPC <- bestNormalize(Results$Result_AUDPC)
 
 transformed_data <- transformed_AUDPC$x.t
 
 Transformed_Results <- cbind(Results, transformed_data)
 
-Transformed_Results$Result_AUDPC <- as.numeric(Transformed_Results$Result_AUDPC)
-Transformed_Results$Result_Type <- as.character(Transformed_Results$Result_Type)
-Transformed_Results$Result_Genotype <- as.character(Transformed_Results$Result_Genotype)
 
 # #redo ANOVA test by selecting a set of selected data in EX1
 # anv.mod<-aov(Ex_all[["1"]] ~ Result_Type * Result_Genotype, data = anv.data)
@@ -123,19 +122,20 @@ for(i in 1:GenoNumber){
     next
   }
   
-  # If data isnt normal Run a Box-Cox proceedure to obtain optimal transformation
-  MASS::boxcox(anv.model)
-  # Produces a plot of likelihood of the parameter lambda against values of lambda
-  # from -2 to 2
-  # Dotted vertical lines indicate the ideal value of lambda
-  # Refine range of lambda eg from 0 to 0.5 in increments of 0.1
-  MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
+  # # If data isnt normal Run a Box-Cox proceedure to obtain optimal transformation
+  # MASS::boxcox(anv.model)
+  # # Produces a plot of likelihood of the parameter lambda against values of lambda
+  # # from -2 to 2
+  # # Dotted vertical lines indicate the ideal value of lambda
+  # # Refine range of lambda eg from 0 to 0.5 in increments of 0.1
+  # MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
+  # 
+  # # Plot boxcoxs
+  # par(mfrow=c(2,1))
+  # MASS::boxcox(anv.model)
+  # MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
   
-  # Plot boxcoxs
-  par(mfrow=c(2,1))
-  MASS::boxcox(anv.model)
-  MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
-  
+  #Test the residuals
   tryCatch({
     x <- resid(lm(Result_AUDPC ~ Result_Type, data = anv.data))
     
