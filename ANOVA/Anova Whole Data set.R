@@ -41,9 +41,13 @@ attach(anv.data)
 anv.data$Result_AUDPC <- as.numeric(anv.data$Result_AUDPC)
 anv.data$Result_Genotype <- as.character(Result_Genotype)
 anv.data$Result_Type <- as.character(Result_Type)
+#create comb variable combining both datasets
+
+comb <- paste(anv.data$Result_Genotype, anv.data$Result_Type)
+
 # Create a variable for boxcox
 # Run aov
-anv.model <- aov(Result_AUDPC ~ Result_Type * Result_Genotype, data = anv.data)
+anv.model <- aov(anv.data$Result_AUDPC ~ comb)
 
 # here x would be disease score, y would be genotype z could be included as block or run without for a one way anova
 
@@ -71,7 +75,7 @@ MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
  
 # Residuals Test
-x<-resid(lm(Result_AUDPC ~ Result_Type * Result_Genotype, data=anv.data))
+x<-resid(lm(anv.data$Result_AUDPC ~ comb))
 hist(x, main = "Residual Distribution of Regression Model for AUDPC by Type and Genotype")
 shapiro.test(x)
 m <- mean(x)
