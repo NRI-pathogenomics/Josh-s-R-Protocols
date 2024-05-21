@@ -37,8 +37,11 @@ library(agricolae)
 
 Genotypes
 GenoNumber
+options(warn=-1)
+#remove warnings
 
 for(i in 1:GenoNumber){
+  print(paste("Running Results for Genotype: ", Genotypes[i]))
   Results_Sub <- subset(Results, Result_Genotype == Genotypes[i])
   print(anv.data<-Results_Sub)
   attach(anv.data)
@@ -59,8 +62,18 @@ for(i in 1:GenoNumber){
    hist(anv.data$Result_AUDPC, main = paste("Distribution of AUDPC values for ", Genotypes[i]))
    qqnorm(anv.data$Result_AUDPC)
    qqline(anv.data$Result_AUDPC)
-  # Check normalitly with shapiro-wilks
-   shapiro.test(anv.data$Result_AUDPC)
+  # Check normalitly with shapiro-wilks - with a tryCatch statement to catch whenever the AUDPCs are all the same
+   shapiro_result <- tryCatch({
+     shapiro.test(anv.data$Result_AUDPC)
+   }, error = function(e) {
+     message("Error in Shapiro-Wilk test for Genotype ", Genotypes[i], ": ", e$message)
+     return(NULL)
+   })
+   
+   if (is.null(shapiro_result)) {
+     detach(anv.data)
+     next
+   }
   
   # If data isnt normal Run a Box-Cox proceedure to obtain optimal transformation
   MASS::boxcox(anv.model)
@@ -75,12 +88,24 @@ for(i in 1:GenoNumber){
    MASS::boxcox(anv.model)
    MASS::boxcox(anv.model, lambda = seq(0, 0.5, 0.1))
    
-  # Residuals Test
-  x<-resid(lm(Result_AUDPC ~ Result_Type, data=anv.data))
-  hist(x, main = paste("Residual Distribution of Regression Model for AUDPC by Type for", Genotypes[i]))
-  shapiro.test(x)
-  m <- mean(x)
-  s <- sd(x)
-  ks.test(x,"pnorm",m,s)
+   tryCatch({
+     x <- resid(lm(Result_AUDPC ~ Result_Type, data = anv.data))
+     
+     if (all(x == x[1])) {
+       stop("all 'x' values are identical")
+     }
+     
+     hist(x, main = paste("Residual Distribution of Regression Model for AUDPC by Type for", Genotypes[i]))
+     shapiro.test(x)
+     m <- mean(x)
+     s <- sd(x)
+     ks.test(x, "pnorm", m, s)
+   }, error = function(e) {
+     message("Error in residuals test for Genotype ", Genotypes[i], ": ", e$message)
+     detach(anv.data)
+     next
+   })
+   
+   detach(anv.data)
 }
  
