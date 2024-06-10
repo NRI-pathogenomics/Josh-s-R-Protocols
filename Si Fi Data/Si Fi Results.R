@@ -39,10 +39,6 @@ plott <- ggplot(Si_Fi_long, aes(x = Hairpin, y = Hits, color = interaction(Genom
   geom_point(aes(shape = Hit_Type, size = Hits), 
              position = position_jitter(width = 0.3, height = 0), 
              alpha = 0.7) +
-  geom_text(aes(label = Hits), 
-            position = position_jitter(width = 0.3, height = 0), 
-            vjust = -0.5, 
-            size = 3) +
   scale_color_manual(values = c("V.dahliae JR2.Total Hits" = "blue", "V.dahliae JR2.Efficient Hits" = "orange",
                                 "Col-0.Total Hits" = "green", "Col-0.Efficient Hits" = "red")) +
   scale_size_continuous(range = c(2, 5)) +  # Adjust size range for visibility
