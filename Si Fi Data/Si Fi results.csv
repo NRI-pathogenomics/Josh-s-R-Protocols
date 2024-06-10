@@ -1,0 +1,47 @@
+Hairpin,Genome,Targets,Total siRNA hits,Efficient siRNA hits
+A.thaliana Chr1 segment,V.dahliae JR2,CP009075.1,160,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009079.1,73,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009082.1,73,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009080.1,67,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009078.1,66,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009077.1,62,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009076.1,57,0
+A.thaliana Chr1 segment,V.dahliae JR2,CP009081.1,54,0
+GFP,V.dahliae JR2,CP009075.1,98,0
+GFP,V.dahliae JR2,CP009082.1,51,0
+GFP,V.dahliae JR2,CP009078.1,50,0
+GFP,V.dahliae JR2,CP009080.1,43,0
+GFP,V.dahliae JR2,CP009076.1,39,0
+GFP,V.dahliae JR2,CP009077.1,34,0
+GFP,V.dahliae JR2,CP009079.1,31,0
+GFP,V.dahliae JR2,CP009081.1,31,0
+Wc1,V.dahliae JR2,CP009079.1,411,0
+Wc1,V.dahliae JR2,CP009075.1,57,0
+Wc1,V.dahliae JR2,CP009081.1,28,0
+Wc1,V.dahliae JR2,CP009077.1,24,0
+Wc1,V.dahliae JR2,CP009082.1,22,0
+Wc1,V.dahliae JR2,CP009080.1,21,0
+Wc1,V.dahliae JR2,CP009078.1,14,0
+Wc1,V.dahliae JR2,CP009076.1,13,0
+V_dahliae Chr7 segment,V.dahliae JR2,CP009078.1,949,440
+V_dahliae Chr7 segment,V.dahliae JR2,CP009082.1,880,414
+V_dahliae Chr7 segment,V.dahliae JR2,CP009081.1,607,300
+V_dahliae Chr7 segment,V.dahliae JR2,CP009077.1,576,270
+V_dahliae Chr7 segment,V.dahliae JR2,CP009079.1,565,260
+V_dahliae Chr7 segment,V.dahliae JR2,CP009076.1,342,160
+V_dahliae Chr7 segment,V.dahliae JR2,CP009075.1,309,150
+V_dahliae Chr7 segment,V.dahliae JR2,CP009080.1,182,80
+Sge1,V.dahliae JR2,CP009075.1,34,0
+Sge1,V.dahliae JR2,CP009077.1,24,0
+Sge1,V.dahliae JR2,CP009082.1,24,0
+Sge1,V.dahliae JR2,CP009078.1,23,0
+Sge1,V.dahliae JR2,CP009076.1,17,0
+Sge1,V.dahliae JR2,CP009081.1,17,0
+Sge1,V.dahliae JR2,CP009079.1,12,0
+Sge1,V.dahliae JR2,CP009080.1,11,0
+ABF Col_0,V.dahliae JR2,CP009076.1,1,1
+ABF Col_0,Col-0,NA,0,0
+Sge1,Col-0,NA,0,0
+Wc1,Col-0,NA,0,0
+GFP,Col-0,NA,0,0
+V_dahliae Chr7 segment,Col-0,NA,0,0
