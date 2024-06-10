@@ -21,7 +21,7 @@ library(reshape2)
 library(tidyverse)
 library(magrittr)
 library(plotrix)
-Si_Fi <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Si Fi Data/Si Fi results.csv", 
+Si_Fi <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Si Fi Data/Si Fi results total.csv", 
                   header = TRUE, sep = ",", quote = "\"",
                   dec = ".", fill = TRUE, comment.char = "")
 
