@@ -1,6 +1,6 @@
 # aligned rank transform (ART)
 ### Step 1: Install and Load Necessary Packages
-R
+
 install.packages("ARTool")
 install.packages("emmeans")
 install.packages("multcompView") # for cld function
