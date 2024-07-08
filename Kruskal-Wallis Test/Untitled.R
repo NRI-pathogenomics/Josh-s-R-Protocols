@@ -41,24 +41,34 @@ data$Result_Type <- as.factor(unlist(data$Result_Type))
 
 # Kruskal-Wallis Test
 print("Mock vs Inoculated")
-KW_results1 <- kruskal.test(Result_AUDPC ~ Result_Genotype * Result_Type, data = data)
+KW_results1 <- kruskal.test(Result_AUDPC, Result_AUDPC ~ Result_Genotype * Result_Type, data = data)
 print(KW_results1)
 
-# Post-hoc Test: Perform Dunn's Test
+# Post Hoc: Perform Dunn's Test
 dunn_results <- dunnTest(Result_AUDPC ~ Result_Genotype * Result_Type, data = data, method = "bonferroni")
-print(dunn_results)
 
-# Summarize data for plotting
-summary_data <- data %>%
-  group_by(Result_Genotype, Result_Type) %>%
-  summarise(mean_AUDPC = mean(Result_AUDPC, na.rm = TRUE),
-            sd_AUDPC = sd(Result_AUDPC, na.rm = TRUE))
+# Extract pairwise comparison results
+pairwise_results <- dunn_results$res
+
+# Add p-values to data
+data$groups <- interaction(data$Result_Genotype, data$Result_Type)
+
+# Perform CLD
+cld_results <- cldList(p.adjust ~ comparison, data = pairwise_results, threshold = 0.05)
+
+# Merge CLD results with data for plotting
+data <- data %>%
+  mutate(group = interaction(Result_Genotype, Result_Type)) %>%
+  left_join(cld_results, by = c("group" = "Group"))
+
+print(cld_results)
 
 # Plot results with ggplot2
 p <- ggplot(data, aes(x = interaction(Result_Genotype, Result_Type), y = Result_AUDPC)) +
   geom_violin(trim = FALSE, fill = "lightblue") +
   geom_boxplot(width = 0.1, fill = "orange", outlier.shape = NA) +
   stat_summary(fun = mean, geom = "point", shape = 23, size = 3, fill = "red") +
+  geom_text(aes(label = Letters), position = position_dodge(width = 0.8), vjust = -0.5) +
   theme_minimal() +
   labs(title = "AUDPC Results by Genotype and Type",
        x = "Genotype and Type",
