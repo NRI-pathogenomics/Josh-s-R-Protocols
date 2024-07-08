@@ -95,7 +95,7 @@ cld_df$Result_Type <- factor(cld_df$Result_Type, levels = unique(cld_df$Result_T
 colnames(cld_df)[colnames(cld_df) == ".group"] <- "CLD_Group"
 
 # Create the bar plot
-ggplot(cld_df, aes(x = Result_Type, y = emmean, fill = Result_Genotype)) +
+art_plot <- ggplot(cld_df, aes(x = Result_Type, y = emmean, fill = Result_Genotype)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
   geom_errorbar(aes(ymin = emmean - SE, ymax = emmean + SE),
                 position = position_dodge(width = 0.8), width = 0.25) +
@@ -104,3 +104,4 @@ ggplot(cld_df, aes(x = Result_Type, y = emmean, fill = Result_Genotype)) +
   labs(x = "Result Type", y = "Estimated Marginal Means", fill = "Result Genotype",
        title = "Bar Plot with Compact Letter Display") +
   theme_minimal()
+print(art_plot)
