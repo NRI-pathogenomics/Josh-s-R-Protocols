@@ -6,7 +6,39 @@ if(("emmeans" %in% all_packages)==FALSE){
   install.packages("emmeans")}
 if(("multcompView" %in% all_packages)==FALSE){
   install.packages("multcompView") # for cld function
-  }
+}
+all_packages <- installed.packages()
+
+if(("MASS" %in% all_packages)==FALSE){
+  install.packages("MASS")}
+if(("ggpmisc" %in% all_packages)==FALSE){
+  install.packages("ggpmisc")}
+if(("jmv" %in% all_packages)==FALSE){
+  install.packages("jmv")}
+if(("Rmisc" %in% all_packages)==FALSE){
+  install.packages("Rmisc")}
+if(("multcomp" %in% all_packages)==FALSE){
+  install.packages("multcomp")}
+if(("Hmisc" %in% all_packages)==FALSE){
+  install.packages("Hmisc")}
+if(("lattice" %in% all_packages)==FALSE){
+  install.packages("lattice")}
+if(("bestNormalize" %in% all_packages)==FALSE){
+  install.packages("bestNormalize")}
+library(MASS)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggpmisc)
+library(jmv)
+library(Rmisc)
+library(emmeans) 
+library(multcomp)
+library(Hmisc)
+library(lattice)
+library(multcompView)
+library(agricolae)
+library(bestNormalize)
 library(ARTool)
 library(emmeans)
 library(multcompView)
