@@ -39,19 +39,43 @@ data$Result_AUDPC <- as.numeric(data$Result_AUDPC)
 data$Result_Genotype <- as.factor(unlist(data$Result_Genotype))
 data$Result_Type <- as.factor(unlist(data$Result_Type))
 
+# remove outliers from the data
+
+# # Function to remove outliers based on IQR
+# remove_outliers <- function(df) {
+#   Q1 <- quantile(df$Result_AUDPC, 0.25)
+#   Q3 <- quantile(df$Result_AUDPC, 0.75)
+#   IQR <- Q3 - Q1
+#   
+#   lower_bound <- Q1 - 1.5 * IQR
+#   upper_bound <- Q3 + 1.5 * IQR
+#   
+#   df %>% filter(Result_AUDPC >= lower_bound & Result_AUDPC <= upper_bound)
+# }
+
+# Apply the function to each group
+cleaned_data <- data %>%
+  group_by(Result_Genotype) %>%
+  group_modify(~remove_outliers(.x)) %>%
+  ungroup()
+
+# Check the result
+print(cleaned_data)
+
+
 ### Step 3: Perform Kruskal-Wallis Test
 #On the data overall
 print("Mock vs Inoculated")
-KW_results1 <- kruskal.test(Result_AUDPC, formula=Result_AUDPC ~ Result_Genotype * Result_Type, data = data)
+KW_results1 <- kruskal.test(Result_AUDPC, formula=Result_AUDPC ~ Result_Genotype * Result_Type, data = cleaned_data)
 print(KW_results1)
 
 # Kruskal-Wallis Test
 print("Mock vs Inoculated")
-KW_results1 <- kruskal.test(Result_AUDPC, Result_AUDPC ~ Result_Genotype * Result_Type, data = data)
+KW_results1 <- kruskal.test(Result_AUDPC, Result_AUDPC ~ Result_Genotype * Result_Type, data = cleaned_data)
 print(KW_results1)
 
 # Post Hoc: Perform Dunn's Test
-dunn_result <- dunn.test(data$Result_AUDPC, g=interaction(data$Result_Genotype, data$Result_Type), method="bonferroni")
+dunn_result <- dunn.test(cleaned_data$Result_AUDPC, g=interaction(cleaned_data$Result_Genotype, cleaned_data$Result_Type), method="bonferroni")
 print("Post-Hoc Dunn Test")
 print(dunn_result)
 
@@ -60,7 +84,7 @@ library(rcompanion)
 
 # Create a compact letter display (cld)
 cld_result <- cldList(data=dunn_result, 
-                      formula =  P ~ comparisons, 
+                      formula = P ~ comparisons, 
                       comparison=comparisons, 
                       threshold = 0.05, 
                       print.comp = TRUE, remove.zero = FALSE)
@@ -71,9 +95,9 @@ cld_df <- as.data.frame(cld_result)
 
 #Add the Cld results to the "data" dataframe
 #First, some reshaping of the data dataframe
-data$Group <- paste(data$Result_Genotype, data$Result_Type, sep=".")
+data$Group <- paste(cleaned_data$Result_Genotype, cleaned_data$Result_Type, sep=".")
 
 # now left join the cld_result to the data data_frame
-data <- data %>% left_join(cld_result,by="Group")
-print(data)
+cleaned_data <- cleaned_data %>% left_join(cld_result,by="Group")
+print(cleaned_data)
 
