@@ -8,7 +8,7 @@ library(FSA)
 setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Improvements")
 pheno<-read.csv("NEWPT2.csv")
 
-# calculate the AUDPC values 
+# calculate the AUDPC values - this formula calculates the AUDPC properly unlike the combined average plots
 head(pheno)
 days<-c(28,35,49,56) # you could use hours and put more time points
 pheno[,1]=as.factor(pheno[,1]) 
