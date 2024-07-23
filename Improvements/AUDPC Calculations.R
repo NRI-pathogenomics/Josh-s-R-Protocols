@@ -99,10 +99,17 @@ for(i in 1:GenoNumber){
 
 Mean_AUDPC <- write.csv(Average_AUDPC, file = "mean_audpc", row.names = FALSE)
 
-# Standard Error
-# Calculate standard deviation of each row
-row_stdev <- apply(Average_AUDPC, 1, sd, na.rm = TRUE)
+print(Average_AUDPC)
 
-# View standard deviation of each row
-print(row_stdev)
-#inno.st.dev/sqrt(inno.no.of.reps)
+#plot the data
+#fill is based on Treatment so there's only need for 2 colours on the bar plot
+#geomerrobar uses the SE column to add the error bars
+ggplot(data = Average_AUDPC, aes(x = Genotype, y = Average_AUDPC, fill = Treatment)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = 0.7) +
+  geom_errorbar(aes(ymin = Average_AUDPC - SE, ymax = Average_AUDPC + SE),
+                position = position_dodge(0.7), width = 0.25) +
+  labs(title = "Average AUDPC with Standard Error by Genotype and Treatment",
+       x = "Genotype",
+       y = "Average AUDPC") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
