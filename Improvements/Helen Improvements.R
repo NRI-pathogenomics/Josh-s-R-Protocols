@@ -5,7 +5,7 @@ library(dunn.test)
 library(DescTools)
 library(rcompanion)
 library(FSA)
-setwd("C:/Users/hc474/OneDrive - University of Kent/PhD students/Josh/Josh scripts")
+setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Improvements")
 pheno<-read.csv("NEWPT2.csv")
 
 # calculate the AUDPC values 
@@ -22,16 +22,18 @@ colnames(pheno)[9]=c('audpc')
 write.csv(pheno, file = "audpc.csv", row.names=FALSE)
 
 #check for normality
-shapiro.test(resid(lm(ansc(pheno$audpc,200)~pheno$Genotype*pheno$treatmentÂ.)))
-hist(resid(lm(ansc(pheno$audpc,150)~pheno$Genotype*pheno$treatmentÂ.)))
+shapiro.test(resid(lm(ansc(pheno$audpc,200)~pheno$Genotype*pheno$treatment.)))
+hist(resid(lm(ansc(pheno$audpc,150)~pheno$Genotype*pheno$treatment.)))
 
 # the data is not normally distributed an anscombe transformation does not help (see above)
+# the Anscombe transform, is a variance-stabilizing transformation that transforms a random variable with a Poisson distribution
+# into one with an approximately standard Gaussian distribution.
 
 pheno$Genotype<-gsub("-","",pheno$Genotype)
-kw<-kruskal.test(pheno, formula=pheno$audpc ~ pheno$Genotype * pheno$treatmentÂ.)
+kw<-kruskal.test(pheno, formula=pheno$audpc ~ pheno$Genotype * pheno$treatment.)
 kw
 # a p value of p-value < 2.2e-16 indicates there is a difference between treatments
-dunn_result2 <- dunnTest(pheno$audpc, g=interaction(pheno$Genotype, pheno$treatmentÂ.,method="bonferroni"))
+dunn_result2 <- dunnTest(pheno$audpc, g=interaction(pheno$Genotype, pheno$treatment.,method="bonferroni"))
 
 CLD = cldList(P.adj ~ Comparison, data=dunn_result2$res)
 CLD
