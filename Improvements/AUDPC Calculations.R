@@ -63,13 +63,44 @@ if(file.exists("/Users/joshhoti/Library/CloudStorage/
 Genotypes <- as.list(as.character(pheno$Genotype))
 Genotypes <- unique(Genotypes)
 GenoNumber <- length(Genotypes)
-Average_AUDPC <- data.frame(matrix(ncol = 3, nrow = 0))
-colnames(Average_AUDPC) <- c('Genotype', 'Treatment', 'Average_AUDPC')
+Average_AUDPC <- data.frame(matrix(ncol = 4, nrow = 0))
+colnames(Average_AUDPC) <- c('Genotype', 'Treatment', 'Average_AUDPC', 'SE')
+
+# use a for loop to loop through the functions I need
+# mean() to calculate the mean values for the rows that contain the Genotype held in Genotypes held in position i  and have the M/I treatment type
+#sd to calucate the standard deviation for the rows that contain the Genotype held in Genotypes held in position i  and have the M/I treatment type
+#sum to add the number of rows that that contain the Genotype held in Genotypes held in position i  and have the M/I treatment type
 for(i in 1:GenoNumber){
   mock_audpc <- mean(pheno$audpc[pheno$Genotype == Genotypes[i] & pheno$treatment. == "M"])
-  Average_AUDPC[nrow(Average_AUDPC) + 1,] = c(Genotypes[i], "M", mock_audpc)
+  
+  mock_sd_value <- sd(pheno$audpc[pheno$Genotype == Genotypes[i] & pheno$treatment. == "M"])
+  
+  n <- sum(pheno$Genotype == Genotypes[i] & pheno$treatment. == "M")
+  
+  # Calculate SE
+  mock_se_value <- mock_sd_value/sqrt(n)
+  
+  Average_AUDPC[nrow(Average_AUDPC) + 1,] = c(Genotypes[i], "M", mock_audpc, mock_se_value)
+  
   inno_audpc <- mean(pheno$audpc[pheno$Genotype == Genotypes[i] & pheno$treatment. == "I"])
-  Average_AUDPC[nrow(Average_AUDPC) + 1,] = c(Genotypes[i], "I", inno_audpc)
+  
+  inno_sd_value <- sd(pheno$audpc[pheno$Genotype == Genotypes[i] & pheno$treatment. == "I"])
+  
+  n <- sum(pheno$Genotype == Genotypes[i] & pheno$treatment. == "I")
+  
+  # Calculate SE
+  inno_se_value <- inno_sd_value/sqrt(n)
+  
+  Average_AUDPC[nrow(Average_AUDPC) + 1,] = c(Genotypes[i], "I", inno_audpc, inno_se_value)
+  
 }
 
 Mean_AUDPC <- write.csv(Average_AUDPC, file = "mean_audpc", row.names = FALSE)
+
+# Standard Error
+# Calculate standard deviation of each row
+row_stdev <- apply(Average_AUDPC, 1, sd, na.rm = TRUE)
+
+# View standard deviation of each row
+print(row_stdev)
+#inno.st.dev/sqrt(inno.no.of.reps)
