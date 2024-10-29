@@ -3,11 +3,11 @@
 #then specify the location you saved the unzipped file eg ~/Documents below
 install.packages("~/Documents/blocksdesign_2.7.tar.gz",repos=NULL,type="source")
 require(blocksdesign)
-setwd("/Users/folder_where_file_is")
+setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Additional Scripts.csv")
 #the following is a file with genotypes and a number associated with each
-number_for_geno<-read.csv("numbers.csv", header=TRUE)
+number_for_geno<-read.csv("Col-0_numbers.csv", header=TRUE)
 # change numbers below to suit your randomisation
-RBC<- blocks(treatments=386,replicates=5)
+RBC<- blocks(treatments=2,replicates=8)
 RBC
 RD<-RBC$Design
 # combine design with your genotype names 
