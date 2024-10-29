@@ -11,6 +11,6 @@ RBC<- blocks(treatments=2,replicates=8)
 RBC
 RD<-RBC$Design
 # combine design with your genotype names 
-comb<- merge(RD,number_for_geno, by.x='Treatments', by.y='Number',all.x=TRUE)
-comb_o<- comb[order(comb$Plots),]
+comb<- merge(RD,number_for_geno, by.x='treatments', by.y='Col_0.Rep',all.x=TRUE)
+comb_o<- comb[order(comb$plots),]
 write.csv(comb_o,"randomisation.csv")
