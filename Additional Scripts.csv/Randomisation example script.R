@@ -1,7 +1,7 @@
 #need to put this in for version 3.5 of R
 #you need to download an old version of the blockdesign package or I can send you it,
 #then specify the location you saved the unzipped file eg ~/Documents below
-install.packages("~/Documents/blocksdesign_2.7.tar.gz",repos=NULL,type="source")
+install.packages("blocksdesign")
 require(blocksdesign)
 setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Additional Scripts.csv")
 #the following is a file with genotypes and a number associated with each
