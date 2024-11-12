@@ -7,7 +7,7 @@ setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgradua
 #the following is a file with genotypes and a number associated with each
 number_for_geno<-read.csv("Col-0_numbers.csv", header=TRUE)
 # change numbers below to suit your randomisation
-RBC<- blocks(treatments=2,replicates=10)
+RBC<- blocks(treatments=2,replicates=5)
 RBC
 RD<-RBC$Design
 # combine design with your genotype names 
