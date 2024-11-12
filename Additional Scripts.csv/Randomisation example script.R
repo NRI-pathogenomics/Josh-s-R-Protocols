@@ -3,7 +3,7 @@
 #then specify the location you saved the unzipped file eg ~/Documents below
 install.packages("blocksdesign")
 require(blocksdesign)
-setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Additional Scripts")
+setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Additional Scripts.csv")
 #the following is a file with genotypes and a number associated with each
 number_for_geno<-read.csv("Col-0_numbers.csv", header=TRUE)
 # change numbers below to suit your randomisation
