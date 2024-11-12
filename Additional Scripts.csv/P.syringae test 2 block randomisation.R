@@ -1,22 +1,15 @@
 # Define treatments and replicate labels for a single block
 setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Additional Scripts.csv")
-treatments <- rep(c("mock", "inoculated"), each = 5)  # Two treatments, 5 replicates each
-replicate_labels <- c(3, 5, 8, 9, 13, 15, 16, 22, 23, 24)  # Col-0 plant labels
-
-# Create a single block with treatments and replicate labels
-single_block <- data.frame(
-  Treatment = treatments,
-  Col_0_label = replicate_labels
+# Define treatments and specific replicate labels for each
+treatment_labels <- data.frame(
+  Treatment = c(rep("inoculated", 5), rep("mock", 5)),
+  Col_0_label = c(3, 5, 8, 9, 13, 15, 16, 22, 23, 24)
 )
 
-# Duplicate the single block to create two blocks
-block1 <- single_block
-block2 <- single_block
-
-# Randomize the rows within each block
+# Create two randomized blocks using the specific labels for each treatment
 set.seed(42)  # Set seed for reproducibility
-block1 <- block1[sample(nrow(block1)), ]
-block2 <- block2[sample(nrow(block2)), ]
+block1 <- treatment_labels[sample(nrow(treatment_labels)), ]  # Randomize rows for Block 1
+block2 <- treatment_labels[sample(nrow(treatment_labels)), ]  # Randomize rows for Block 2
 
 # Add Block identifiers
 block1$Block <- 1
@@ -25,7 +18,7 @@ block2$Block <- 2
 # Combine both blocks into one data frame
 design <- rbind(block1, block2)
 
-# Add Plot numbers within each block
+# Add Plot numbers within each block for easy reference
 design <- design[order(design$Block), ]
 design$Plot <- unlist(lapply(split(design, design$Block), function(df) 1:nrow(df)))
 
