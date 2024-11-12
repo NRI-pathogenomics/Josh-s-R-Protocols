@@ -1,4 +1,5 @@
 # Define treatments and replicate labels for a single block
+setwd("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Additional Scripts.csv")
 treatments <- rep(c("mock", "inoculated"), each = 5)  # Two treatments, 5 replicates each
 replicate_labels <- c(3, 5, 8, 9, 13, 15, 16, 22, 23, 24)  # Col-0 plant labels
 
