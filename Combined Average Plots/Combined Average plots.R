@@ -21,19 +21,19 @@ library(reshape2)
 library(tidyverse)
 library(magrittr)
 library(plotrix)
-Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Input Files/NEWPT2.csv", 
+Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Input Files/NEWPT2.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
 Path_Assay <- setNames(Path_Assay, nm=c("Genotype", "block",	"treatment.", "number", "Day 28", "Day 35", "Day 49", "Day 56"))
 
 
 if(file.exists("/Users/joshhoti/Library/CloudStorage/
-               OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average plots/Mock Averaged Results")==FALSE){
+               OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average plots/Mock Averaged Results")==FALSE){
   file.create("Mock Averaged Results")
 }
 
 if(file.exists("/Users/joshhoti/Library/CloudStorage/
-               OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average plots/Innoculated Averaged Results")==FALSE){
+               OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average plots/Innoculated Averaged Results")==FALSE){
   file.create("Innoculated Averaged Results")
 }
 ##Subsetting the Data
@@ -107,12 +107,12 @@ Inno_means <- data.frame()
 Inno_AUDPC <- list()
 ## check if mock output files exist and create them if not in the Onedrive local repository
 if(file.exists("/Users/joshhoti/Library/CloudStorage/
-               OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average plots/Mock Averaged Results")==FALSE){
+               OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average plots/Mock Averaged Results")==FALSE){
   file.create("Mock Averaged Results")
 }
 
 if(file.exists("/Users/joshhoti/Library/CloudStorage/
-               OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average plots/Innoculated Averaged Results")==FALSE){
+               OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average plots/Innoculated Averaged Results")==FALSE){
   file.create("Innoculated Averaged Results")
 }
 ## Calculate and save the Averaged AUPDC results
@@ -182,8 +182,8 @@ Inno_results <- cbind(Genotypes, Inno_AUDPC)
 print(Mock_results)
 print(Inno_results)
 #Save Results
-Save_File_Mock <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average Plots/MockAUDPC.csv"
-Save_File_Inno <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R-Protocols/Combined Average Plots/InnoAUDPC.csv"
+Save_File_Mock <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average Plots/MockAUDPC.csv"
+Save_File_Inno <- "/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Average Plots/InnoAUDPC.csv"
 if(file.exists(Save_File_Mock) == TRUE){
   file.remove(Save_File_Mock)
 }
