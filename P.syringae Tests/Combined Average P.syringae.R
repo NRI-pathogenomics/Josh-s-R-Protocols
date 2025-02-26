@@ -72,25 +72,31 @@ library(ggplot2)
 library(reshape2)
 
 # Define your average values
-data <- data.frame(
+score_data <- data.frame(
   Condition = c("Mock", "Inno"),
-  Score = c(Mock_Scores_Average[1], Inno_Scores_Average[1]),
-  Chlorosis = c(Mock_Scores_Average[2], Inno_Scores_Average[2])
-)
+  Score = c(Mock_Scores_Average[1], Inno_Scores_Average[1]))
+chlorosis_data <- data.frame(
+  Condition = c("Mock", "Inno"),
+  Chlorosis = c(Mock_Scores_Average[2], Inno_Scores_Average[2]))
 
 # Define your standard error values
-SE_values <- data.frame(
+score_SE_values <- data.frame(
   Condition = c("Mock", "Inno"),
-  Score = c(Mock_Score_SE, Inno_Score_SE),
-  Chlorosis = c(Mock_Chlorosis_SE, Inno_Chlorosis_SE)
+  Score = c(Mock_Score_SE, Inno_Score_SE)
 )
+chlorosis_SE_values <- data.frame(
+  Condition = c("Mock", "Inno"),
+  Chlorosis = c(Mock_Chlorosis_SE, Inno_Chlorosis_SE))
 
 # Convert data and SE values to long format
-data_long <- melt(data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
-SE_long <- melt(SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
+score_data_long <- melt(score_data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
+score_SE_long <- melt(score_SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
 
+chlorosis_data_long <- melt(chlorosis_data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
+chlorosis_SE_long <- melt(chlorosis_SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
 # Merge standard error values into the main data
-data_long <- merge(data_long, SE_long, by = c("Condition", "Metric"))
+score_data_long <- merge(score_data_long, score_SE_long, by = c("Condition", "Metric"))
+chlorosis_data_long <- merge(chlorosis_data_long, chlorosis_SE_long, by = c("Condition", "Metric"))
 
 ##Normality
 Score_Normality <- shapiro.test(Path_Assay$Score)
@@ -143,21 +149,30 @@ print(chlorosis_cld)
 score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Score", CLD = score_cld$Letter)
 chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Chlorosis", CLD = chlorosis_cld$Letter)
 
-# Combine the two CLD dataframes
-cld_df <- rbind(score_cld_df, chlorosis_cld_df)
-
-# Merge CLD labels into the long-format data
-data_long <- left_join(data_long, cld_df, by = c("Condition", "Metric"))
-
+# Combine the results to their respective CLD dataframes
+scores_and_cld_df <- left_join(score_data_long, score_cld_df, by = c("Condition", "Metric"))
+chlorosis_and_cld_df <- left_join(chlorosis_data_long, chlorosis_cld_df, by = c("Condition", "Metric"))
 # Plot with CLD labels
-plot <- ggplot(data_long, aes(x = Condition, y = Value, fill = Metric)) +
+score_plot <- ggplot(scores_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
   geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
                 position = position_dodge(0.9)) +
   geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
             position = position_dodge(0.9), size = 5) +
   theme_minimal() +
-  labs(y = "Average Score", title = "Subjective Scores and % Chlorosis with Standard Error & CLD") +
-  scale_fill_manual(values = c("red", "blue"))
+  labs(y = "Average Score", title = "Average Disease Index Scores 0-10 for Col-0 Infected with P.syringae") +
+  scale_fill_manual(values = c("blue"))
 
-show(plot)
+show(score_plot)
+
+chlorosis_plot <- ggplot(chlorosis_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
+  geom_bar(stat = "identity", position = position_dodge(), color = "black") +
+  geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
+                position = position_dodge(0.9)) +
+  geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
+            position = position_dodge(0.9), size = 5) +
+  theme_minimal() +
+  labs(y = "Average Score", title = "Average % Chlorosis for Col-0 Infected with P.syringae") +
+  scale_fill_manual(values = c("red"))
+
+show(chlorosis_plot)
