@@ -140,8 +140,8 @@ print(chlorosis_cld)
 
 ## Plot
 # Convert CLD results into a data frame
-score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Score", CLD = score_cld$Letter)
-chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Chlorosis", CLD = chlorosis_cld$Letter)
+score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Subjective Score", CLD = score_cld$Letter)
+chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "% Chlorosis", CLD = chlorosis_cld$Letter)
 
 # Combine the two CLD dataframes
 cld_df <- rbind(score_cld_df, chlorosis_cld_df)
