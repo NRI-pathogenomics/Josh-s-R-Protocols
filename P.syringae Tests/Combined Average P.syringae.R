@@ -140,8 +140,8 @@ print(chlorosis_cld)
 
 ## Plot
 # Convert CLD results into a data frame
-score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Subjective Score", CLD = score_cld$Letter)
-chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "% Chlorosis", CLD = chlorosis_cld$Letter)
+score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Score", CLD = score_cld$Letter)
+chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Chlorosis", CLD = chlorosis_cld$Letter)
 
 # Combine the two CLD dataframes
 cld_df <- rbind(score_cld_df, chlorosis_cld_df)
@@ -150,12 +150,14 @@ cld_df <- rbind(score_cld_df, chlorosis_cld_df)
 data_long <- left_join(data_long, cld_df, by = c("Condition", "Metric"))
 
 # Plot with CLD labels
-ggplot(data_long, aes(x = Condition, y = Value, fill = Metric)) +
+plot <- ggplot(data_long, aes(x = Condition, y = Value, fill = Metric)) +
   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
   geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
                 position = position_dodge(0.9)) +
   geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
             position = position_dodge(0.9), size = 5) +
   theme_minimal() +
-  labs(y = "Average Score", title = "Scores and Chlorosis with Standard Error & CLD") +
+  labs(y = "Average Score", title = "Subjective Scores and % Chlorosis with Standard Error & CLD") +
   scale_fill_manual(values = c("red", "blue"))
+
+show(plot)
