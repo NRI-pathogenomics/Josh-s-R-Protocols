@@ -81,6 +81,16 @@ SE_long <- melt(SE_values, id.vars = "Condition", variable.name = "Metric", valu
 # Merge standard error values into the main data
 data_long <- merge(data_long, SE_long, by = c("Condition", "Metric"))
 
+##Normality
+
+Mock_Score_Normality <- shapiro.test(Mock_Sub$Score)
+if(Mock_Score_Normality[2] < 0.05){
+  kruskal.test(Mock_Sub$Score, formula= Score ~ Treatment, data = Mock_Sub, g = )
+}
+Mock_Chlorosis_Normality <- shapiro.test(Mock_Sub$Chlorosis)
+
+Inno_Score_Normality <- shapiro.test(Inno_Sub$Score)
+Inno_Chlorosis_Normality <- shapiro.test(Inno_Sub$Chlorosis)
 # Plot with error bars
 ggplot(data_long, aes(x = Condition, y = Value, fill = Metric)) +
   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
