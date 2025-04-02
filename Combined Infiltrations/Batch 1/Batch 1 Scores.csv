@@ -1,0 +1,21 @@
+﻿Col-0 replicate,Treatment,Block,Block Rep,Chlorosis,Infiltrated with P.syringae,Fungus gnats,Perforation
+21,Water-I,1,A,3,Y,N,N
+7,GFP-I,1,B,5,Y,Y,N
+5,GFP-M,1,C,5,N,Y,Y
+13,Ctrl-HP-I,1,D,4,Y,Y,Y
+18,EHA105-I,1,E,5,Y,N,Y
+9,GFP-I,2,A,2,Y,N,Y
+20,EHA105-I,2,B,5,Y,N,Y
+3,GFP-M,2,D,0,N,N,Y
+25,Water-I,2,E,3,Y,N,Y
+6,GFP-I,3,A,3,Y,N,Y
+22,Water-I,3,B,4,Y,N,Y
+4,GFP-M,3,C,0,N,N,Y
+14,Ctrl-HP-I,3,E,0,Y,Y,N
+1,GFP-M,4,A,2,N,N,Y
+23,Water-I,4,C,4,Y,N,Y
+17,EHA105-I,4,E,4,Y,N,Y
+24,Water-I,5,B,6,Y,N,Y
+19,EHA105-I,5,C,6,Y,N,Y
+2,GFP-M,5,D,0,N,N,N
+10,GFP-I,5,E,0,Y,Y,N
