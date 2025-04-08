@@ -32,25 +32,14 @@ library(FSA)
 library(dunn.test)
 library(rcompanion)
 
-Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/P.syringae Tests/P.syringae scores.csv", 
+Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
-Path_Assay <- setNames(Path_Assay, nm=c("Replicate", "Treatment", "Score", "Chlorosis"))
+# Pre-process the data
 Path_Assay <- na.omit(Path_Assay)
-Path_Assay$Treatment <- as.factor(Path_Assay$Treatment)
+Path_Assay <- subset(Path_Assay, select = -c(Random, Block, Block.Rep)) #remove randomized block design calculations
+Path_Assay <- subset(Path_Assay, Fungus.gnats == "Y") #remove the rows where fungus gnat 
 
-if(file.exists("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/P.syringae Tests/Mock Averaged Results")==FALSE){
-  file.create("Mock Averaged Results")
-}
-
-if(file.exists("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/P.syringae Tests/Inoculated Averaged Results")==FALSE){
-  file.create("Innoculated Averaged Results")
-}
-##Subsetting the Data
-Inno_Sub <- as.data.frame(subset(Path_Assay, Treatment=="Inoculated"))
-Inno_Sub <- na.omit(Inno_Sub)
-Mock_Sub <- as.data.frame(subset(Path_Assay, Treatment=="Mock"))
-Mock_Sub <- na.omit(Mock_Sub)
 ## Reformat columns
 Mock_Sub$Score <- as.numeric(Mock_Sub$Score)
 Mock_Sub$Chlorosis <- as.numeric(Mock_Sub$Chlorosis)
