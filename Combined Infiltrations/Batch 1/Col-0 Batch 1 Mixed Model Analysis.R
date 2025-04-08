@@ -33,5 +33,5 @@ anova(model_null, model_fg)
 #summary to quantify the effect size of each factor
 summary(model_ps)
 summary(model_fg)
-
+# Remodel to look at the interaction between treatment and whether it was infiltrated with P.syringae, accounting for leaf damage caused by fungus gnats
 
