@@ -7,7 +7,26 @@
 # assocstats(table(disease_scores$Treatment, disease_scores$Infiltrated.with.P.syringae))
 # assocstats(table(disease_scores$Treatment, disease_scores$Fungus.gnats))
 # assocstats(table(disease_scores$Treatment, disease_scores$Perforation))
+if(("dplyr" %in% all_packages)==FALSE){
+  install.packages("dplyr")}
+if(("agricolae" %in% all_packages)==FALSE){
+  install.packages("agricolae")}
+if(("agricolaeplotr" %in% all_packages)==FALSE){
+  install.packages("agricolaeplotr")}
+if(("tidyverse" %in% all_packages)==FALSE){
+  install.packages("tidyverse")}
+if(("plotrix" %in% all_packages)==FALSE){
+  install.packages("plotrix")}
+if(("FSA" %in% all_packages)==FALSE){
+  install.packages("FSA")}
+if(("dunn.test" %in% all_packages)==FALSE){
+  install.packages("dunn.test")}
+if(("rcompanion" %in% all_packages)==FALSE){
+  install.packages("rcompanion")}
 install.packages("ordinal")
+install.packages("multcompView")
+library(multcompView)
+library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
@@ -17,6 +36,7 @@ disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-U
 # data processing
 disease_scores <- na.omit(disease_scores) #removes NA values
 disease_scores <- subset(disease_scores, select = -c(Chlorosis,Random, Block.Rep)) 
+disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 #removes chlorosis as this test is focusing on leaf damage
 #randomized block design calculations and the block rep (not important for this model)
 
@@ -70,6 +90,7 @@ anova(lmer1e, lmer1f)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage
 
+#best fit model:
 summary(lmer1e)
 
 #No we need a post-hoc test to determine which treatments differ from one another:
@@ -92,4 +113,13 @@ model_null <- clm(as.ordered(Leaf.Damage) ~ 1,
 # summary(model_pf)
 # summary(model_fg)
 # # Remodel to look at the interaction between treatment and whether it was infiltrated with P.syringae, accounting for leaf damage caused by fungus gnats
-# 
+
+#Post Hoc Test - Tukey Test
+library(emmeans)
+posthoc <- emmeans(lmer1e, ~ Treatment)
+summary(posthoc)
+tukey_results <- pairs(posthoc, adjust = "tukey")
+summary(tukey_results)
+tukey_results <- as.data.frame(tukey_results)
+cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+
