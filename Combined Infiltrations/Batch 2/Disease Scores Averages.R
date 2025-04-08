@@ -38,31 +38,30 @@ Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Unive
 # Pre-process the data
 Path_Assay <- na.omit(Path_Assay)
 Path_Assay <- subset(Path_Assay, select = -c(Random, Block, Block.Rep)) #remove randomized block design calculations
-Path_Assay <- subset(Path_Assay, Fungus.gnats == "Y") #remove the rows where fungus gnat 
+Path_Assay <- subset(Path_Assay, Fungus.gnats == "N") #remove the rows where fungus gnat 
 
-## Reformat columns
-Mock_Sub$Score <- as.numeric(Mock_Sub$Score)
-Mock_Sub$Chlorosis <- as.numeric(Mock_Sub$Chlorosis)
-
-Inno_Sub$Score <- as.numeric(Inno_Sub$Score)
-Inno_Sub$Chlorosis <- as.numeric(Inno_Sub$Chlorosis)
+## Subset the Mock vs Inoculated replicates
+Mock_Sub <- subset(Path_Assay, Treatment=="GFP-M")
+Mock_Sub <- Mock_Sub[1:4]
+Inno_Sub <- subset(Path_Assay, Infiltrated.with.P.syringae=="Y")
+Inno_Sub <- Inno_Sub[1:4]
 
 Mock_Scores_Average <- colMeans(Mock_Sub[3:4], na.rm = TRUE)
 Inno_Scores_Average <- colMeans(Inno_Sub[3:4], na.rm = TRUE)
 ##Plot Data Here
 #Standard Error
-# Standard Error for Mock Score
-Mock_Score_SE <- sd(Mock_Sub$Score, na.rm = TRUE) / sqrt(length(Mock_Sub$Score))
-
-# Standard Error for Mock Chlorosis
+# Standard Error for  Leaf.Damage
+Mock_LD_SE <- sd(Mock_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Mock_Sub$Leaf.Damage))
+Inno_LD_SE <- sd(Inno_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Inno_Sub$Leaf.Damage))
+# Standard Error for  Chlorosis
 Mock_Chlorosis_SE <- sd(Mock_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Mock_Sub$Chlorosis))
-
+Inno_Chlorosis_SE <- sd(Inno_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Inno_Sub$Chlorosis))
 # Load required library
 library(ggplot2)
 library(reshape2)
 
 # Define your average values
-score_data <- data.frame(
+LD_data <- data.frame(
   Condition = c("Mock", "Inno"),
   Score = c(Mock_Scores_Average[1], Inno_Scores_Average[1]))
 chlorosis_data <- data.frame(
@@ -79,21 +78,21 @@ chlorosis_SE_values <- data.frame(
   Chlorosis = c(Mock_Chlorosis_SE, Inno_Chlorosis_SE))
 
 # Convert data and SE values to long format
-score_data_long <- melt(score_data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
-score_SE_long <- melt(score_SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
+LD_data_long <- melt(LD_data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
+LD_SE_long <- melt(LD_SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
 
 chlorosis_data_long <- melt(chlorosis_data, id.vars = "Condition", variable.name = "Metric", value.name = "Value")
 chlorosis_SE_long <- melt(chlorosis_SE_values, id.vars = "Condition", variable.name = "Metric", value.name = "SE")
 # Merge standard error values into the main data
-score_data_long <- merge(score_data_long, score_SE_long, by = c("Condition", "Metric"))
+LD_data_long <- merge(LD_data_long, LD_SE_long, by = c("Condition", "Metric"))
 chlorosis_data_long <- merge(chlorosis_data_long, chlorosis_SE_long, by = c("Condition", "Metric"))
 
 ##Normality
-Score_Normality <- shapiro.test(Path_Assay$Score)
+LD_Normality <- shapiro.test(Path_Assay$Leaf.Damage)
 # if the P.value for the shapiro wilkes test is below 0.05 this indicates the results are not normally distributed
 # if results are not normally distributed then they need to be analysed by a non-parametric test
-if(Score_Normality[2] < 0.05){
-  Score_KW <- kruskal.test(Score ~ Treatment, data = Path_Assay)
+if(LD_Normality[2] < 0.05){
+  LD_KW <- kruskal.test(Leaf.Damage ~ Treatment, data = Path_Assay)
 }
 Chlorosis_Normality <- shapiro.test(Path_Assay$Chlorosis)
 if(Chlorosis_Normality[2] < 0.05){
@@ -104,16 +103,16 @@ if(Chlorosis_Normality[2] < 0.05){
 #if the non-parametric results have a p-value below 0.05 then the Scores and Chlorosis levels do differ significantly 
 # this requires a post-hoc Dunn test for multiple comparisons
 # Pairwise comparisons for Score
-scores_dunn_test <- dunn.test(Path_Assay$Score, g=interaction(Path_Assay$Treatment), method="bonferroni")
+LD_dunn_test <- dunn.test(Path_Assay$Leaf.Damage, g=interaction(Path_Assay$Treatment), method="bonferroni")
 
 # Pairwise comparisons for Chlorosis
 chlorosis_dunn_test <- dunn.test(Path_Assay$Chlorosis, g=interaction(Path_Assay$Treatment), method="bonferroni")
 
 ## cld
 # Convert Dunn's test output to a data frame with proper naming
-scores_dunn_df <- data.frame(
-  Comparison = scores_dunn_test$comparisons,  # Extract comparisons
-  P.adj = scores_dunn_test$P.adjusted        # Extract adjusted p-values
+LD_dunn_df <- data.frame(
+  Comparison = LD_dunn_test$comparisons,  # Extract comparisons
+  P.adj = LD_dunn_test$P.adjusted        # Extract adjusted p-values
 )
 
 chlorosis_dunn_df <- data.frame(
@@ -122,12 +121,12 @@ chlorosis_dunn_df <- data.frame(
 )
 
 # Ensure no NA values in comparisons
-scores_dunn_df <- na.omit(scores_dunn_df)
+LD_dunn_df <- na.omit(LD_dunn_df)
 chlorosis_dunn_df <- na.omit(chlorosis_dunn_df)
 
 # CLD for Scores
-score_cld <- cldList(P.adj ~ Comparison, data = scores_dunn_df, threshold = 0.05)
-print(score_cld)
+LD_cld <- cldList(P.adj ~ Comparison, data = LD_dunn_df, threshold = 0.05)
+print(LD_cld)
 
 # CLD for Chlorosis
 chlorosis_cld <- cldList(P.adj ~ Comparison, data = chlorosis_dunn_df, threshold = 0.05)
@@ -136,14 +135,14 @@ print(chlorosis_cld)
 
 ## Plot
 # Convert CLD results into a data frame
-score_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Score", CLD = score_cld$Letter)
+LD_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Leaf.Damage", CLD = score_cld$Letter)
 chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Chlorosis", CLD = chlorosis_cld$Letter)
 
 # Combine the results to their respective CLD dataframes
-scores_and_cld_df <- left_join(score_data_long, score_cld_df, by = c("Condition", "Metric"))
+LD_and_cld_df <- left_join(score_data_long, score_cld_df, by = c("Condition", "Metric"))
 chlorosis_and_cld_df <- left_join(chlorosis_data_long, chlorosis_cld_df, by = c("Condition", "Metric"))
 # Plot with CLD labels
-score_plot <- ggplot(scores_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
+LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
   geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
                 position = position_dodge(0.9)) +
@@ -153,4 +152,4 @@ score_plot <- ggplot(scores_and_cld_df, aes(x = Condition, y = Value, fill = Met
   labs(y = "Average Score", title = "Average Disease Index Scores 0-10 for Col-0 Infected with P.syringae") +
   scale_fill_manual(values = c("blue"))
 
-show(score_plot)
+show(LD_plot)
