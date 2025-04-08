@@ -76,7 +76,7 @@ summary(lmer1e)
 # the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
 #In short: Treatment is a fixed effect and one or more treatment is behind the leaf damage
 #Fungus.gnat damage is accounted for as a random effect that causes variance in the data
-# but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degredation - ergo the stats will show if P.syringae presence is behind leaf degredation
+# but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
 model_null <- clm(as.ordered(Leaf.Damage) ~ 1, 
