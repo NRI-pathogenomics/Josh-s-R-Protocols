@@ -69,7 +69,7 @@ chlorosis_data <- data.frame(
   Chlorosis = c(Mock_Scores_Average[2], Inno_Scores_Average[2]))
 
 # Define your standard error values
-score_SE_values <- data.frame(
+LD_SE_values <- data.frame(
   Condition = c("Mock", "Inno"),
   Score = c(Mock_Score_SE, Inno_Score_SE)
 )
