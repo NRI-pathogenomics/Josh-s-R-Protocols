@@ -66,15 +66,12 @@ for(i in 1:x){
 ##Plot Data Here
 #Standard Error
 # Standard Error for  Leaf.Damage
-column_names <- c("SE")
-Ld.SE.values <- list()
 for(i in 1:x){
   Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
   Ld.SE <- sd(Data_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$Leaf.Damage))
-  Ld.SE.values <- c(Ld.SE.values, Ld.SE)
+  LD.Averages$SE[i] <- Ld.SE
 }
-#Convert the Leaf damage SE values to the LD.Averages table
-SE.Values <- data.frame(SE = unlist(Ld.SE.values))
+
 
 # Load required library
 library(ggplot2)
@@ -98,24 +95,28 @@ disease_treatments_cld <- disease_treatments_cld %>%
 LD.Averages <- as.data.frame(LD.Averages)
 disease_treatments_cld <- as.data.frame(disease_treatments_cld)
 LD.Averages$CLD <- disease_treatments_cld$Letter
-# Melt the data
-LD.long <- melt(LD.Averages, id.vars = "Treatments",
-                variable.name = "Measure", value.name = "Value")
-SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
-#merge the data
-LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
-disease_treatments_cld
+# # Melt the data
+# LD.long <- melt(LD.Averages, id.vars = "Treatments",
+#                 variable.name = "Measure", value.name = "Value")
+# SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
+# #merge the data
+# LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
+# disease_treatments_cld
 
 
-# # Plot with CLD labels
-# LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
-#   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
-#   geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
-#                 position = position_dodge(0.9)) +
-#   geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
-#             position = position_dodge(0.9), size = 5) +
-#   theme_minimal() +
-#   labs(y = "Average Score", title = "Average Disease Index Scores 0-10 for Col-0 Infected with P.syringae") +
-#   scale_fill_manual(values = c("blue"))
-# 
-# show(LD_plot)
+# Plot with CLD labels
+# To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
+LD.Averages$Treatments <- as.character(treatments)
+LD.Averages$Treatments <- factor(LD.Averages$Treatments, levels = unique(LD.Averages$Treatments))
+#ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
+# so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
+# Plot +
+LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, fill = Treatments)) +
+  geom_col(color = "black") +
+  geom_errorbar(aes(ymin = `Leaf Damage Averages` - SE, ymax = `Leaf Damage Averages` + SE), width = 0.2) +
+  geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
+  theme_minimal() +
+  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 1 Average Leaf Damage Scores") +
+  scale_fill_brewer(palette = "Blues")  # nicer than all-blue
+
+show(LD_plot)
