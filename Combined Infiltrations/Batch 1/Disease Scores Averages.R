@@ -32,7 +32,7 @@ library(FSA)
 library(dunn.test)
 library(rcompanion)
 
-Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
+Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 1/Batch 1 Scores.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
 # Pre-process the data
@@ -96,24 +96,24 @@ SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name 
 #merge the data
 LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
 
-## Plot
-# Convert CLD results into a data frame
-
-LD_cld_df <- data.frame(Condition = disease_treatments_cld$Group, Metric = "Leaf Damage Averages", CLD = disease_treatments_cld$Letter)
-# rename the "Condition" column to "Treatments" to allow for a merge()
-LD_cld_df <- LD_cld_df %>% rename("Treatments" = "Condition")
-
-
-
-# Plot with CLD labels
-LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
-  geom_bar(stat = "identity", position = position_dodge(), color = "black") +
-  geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
-                position = position_dodge(0.9)) +
-  geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
-            position = position_dodge(0.9), size = 5) +
-  theme_minimal() +
-  labs(y = "Average Score", title = "Average Disease Index Scores 0-10 for Col-0 Infected with P.syringae") +
-  scale_fill_manual(values = c("blue"))
-
-show(LD_plot)
+# ## Plot
+# # Add CLD to the dataframe based on treatments
+# 
+# for(i in 1:x){
+#   
+# }
+# 
+# 
+# 
+# # Plot with CLD labels
+# LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
+#   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
+#   geom_errorbar(aes(ymin = Value - SE, ymax = Value + SE), width = 0.2, 
+#                 position = position_dodge(0.9)) +
+#   geom_text(aes(label = CLD, y = Value + SE + 1),  # Adjust position slightly above bars
+#             position = position_dodge(0.9), size = 5) +
+#   theme_minimal() +
+#   labs(y = "Average Score", title = "Average Disease Index Scores 0-10 for Col-0 Infected with P.syringae") +
+#   scale_fill_manual(values = c("blue"))
+# 
+# show(LD_plot)
