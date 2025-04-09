@@ -121,5 +121,5 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
