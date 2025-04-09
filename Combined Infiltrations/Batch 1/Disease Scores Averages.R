@@ -98,12 +98,13 @@ LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
 
 ## Plot
 # Convert CLD results into a data frame
-LD_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Leaf.Damage", CLD = score_cld$Letter)
-chlorosis_cld_df <- data.frame(Condition = c("Mock", "Inno"), Metric = "Chlorosis", CLD = chlorosis_cld$Letter)
 
-# Combine the results to their respective CLD dataframes
-LD_and_cld_df <- left_join(score_data_long, score_cld_df, by = c("Condition", "Metric"))
-chlorosis_and_cld_df <- left_join(chlorosis_data_long, chlorosis_cld_df, by = c("Condition", "Metric"))
+LD_cld_df <- data.frame(Condition = disease_treatments_cld$Group, Metric = "Leaf Damage Averages", CLD = disease_treatments_cld$Letter)
+# rename the "Condition" column to "Treatments" to allow for a merge()
+LD_cld_df <- LD_cld_df %>% rename("Treatments" = "Condition")
+
+
+
 # Plot with CLD labels
 LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
