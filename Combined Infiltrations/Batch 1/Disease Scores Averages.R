@@ -1,23 +1,23 @@
 #Disease Assay Average Scores 
 #Batch 1
-all_packages <- installed.packages()
-
-if(("dplyr" %in% all_packages)==FALSE){
-  install.packages("dplyr")}
-if(("agricolae" %in% all_packages)==FALSE){
-  install.packages("agricolae")}
-if(("agricolaeplotr" %in% all_packages)==FALSE){
-  install.packages("agricolaeplotr")}
-if(("tidyverse" %in% all_packages)==FALSE){
-  install.packages("tidyverse")}
-if(("plotrix" %in% all_packages)==FALSE){
-  install.packages("plotrix")}
-if(("FSA" %in% all_packages)==FALSE){
-  install.packages("FSA")}
-if(("dunn.test" %in% all_packages)==FALSE){
-  install.packages("dunn.test")}
-if(("rcompanion" %in% all_packages)==FALSE){
-  install.packages("rcompanion")}
+# all_packages <- installed.packages()
+# 
+# if(("dplyr" %in% all_packages)==FALSE){
+#   install.packages("dplyr")}
+# if(("agricolae" %in% all_packages)==FALSE){
+#   install.packages("agricolae")}
+# if(("agricolaeplotr" %in% all_packages)==FALSE){
+#   install.packages("agricolaeplotr")}
+# if(("tidyverse" %in% all_packages)==FALSE){
+#   install.packages("tidyverse")}
+# if(("plotrix" %in% all_packages)==FALSE){
+#   install.packages("plotrix")}
+# if(("FSA" %in% all_packages)==FALSE){
+#   install.packages("FSA")}
+# if(("dunn.test" %in% all_packages)==FALSE){
+#   install.packages("dunn.test")}
+# if(("rcompanion" %in% all_packages)==FALSE){
+#   install.packages("rcompanion")}
 
 library(agricolae)
 library(agricolaeplotr)
@@ -89,22 +89,24 @@ install.packages("reshape2")
 # Load the library
 library(reshape2)
 
+#add cld letters to LD.averages
+#Order both LD.Averages and disease_treatments_cld in alphabetical order
+LD.Averages <- LD.Averages %>%
+  arrange(Treatments)
+disease_treatments_cld <- disease_treatments_cld %>%
+  arrange(Group)
+LD.Averages <- as.data.frame(LD.Averages)
+disease_treatments_cld <- as.data.frame(disease_treatments_cld)
+LD.Averages$CLD <- disease_treatments_cld$Letter
 # Melt the data
 LD.long <- melt(LD.Averages, id.vars = "Treatments",
                 variable.name = "Measure", value.name = "Value")
 SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
 #merge the data
 LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
+disease_treatments_cld
 
-# ## Plot
-# # Add CLD to the dataframe based on treatments
-# 
-# for(i in 1:x){
-#   
-# }
-# 
-# 
-# 
+
 # # Plot with CLD labels
 # LD_plot <- ggplot(LD_and_cld_df, aes(x = Condition, y = Value, fill = Metric)) +
 #   geom_bar(stat = "identity", position = position_dodge(), color = "black") +
