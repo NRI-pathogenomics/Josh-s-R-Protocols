@@ -90,6 +90,13 @@ disease_treatments_cld <- disease_treatments_cld %>%
 LD.Averages <- cbind(LD.Averages, disease_treatments_cld$Letter)
 column_names <- c("Treatments", "Leaf Damage Averages", "SE", "CLD")
 colnames(LD.Averages) <- column_names
+
+# count the number of records for each treatment;
+treatment_counts <- table(Path_Assay$Treatment)
+
+# Display the counts
+print(treatment_counts)
+
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
 LD.Averages$Treatments <- unlist(LD.Averages$Treatments)
