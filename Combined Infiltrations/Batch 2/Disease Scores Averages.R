@@ -176,6 +176,10 @@ Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
 column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
 colnames(Chlorosis.Averages) <- column_names
 
+# Count the number of records for each Treatment type
+ld_treatment_counts <- table(LD_Assay$Treatment)
+cl_treatment_counts <- table(Chlorosis_Assay$Treatment)
+
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
 Chlorosis.Averages$Treatments <- unlist(Chlorosis.Averages$Treatments)
