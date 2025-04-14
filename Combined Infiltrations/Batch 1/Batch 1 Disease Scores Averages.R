@@ -39,6 +39,7 @@ Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Unive
 Path_Assay <- na.omit(Path_Assay)
 Path_Assay <- subset(Path_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
 Path_Assay$Treatment <- gsub("-", ".", Path_Assay$Treatment)
+Path_Assay <- subset(Path_Assay, Treatment != "Ctrl.HP.I")
 ## Calculate the Average Leaf Damage of each treatment
 # take the individual treatment names
 treatments <- unique(Path_Assay$Treatment)
