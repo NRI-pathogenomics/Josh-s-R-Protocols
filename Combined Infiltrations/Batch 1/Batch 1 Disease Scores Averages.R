@@ -59,6 +59,8 @@ for(i in 1:x){
   Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
   Data_Sub
   ld.mean <- mean(as.numeric(Data_Sub$Leaf.Damage))
+  print(treatments[i])
+  print(ld.mean)
   LD.Averages$`Leaf Damage Averages`[i] <- ld.mean
 }
 
@@ -72,44 +74,26 @@ for(i in 1:x){
   LD.Averages$SE[i] <- Ld.SE
 }
 
-
-# Load required library
-library(ggplot2)
-library(reshape2)
-
-
-
 # Convert data and SE values to long format
 # If you haven't already installed reshape2
-install.packages("reshape2")
-
-# Load the library
-library(reshape2)
+# install.packages("reshape2")
 
 #add cld letters to LD.averages
 #Order both LD.Averages and disease_treatments_cld in alphabetical order
-#Convert LD.Averages$Treatments to character
-LD.Averages$Treatments <- as.character(LD.Averages$Treatments)
+
 LD.Averages <- LD.Averages %>%
   arrange(Treatments)
+
 disease_treatments_cld <- disease_treatments_cld %>%
-  arrange(Group)
-LD.Averages <- as.data.frame(LD.Averages)
-disease_treatments_cld <- as.data.frame(disease_treatments_cld)
-LD.Averages$CLD <- disease_treatments_cld$Letter
-# # Melt the data
-# LD.long <- melt(LD.Averages, id.vars = "Treatments",
-#                 variable.name = "Measure", value.name = "Value")
-# SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
-# #merge the data
-# LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
-# disease_treatments_cld
+  arrange(`Group`)
 
-
+LD.Averages <- cbind(LD.Averages, disease_treatments_cld$Letter)
+column_names <- c("Treatments", "Leaf Damage Averages", "SE", "CLD")
+colnames(LD.Averages) <- column_names
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
-LD.Averages$Treatments <- as.character(treatments)
-LD.Averages$Treatments <- factor(LD.Averages$Treatments, levels = unique(LD.Averages$Treatments))
+LD.Averages$Treatments <- unlist(LD.Averages$Treatments)
+LD.Averages$Treatments <- factor(LD.Averages$Treatments)
 #ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
 # so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
 # Plot +
