@@ -37,6 +37,7 @@ disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-U
 disease_scores <- na.omit(disease_scores) #removes NA values
 disease_scores <- subset(disease_scores, select = -c(Chlorosis,Random, Block.Rep)) 
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
+disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
 #removes chlorosis as this test is focusing on leaf damage
 #randomized block design calculations and the block rep (not important for this model)
 
