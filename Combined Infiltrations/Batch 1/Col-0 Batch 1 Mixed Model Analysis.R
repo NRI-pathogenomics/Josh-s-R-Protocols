@@ -7,24 +7,24 @@
 # assocstats(table(disease_scores$Treatment, disease_scores$Infiltrated.with.P.syringae))
 # assocstats(table(disease_scores$Treatment, disease_scores$Fungus.gnats))
 # assocstats(table(disease_scores$Treatment, disease_scores$Perforation))
-if(("dplyr" %in% all_packages)==FALSE){
-  install.packages("dplyr")}
-if(("agricolae" %in% all_packages)==FALSE){
-  install.packages("agricolae")}
-if(("agricolaeplotr" %in% all_packages)==FALSE){
-  install.packages("agricolaeplotr")}
-if(("tidyverse" %in% all_packages)==FALSE){
-  install.packages("tidyverse")}
-if(("plotrix" %in% all_packages)==FALSE){
-  install.packages("plotrix")}
-if(("FSA" %in% all_packages)==FALSE){
-  install.packages("FSA")}
-if(("dunn.test" %in% all_packages)==FALSE){
-  install.packages("dunn.test")}
-if(("rcompanion" %in% all_packages)==FALSE){
-  install.packages("rcompanion")}
-install.packages("ordinal")
-install.packages("multcompView")
+# if(("dplyr" %in% all_packages)==FALSE){
+#   install.packages("dplyr")}
+# if(("agricolae" %in% all_packages)==FALSE){
+#   install.packages("agricolae")}
+# if(("agricolaeplotr" %in% all_packages)==FALSE){
+#   install.packages("agricolaeplotr")}
+# if(("tidyverse" %in% all_packages)==FALSE){
+#   install.packages("tidyverse")}
+# if(("plotrix" %in% all_packages)==FALSE){
+#   install.packages("plotrix")}
+# if(("FSA" %in% all_packages)==FALSE){
+#   install.packages("FSA")}
+# if(("dunn.test" %in% all_packages)==FALSE){
+#   install.packages("dunn.test")}
+# if(("rcompanion" %in% all_packages)==FALSE){
+#   install.packages("rcompanion")}
+# install.packages("ordinal")
+# install.packages("multcompView")
 library(multcompView)
 library(rcompanion)
 library(ordinal)
@@ -122,4 +122,5 @@ tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
 disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
-
+# Change EHA15.I to EHA105.I
+disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
