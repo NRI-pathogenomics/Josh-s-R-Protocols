@@ -165,30 +165,24 @@ library(reshape2)
 
 
 # add cld letters to LD.averages
-#Order both Chlorosis.Averages and chlorosis_cld in alphabetical order
-#Convert Chlorosis.Averages$Treatments to character
-Chlorosis.Averages$Treatments <- as.character(Chlorosis.Averages$Treatments)
+
 Chlorosis.Averages <- Chlorosis.Averages %>%
   arrange(Treatments)
+
 chlorosis_cld <- chlorosis_cld %>%
-  arrange(Group)
-Chlorosis.Averages <- as.data.frame(Chlorosis.Averages)
-chlorosis_cld <- as.data.frame(chlorosis_cld)
-Chlorosis.Averages$CLD <- chlorosis_cld$Letter
-# # Melt the data
-# LD.long <- melt(LD.Averages, id.vars = "Treatments",
-#                 variable.name = "Measure", value.name = "Value")
-# SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
-# #merge the data
-# LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
-# disease_treatments_cld
+  arrange(`Group`)
+
+Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
+column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
+colnames(Chlorosis.Averages) <- column_names
 
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
-Chlorosis.Averages$Treatments <- as.character(treatments)
-Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments, levels = unique(Chlorosis.Averages$Treatments))
+Chlorosis.Averages$Treatments <- unlist(Chlorosis.Averages$Treatments)
+Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments)
 #ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
 # so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
+
 # Plot +
 CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Averages`, fill = Treatments)) +
   geom_col(color = "black") +
