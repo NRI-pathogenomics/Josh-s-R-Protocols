@@ -67,12 +67,6 @@ Mock_Score_SE <- sd(Mock_Sub$Score, na.rm = TRUE) / sqrt(length(Mock_Sub$Score))
 # Standard Error for Mock Chlorosis
 Mock_Chlorosis_SE <- sd(Mock_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Mock_Sub$Chlorosis))
 
-# Standard Error for Inno Score
-Inno_Score_SE <- sd(Inno_Sub$Score, na.rm = TRUE) / sqrt(length(Inno_Sub$Score))
-
-# Standard Error for Inno Chlorosis
-Inno_Chlorosis_SE <- sd(Inno_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Inno_Sub$Chlorosis))
-
 # Load required library
 library(ggplot2)
 library(reshape2)
