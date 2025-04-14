@@ -88,6 +88,8 @@ library(reshape2)
 
 #add cld letters to LD.averages
 #Order both LD.Averages and disease_treatments_cld in alphabetical order
+#Convert LD.Averages$Treatments to character
+LD.Averages$Treatments <- as.character(LD.Averages$Treatments)
 LD.Averages <- LD.Averages %>%
   arrange(Treatments)
 disease_treatments_cld <- disease_treatments_cld %>%
