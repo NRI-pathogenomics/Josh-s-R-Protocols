@@ -35,13 +35,14 @@ library(rcompanion)
 Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
+## Leaf Damage
 # Pre-process the data
-Path_Assay <- na.omit(Path_Assay)
-Path_Assay <- subset(Path_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
-Path_Assay$Treatment <- gsub("-", ".", Path_Assay$Treatment)
+LD_Assay <- na.omit(Path_Assay)
+LD_Assay <- subset(LD_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
+LD_Assay$Treatment <- gsub("-", ".", LD_Assay$Treatment)
 ## Calculate the Average Leaf Damage of each treatment
 # take the individual treatment names
-treatments <- unique(Path_Assay$Treatment)
+treatments <- unique(LD_Assay$Treatment)
 #get the number of treatments
 x <- length(treatments)
 #Create Leaf Damage (LD) Averages data frame
@@ -56,7 +57,7 @@ LD.Averages$Treatments <- as.data.frame(treatments)
 # Display the empty data frame
 print(LD.Averages)
 for(i in 1:x){
-  Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
+  Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
   Data_Sub
   ld.mean <- mean(as.numeric(Data_Sub$Leaf.Damage))
   LD.Averages$`Leaf Damage Averages`[i] <- ld.mean
@@ -67,7 +68,7 @@ for(i in 1:x){
 #Standard Error
 # Standard Error for  Leaf.Damage
 for(i in 1:x){
-  Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
+  Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
   Ld.SE <- sd(Data_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$Leaf.Damage))
   LD.Averages$SE[i] <- Ld.SE
 }
@@ -86,17 +87,17 @@ install.packages("reshape2")
 # Load the library
 library(reshape2)
 
-add cld letters to LD.averages
-#Order both LD.Averages and disease_treatments_cld in alphabetical order
+# add cld letters to LD.averages
+#Order both LD.Averages and leaf_damage_cld in alphabetical order
 #Convert LD.Averages$Treatments to character
 LD.Averages$Treatments <- as.character(LD.Averages$Treatments)
 LD.Averages <- LD.Averages %>%
   arrange(Treatments)
-disease_treatments_cld <- disease_treatments_cld %>%
+leaf_damage_cld <- leaf_damage_cld %>%
   arrange(Group)
 LD.Averages <- as.data.frame(LD.Averages)
-disease_treatments_cld <- as.data.frame(disease_treatments_cld)
-LD.Averages$CLD <- disease_treatments_cld$Letter
+leaf_damage_cld <- as.data.frame(leaf_damage_cld)
+LD.Averages$CLD <- leaf_damage_cld$Letter
 # # Melt the data
 # LD.long <- melt(LD.Averages, id.vars = "Treatments",
 #                 variable.name = "Measure", value.name = "Value")
@@ -121,3 +122,91 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   scale_fill_brewer(palette = "Blues")  # nicer than all-blue
 
 show(LD_plot)
+
+## Chlorosis
+# Pre-process the data
+Chlorosis_Assay <- na.omit(Path_Assay)
+Chlorosis_Assay  <- subset(Chlorosis_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
+Chlorosis_Assay$Treatment <- gsub("-", ".", Chlorosis_Assay$Treatment)
+## Calculate the Average Chlorosis of each treatment
+# take the individual treatment names
+treatments <- unique(Chlorosis_Assay$Treatment)
+#get the number of treatments
+x <- length(treatments)
+#Create Leaf Damage (LD) Averages data frame
+# Define the column names
+column_names <- c("Treatments", "Chlorosis Averages")
+
+# Create an empty data frame with the specified column names
+Chlorosis.Averages <- data.frame(matrix(ncol = length(column_names), nrow = x))
+colnames(Chlorosis.Averages) <- column_names
+#add the treatments to the Averages Data frame
+Chlorosis.Averages$Treatments <- as.data.frame(treatments)
+# Display the empty data frame
+print(Chlorosis.Averages)
+for(i in 1:x){
+  Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
+  Data_Sub
+  cl.mean <- mean(as.numeric(Data_Sub$Chlorosis))
+  print(cl.mean)
+  Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
+}
+
+
+##Plot Data Here
+#Standard Error
+# Standard Error for  Chlorosis
+for(i in 1:x){
+  Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
+  cl.SE <- sd(Data_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$Chlorosis))
+  Chlorosis.Averages$SE[i] <- cl.SE
+}
+
+
+# Load required library
+library(ggplot2)
+library(reshape2)
+
+
+
+# Convert data and SE values to long format
+# If you haven't already installed reshape2
+# install.packages("reshape2")
+
+
+# add cld letters to LD.averages
+#Order both Chlorosis.Averages and chlorosis_cld in alphabetical order
+#Convert Chlorosis.Averages$Treatments to character
+Chlorosis.Averages$Treatments <- as.character(Chlorosis.Averages$Treatments)
+Chlorosis.Averages <- Chlorosis.Averages %>%
+  arrange(Treatments)
+chlorosis_cld <- chlorosis_cld %>%
+  arrange(Group)
+Chlorosis.Averages <- as.data.frame(Chlorosis.Averages)
+chlorosis_cld <- as.data.frame(chlorosis_cld)
+Chlorosis.Averages$CLD <- chlorosis_cld$Letter
+# # Melt the data
+# LD.long <- melt(LD.Averages, id.vars = "Treatments",
+#                 variable.name = "Measure", value.name = "Value")
+# SE.long <- melt(SE.Values, id.vars = "SE", variable.name = "Metric", value.name = "SE")
+# #merge the data
+# LD.plot.data <- cbind(LD.long, SE = SE.long$SE)
+# disease_treatments_cld
+
+# Plot with CLD labels
+# To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
+Chlorosis.Averages$Treatments <- as.character(treatments)
+Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments, levels = unique(Chlorosis.Averages$Treatments))
+#ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
+# so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
+# Plot +
+CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Averages`, fill = Treatments)) +
+  geom_col(color = "black") +
+  geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
+  geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
+  theme_minimal() +
+  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 2 Average Chlorosis Scores") +
+  scale_fill_brewer(palette = "Reds")  # nicer than all-blue
+
+show(CL_plot)
+
