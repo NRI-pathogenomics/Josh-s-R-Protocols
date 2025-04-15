@@ -44,55 +44,62 @@ disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
 # #The model - models for individual factors (Perforation, P.syringae infiltration and fungus gnats) to determine which of the two is more closely associated with leaf damage
 # 
 # # Model with only P. syringae (hypothesis: P.syringae are more closely associated with damage)
-# model_ps <- clm(as.ordered(Leaf.Damage) ~ Infiltrated.with.P.syringae, 
+# model_ps <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Infiltrated.with.P.syringae, 
 #                 data = disease_scores)
 # 
 # # Model with only fungus gnats (hypothesis: fungus gnats are more closely associated with damage)
-# model_fg <- clm(as.ordered(Leaf.Damage) ~ Fungus.gnats, 
+# model_fg <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Fungus.gnats, 
 #                 data = disease_scores)
 # 
 # # Model with only Perforation (hypothesis: Infiltration process is closely associated with damage)
-# model_pf <- clm(as.ordered(Leaf.Damage) ~ Perforation, 
+# model_pf <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Perforation, 
 #                 data = disease_scores)
 
 #Complete Model
-lmer1a <- lmer(Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1a <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Leaf.Damage), data = disease_scores)
 summary(lmer1a)
 
+# Simpler Model (dropped X0.dpi.Leaf.Damage as a random effect)
+
+lmer1b <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+summary(lmer1b)
+
+anova(lmer1a, lmer1b)
+
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer1b <- lmer(Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1c <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
 summary(lmer1b)
 
 # Simpler Model (dropped Block as a Random effect)
 
-lmer1c <- lmer(Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
 summary(lmer1c)
 
-anova(lmer1a,lmer1b)
+anova(lmer1b,lmer1c)
 # compare whether meodle with block is significantly different to the model without - if it is then Block is important 
 #It is in this case
 
-lmer1d <- lmer(Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = disease_scores)
-summary(lmer1d)
+lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = disease_scores)
+summary(lmer1e)
 anova(lmer1b,lmer1d)
 #Compare the model with Block and Fungus.gnats to the model with Block only
 #P.value indicates Fungus gnats is importance
 #Simpler model without the Perforation
 
-lmer1e <- lmer(Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-summary(lmer1e)
-anova(lmer1b,lmer1e)
+lmer1f <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
+summary(lmer1f)
+anova(lmer1d,lmer1e)
 #Result indicates that perforation is not important - perforation does not explain a significant amount of variance in leaf damage
 
 #Simplier model without Treatment
 
-lmer1f <- lmer(Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-anova(lmer1e, lmer1f)
+lmer1g <- lmer(X5.dpi.Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
+anova(lmer1f, lmer1g)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage
 
 #best fit model:
-summary(lmer1e)
+summary(lmer1g)
 
 #No we need a post-hoc test to determine which treatments differ from one another:
 # the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
@@ -101,7 +108,7 @@ summary(lmer1e)
 # but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
-model_null <- clm(as.ordered(Leaf.Damage) ~ 1, 
+model_null <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ 1, 
                   data = disease_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
@@ -117,7 +124,7 @@ model_null <- clm(as.ordered(Leaf.Damage) ~ 1,
 
 #Post Hoc Test - Tukey Test
 library(emmeans)
-posthoc <- emmeans(lmer1e, ~ Treatment)
+posthoc <- emmeans(lmer1f, ~ Treatment)
 summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
