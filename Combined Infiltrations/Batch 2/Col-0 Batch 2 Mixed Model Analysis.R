@@ -39,19 +39,24 @@ disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-U
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
 damage_scores <- na.omit(disease_scores) #removes NA values
-damage_scores <- subset(damage_scores, select = -c(Chlorosis,Random, Block.Rep)) 
+damage_scores <- subset(damage_scores, select = -c(X5.dpi.Chlorosis,Random, Block.Rep)) 
 damage_scores$Treatment <- gsub("-", ".", damage_scores$Treatment)
-#removes chlorosis as this test is focusing on leaf damage
+#removes X5.dpi.Chlorosis as this test is focusing on leaf damage
 #randomized block design calculations and the block rep (not important for this model)
 
-## Damage and chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+## Damage and X5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
 
 ## Leaf Damage Complete Model
-lmer1a <- lmer(Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
+lmer1z <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Leaf.Damage), data = damage_scores)
+summary(lmer1z)
+## Leaf Damage (dropped x0.dpi Leaf.Damage)
+lmer1a <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1a)
 
+anova(lmer1z, lmer1a)
+
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer1b <- lmer(Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
+lmer1b <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1b)
 
 anova(lmer1a,lmer1b)
@@ -60,7 +65,7 @@ anova(lmer1a,lmer1b)
 
 # Simpler Model (dropped Block as a Random effect)
 
-lmer1c <- lmer(Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
+lmer1c <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1c)
 anova(lmer1b,lmer1c)
 #results:
@@ -69,7 +74,7 @@ anova(lmer1b,lmer1c)
 # inclusion of Block does not improve the model
 
 # Simpler model without Perforation
-lmer1d <- lmer(Leaf.Damage ~ Treatment + (1 | Fungus.gnats), data = damage_scores)
+lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats), data = damage_scores)
 summary(lmer1d)
 anova(lmer1c,lmer1d)
 #results:
@@ -78,7 +83,7 @@ anova(lmer1c,lmer1d)
 
 #Simpler model without Fungus gnats
 
-lmer1e <- lmer(Leaf.Damage ~ Treatment + (1 | Perforation), data = damage_scores)
+lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Perforation), data = damage_scores)
 summary(lmer1e)
 anova(lmer1c,lmer1e)
 #results
@@ -87,7 +92,7 @@ anova(lmer1c,lmer1e)
 # 
 # #Simplier model without Treatment
 # 
-# lmer1f <- lmer(Leaf.Damage ~ (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
+# lmer1f <- lmer(X5.dpi.Leaf.Damage ~ (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 # anova(lmer1c, lmer1f)
 # #results
 # #            Chisq | Pr(>Chisq)
@@ -112,22 +117,27 @@ summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
 leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
-## Chlorosis Complete Model
+## X5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_scores) #removes NA values
-chlorosis_scores <- subset(chlorosis_scores, select = -c(Leaf.Damage,Random, Block.Rep)) 
-chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
-#removes Leaf Damage as this test is focusing on chlorosis
+chlorosis_scores <- subset(X5.dpi.Chlorosis, select = -c(X5.dpi.Leaf.Damage,Random, Block.Rep)) 
+chlorosis_scores$Treatment <- gsub("-", ".", X5.dpi.Chlorosis$Treatment)
+#removes Leaf Damage as this test is focusing on X5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
 
-## Damage and chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+## Damage and X5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
 
-## Chlorosis Complete Model
-lmer2a <- lmer(Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+## X5.dpi.Chlorosis Complete Model
+lmer2z <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Chlorosis), data = chlorosis_scores)
+summary(lmer1z)
+# Simpler Model (dropped X0.dpi.Chlorosis)
+lmer2a <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2a)
 
+anova(lmer2z, lmer2a)
+
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2b <- lmer(Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2b <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2b)
 
 anova(lmer2a,lmer2b)
@@ -137,14 +147,14 @@ anova(lmer2a,lmer2b)
 # lmer2a  0.9659 | 0.3257 - Indicates that "Infiltrated.with.P.syringae" does not significantly improve the model
 # Simpler Model (dropped Block as a Random effect)
 
-lmer2c <- lmer(Chlorosis ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2c <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2c)
 anova(lmer2b,lmer2c)
 #    Chisq | Pr(>Chisq)
 # lmer2b 0 | 1 - results indicate "Block" does not significantly improve the model
 
 # Simpler model without Perforation
-lmer2d <- lmer(Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
+lmer2d <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
 #    Chisq | Pr(>Chisq)
@@ -152,7 +162,7 @@ anova(lmer2c,lmer2d)
 
 #Simpler model without Fungus gnats
 # had to use lm() as the formula has removed all random effects
-lmer2e <- lm(Chlorosis ~ Treatment, data = chlorosis_scores)
+lmer2e <- lm(X5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
 summary(lmer2e)
 anova(lmer2d,lmer2e)
 #results
