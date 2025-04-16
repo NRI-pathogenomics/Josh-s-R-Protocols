@@ -137,7 +137,7 @@ print(Chlorosis.Averages)
 for(i in 1:x){
   Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
   Data_Sub
-  cl.mean <- mean(as.numeric(Data_Sub$Chlorosis))
+  cl.mean <- mean(as.numeric(Data_Sub$X5.dpi.Chlorosis))
   print(cl.mean)
   Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
 }
@@ -148,7 +148,7 @@ for(i in 1:x){
 # Standard Error for  Chlorosis
 for(i in 1:x){
   Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
-  cl.SE <- sd(Data_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$Chlorosis))
+  cl.SE <- sd(Data_Sub$X5.dpi.Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$X5.dpi.Chlorosis))
   Chlorosis.Averages$SE[i] <- cl.SE
 }
 
