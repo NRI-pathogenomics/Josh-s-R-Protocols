@@ -19,8 +19,8 @@
 # if(("rcompanion" %in% all_packages)==FALSE){
 #   install.packages("rcompanion")}
 
-library(agricolae)
-library(agricolaeplotr)
+# library(agricolae)
+# library(agricolaeplotr)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -59,7 +59,7 @@ print(LD.Averages)
 for(i in 1:x){
   Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
   Data_Sub
-  ld.mean <- mean(as.numeric(Data_Sub$Leaf.Damage))
+  ld.mean <- mean(as.numeric(Data_Sub$X5.dpi.Leaf.Damage))
   print(treatments[i])
   print(ld.mean)
   LD.Averages$`Leaf Damage Averages`[i] <- ld.mean
@@ -68,10 +68,10 @@ for(i in 1:x){
 
 ##Plot Data Here
 #Standard Error
-# Standard Error for  Leaf.Damage
+# Standard Error for  X5.dpi.Leaf.Damage
 for(i in 1:x){
   Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
-  Ld.SE <- sd(Data_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$Leaf.Damage))
+  Ld.SE <- sd(Data_Sub$X5.dpi.Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$X5.dpi.Leaf.Damage))
   LD.Averages$SE[i] <- Ld.SE
 }
 

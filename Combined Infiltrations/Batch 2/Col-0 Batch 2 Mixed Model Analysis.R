@@ -1,7 +1,6 @@
 # Col-0 Batch 2 Mixed Model Analysis
 # USE The REML results to figure out which model best explains the data (the lower the REML the better the model fit)
-install.packages("ordinal")
-library(ordinal)
+# install.packages("ordinal")
 # since the response variables are ordinal data
 # # Install and load required package
 # if(!require(vcd)) install.packages("vcd")
@@ -11,24 +10,25 @@ library(ordinal)
 # assocstats(table(disease_scores$Treatment, disease_scores$Infiltrated.with.P.syringae))
 # assocstats(table(disease_scores$Treatment, disease_scores$Fungus.gnats))
 # assocstats(table(disease_scores$Treatment, disease_scores$Perforation))
-if(("dplyr" %in% all_packages)==FALSE){
-  install.packages("dplyr")}
-if(("agricolae" %in% all_packages)==FALSE){
-  install.packages("agricolae")}
-if(("agricolaeplotr" %in% all_packages)==FALSE){
-  install.packages("agricolaeplotr")}
-if(("tidyverse" %in% all_packages)==FALSE){
-  install.packages("tidyverse")}
-if(("plotrix" %in% all_packages)==FALSE){
-  install.packages("plotrix")}
-if(("FSA" %in% all_packages)==FALSE){
-  install.packages("FSA")}
-if(("dunn.test" %in% all_packages)==FALSE){
-  install.packages("dunn.test")}
-if(("rcompanion" %in% all_packages)==FALSE){
-  install.packages("rcompanion")}
-install.packages("ordinal")
-install.packages("multcompView")
+# if(("dplyr" %in% all_packages)==FALSE){
+#   install.packages("dplyr")}
+# if(("agricolae" %in% all_packages)==FALSE){
+#   install.packages("agricolae")}
+# if(("agricolaeplotr" %in% all_packages)==FALSE){
+#   install.packages("agricolaeplotr")}
+# if(("tidyverse" %in% all_packages)==FALSE){
+#   install.packages("tidyverse")}
+# if(("plotrix" %in% all_packages)==FALSE){
+#   install.packages("plotrix")}
+# if(("FSA" %in% all_packages)==FALSE){
+#   install.packages("FSA")}
+# if(("dunn.test" %in% all_packages)==FALSE){
+#   install.packages("dunn.test")}
+# if(("rcompanion" %in% all_packages)==FALSE){
+#   install.packages("rcompanion")}
+# install.packages("ordinal")
+# install.packages("multcompView")
+library(ordinal)
 library(multcompView)
 library(rcompanion)
 library(ordinal)
