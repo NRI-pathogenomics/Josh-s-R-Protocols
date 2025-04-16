@@ -125,6 +125,6 @@ LD_plot <- ggplot(Rot.Averages, aes(x = Treatments, y = `Leaf Rot %`, fill = Tre
   geom_text(aes(label = CLD, y = `Leaf Rot %` + SE + 4), size = 5) +
   theme_minimal() +
   labs(y = "Average Leaf Rot Score", title = "Col-0 Batch 3 Average Leaf Rot Scores") +
-  scale_fill_brewer(palette = "Blues")  # nicer than all-blue
+  scale_fill_brewer(palette = "Greens")  # nicer than all-blue
 
 show(LD_plot)
