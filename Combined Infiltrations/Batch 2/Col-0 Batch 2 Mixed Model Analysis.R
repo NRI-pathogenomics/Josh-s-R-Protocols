@@ -120,24 +120,24 @@ leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold =
 ## X5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_scores) #removes NA values
-chlorosis_scores <- subset(X5.dpi.Chlorosis, select = -c(X5.dpi.Leaf.Damage,Random, Block.Rep)) 
-chlorosis_scores$Treatment <- gsub("-", ".", X5.dpi.Chlorosis$Treatment)
+chlorosis_scores <- subset(disease_scores, select = -c(X5.dpi.Leaf.Damage,Random, Block.Rep)) 
+chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 #removes Leaf Damage as this test is focusing on X5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
 
 ## Damage and X5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
 
 ## X5.dpi.Chlorosis Complete Model
-lmer2z <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Chlorosis), data = chlorosis_scores)
+lmer2z <- lmer(chlorosis_scores ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Chlorosis), data = chlorosis_scores)
 summary(lmer1z)
 # Simpler Model (dropped X0.dpi.Chlorosis)
-lmer2a <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2a <- lmer(chlorosis_scores ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2a)
 
 anova(lmer2z, lmer2a)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2b <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2b <- lmer(chlorosis_scores ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2b)
 
 anova(lmer2a,lmer2b)
@@ -147,14 +147,14 @@ anova(lmer2a,lmer2b)
 # lmer2a  0.9659 | 0.3257 - Indicates that "Infiltrated.with.P.syringae" does not significantly improve the model
 # Simpler Model (dropped Block as a Random effect)
 
-lmer2c <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2c <- lmer(chlorosis_scores ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2c)
 anova(lmer2b,lmer2c)
 #    Chisq | Pr(>Chisq)
 # lmer2b 0 | 1 - results indicate "Block" does not significantly improve the model
 
 # Simpler model without Perforation
-lmer2d <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
+lmer2d <- lmer(chlorosis_scores ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
 #    Chisq | Pr(>Chisq)
@@ -162,7 +162,7 @@ anova(lmer2c,lmer2d)
 
 #Simpler model without Fungus gnats
 # had to use lm() as the formula has removed all random effects
-lmer2e <- lm(X5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+lmer2e <- lm(chlorosis_scores ~ Treatment, data = chlorosis_scores)
 summary(lmer2e)
 anova(lmer2d,lmer2e)
 #results
