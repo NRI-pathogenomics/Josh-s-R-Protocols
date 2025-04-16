@@ -31,36 +31,52 @@ library(plotrix)
 library(FSA)
 library(dunn.test)
 library(rcompanion)
+library(readr)
 
-Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
+
+Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 3/Batch 3 Scores.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
 ## Leaf Damage
 # Pre-process the data
-LD_Assay <- na.omit(Path_Assay)
-LD_Assay <- subset(LD_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
-LD_Assay$Treatment <- gsub("-", ".", LD_Assay$Treatment)
+Rot_Scores<- na.omit(Path_Assay)
+Rot_Scores<- subset(Path_Assay, select = -c(Random, Block, Total.Leaves, Rotted.Leaves, Chlorotic.leaves, X..Chlorosis)) #remove randomized block design calculations
+Rot_Scores$Treatment <- gsub("-", ".", Rot_Scores$Treatment)
+
+## Change treatment names for clarity
+
+Rot_Scores$Treatment[Rot_Scores$Treatment == "P.syringae.Only"] <- "Uninfiltrated"
+
+Rot_Scores$Treatment[Rot_Scores$Treatment == "Mock"] <- "Mock.Solution"
+
+Rot_Scores$Treatment[Rot_Scores$Treatment == "GFP.Only"] <- "GFP.Group.1"
+
+Rot_Scores$Treatment[Rot_Scores$Treatment == "Both"] <- "GFP.Group.2"
+
+# Convert % values stored as characters to numeric
+Rot_Scores$X..of.leaf.rot <- parse_number(Rot_Scores$X..of.leaf.rot)
+Rot_Scores$X..of.leaf.rot <- as.numeric(Rot_Scores$X..of.leaf.rot)
 ## Calculate the Average Leaf Damage of each treatment
 # take the individual treatment names
-treatments <- unique(LD_Assay$Treatment)
+treatments <- unique(Rot_Scores$Treatment)
 #get the number of treatments
 x <- length(treatments)
 #Create Leaf Damage (LD) Averages data frame
 # Define the column names
-column_names <- c("Treatments", "Leaf Damage Averages")
+column_names <- c("Treatments", "Rot %")
 
 # Create an empty data frame with the specified column names
-LD.Averages <- data.frame(matrix(ncol = length(column_names), nrow = x))
-colnames(LD.Averages) <- column_names
+Rot.Averages <- data.frame(matrix(ncol = length(column_names), nrow = x))
+colnames(Rot.Averages) <- column_names
 #add the treatments to the Averages Data frame
-LD.Averages$Treatments <- as.data.frame(treatments)
+Rot.Averages$Treatments <- as.data.frame(treatments)
 # Display the empty data frame
-print(LD.Averages)
+print(Rot.Averages)
 for(i in 1:x){
-  Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
+  Data_Sub <- subset(Rot_Scores, Treatment == treatments[i])
   Data_Sub
-  ld.mean <- mean(as.numeric(Data_Sub$Leaf.Damage))
-  LD.Averages$`Leaf Damage Averages`[i] <- ld.mean
+  ld.mean <- mean(as.numeric(Data_Sub$`X..of.leaf.rot`))
+  Rot.Averages$`Rot %`[i] <- ld.mean
 }
 
 
@@ -68,9 +84,9 @@ for(i in 1:x){
 #Standard Error
 # Standard Error for  Leaf.Damage
 for(i in 1:x){
-  Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
-  Ld.SE <- sd(Data_Sub$Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$Leaf.Damage))
-  LD.Averages$SE[i] <- Ld.SE
+  Data_Sub <- subset(Rot_Scores, Treatment == treatments[i])
+  Ld.SE <- sd(Data_Sub$`X..of.leaf.rot`, na.rm = TRUE) / sqrt(length(Data_Sub$`X..of.leaf.rot`))
+  Rot.Averages$SE[i] <- Ld.SE
 }
 
 
@@ -83,118 +99,32 @@ library(reshape2)
 # Convert data and SE values to long format
 # If you haven't already installed reshape2
 
-# add cld letters to LD.averages
+# add cld letters to Rot.Averages
 
 
-LD.Averages <- LD.Averages %>%
+Rot.Averages <- Rot.Averages %>%
   arrange(Treatments)
 
-leaf_damage_cld <- leaf_damage_cld %>%
+disease_treatments_cld <- disease_treatments_cld %>%
   arrange(`Group`)
 
-LD.Averages <- cbind(LD.Averages, leaf_damage_cld$Letter)
-column_names <- c("Treatments", "Leaf Damage Averages", "SE", "CLD")
-colnames(LD.Averages) <- column_names
+Rot.Averages <- cbind(Rot.Averages, disease_treatments_cld$Letter)
+column_names <- c("Treatments", "Leaf Rot %", "SE", "CLD")
+colnames(Rot.Averages) <- column_names
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
-LD.Averages$Treatments <- unlist(LD.Averages$Treatments)
-LD.Averages$Treatments <- factor(LD.Averages$Treatments)
+Rot.Averages$Treatments <- unlist(Rot.Averages$Treatments)
+Rot.Averages$Treatments <- factor(Rot.Averages$Treatments)
 #ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
 # so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
 
 # Plot +
-LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, fill = Treatments)) +
+LD_plot <- ggplot(Rot.Averages, aes(x = Treatments, y = `Leaf Rot %`, fill = Treatments)) +
   geom_col(color = "black") +
-  geom_errorbar(aes(ymin = `Leaf Damage Averages` - SE, ymax = `Leaf Damage Averages` + SE), width = 0.2) +
-  geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
+  geom_errorbar(aes(ymin = `Leaf Rot %` - SE, ymax = `Leaf Rot %` + SE), width = 0.2) +
+  geom_text(aes(label = CLD, y = `Leaf Rot %` + SE + 4), size = 5) +
   theme_minimal() +
-  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 2 Average Leaf Damage Scores") +
+  labs(y = "Average Leaf Rot Score", title = "Col-0 Batch 3 Average Leaf Rot Scores") +
   scale_fill_brewer(palette = "Blues")  # nicer than all-blue
 
 show(LD_plot)
-
-## Chlorosis
-# Pre-process the data
-Chlorosis_Assay <- na.omit(Path_Assay)
-Chlorosis_Assay  <- subset(Chlorosis_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
-Chlorosis_Assay$Treatment <- gsub("-", ".", Chlorosis_Assay$Treatment)
-## Calculate the Average Chlorosis of each treatment
-# take the individual treatment names
-treatments <- unique(Chlorosis_Assay$Treatment)
-#get the number of treatments
-x <- length(treatments)
-#Create Leaf Damage (LD) Averages data frame
-# Define the column names
-column_names <- c("Treatments", "Chlorosis Averages")
-
-# Create an empty data frame with the specified column names
-Chlorosis.Averages <- data.frame(matrix(ncol = length(column_names), nrow = x))
-colnames(Chlorosis.Averages) <- column_names
-#add the treatments to the Averages Data frame
-Chlorosis.Averages$Treatments <- as.data.frame(treatments)
-# Display the empty data frame
-print(Chlorosis.Averages)
-for(i in 1:x){
-  Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
-  Data_Sub
-  cl.mean <- mean(as.numeric(Data_Sub$Chlorosis))
-  print(cl.mean)
-  Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
-}
-
-
-##Plot Data Here
-#Standard Error
-# Standard Error for  Chlorosis
-for(i in 1:x){
-  Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
-  cl.SE <- sd(Data_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$Chlorosis))
-  Chlorosis.Averages$SE[i] <- cl.SE
-}
-
-
-# Load required library
-library(ggplot2)
-library(reshape2)
-
-
-
-# Convert data and SE values to long format
-# If you haven't already installed reshape2
-# install.packages("reshape2")
-
-
-# add cld letters to LD.averages
-
-Chlorosis.Averages <- Chlorosis.Averages %>%
-  arrange(Treatments)
-
-chlorosis_cld <- chlorosis_cld %>%
-  arrange(`Group`)
-
-Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
-column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
-colnames(Chlorosis.Averages) <- column_names
-
-# Count the number of records for each Treatment type
-ld_treatment_counts <- table(LD_Assay$Treatment)
-cl_treatment_counts <- table(Chlorosis_Assay$Treatment)
-
-# Plot with CLD labels
-# To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
-Chlorosis.Averages$Treatments <- unlist(Chlorosis.Averages$Treatments)
-Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments)
-#ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
-# so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
-
-# Plot +
-CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Averages`, fill = Treatments)) +
-  geom_col(color = "black") +
-  geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
-  geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
-  theme_minimal() +
-  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 2 Average Chlorosis Scores") +
-  scale_fill_brewer(palette = "Reds")  # nicer than all-blue
-
-show(CL_plot)
-
