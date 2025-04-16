@@ -30,14 +30,14 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 1/Batch 1 Scores.csv", 
+disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 3/Batch 3 Scores.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
 disease_scores <- na.omit(disease_scores) #removes NA values
-disease_scores <- subset(disease_scores, select = -c(Chlorosis,Random, Block.Rep)) 
+disease_scores <- subset(disease_scores, select = -c(Col.0..Rep, Random, Block)) 
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
-disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
+
 #removes chlorosis as this test is focusing on leaf damage
 #randomized block design calculations and the block rep (not important for this model)
 
@@ -56,50 +56,19 @@ disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
 #                 data = disease_scores)
 
 #Complete Model
-lmer1a <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Leaf.Damage), data = disease_scores)
+lmer1a <- lmer(Rotted.Leaves ~ Treatment + (1 | Chlorotic.leaves), data = disease_scores)
 summary(lmer1a)
 
-# Simpler Model (dropped X0.dpi.Leaf.Damage as a random effect)
+# Simpler Model (dropped X..Chlorosis)
 
-lmer1b <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1b <- lm(Rotted.Leaves ~ Treatment, data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
-
-# Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer1c <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
-summary(lmer1b)
-
-# Simpler Model (dropped Block as a Random effect)
-
-lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
-summary(lmer1c)
-
-anova(lmer1b,lmer1c)
-# compare whether meodle with block is significantly different to the model without - if it is then Block is important 
-#It is in this case
-
-lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = disease_scores)
-summary(lmer1e)
-anova(lmer1b,lmer1d)
-#Compare the model with Block and Fungus.gnats to the model with Block only
-#P.value indicates Fungus gnats is importance
-#Simpler model without the Perforation
-
-lmer1f <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-summary(lmer1f)
-anova(lmer1d,lmer1e)
-#Result indicates that perforation is not important - perforation does not explain a significant amount of variance in leaf damage
-
-#Simplier model without Treatment
-
-lmer1g <- lmer(X5.dpi.Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-anova(lmer1f, lmer1g)
-
-# Results indicate that treatment does explain a significant amount of variance in leaf damage
-
-#best fit model:
-summary(lmer1g)
+## Result
+#          Chisq  Pr(>Chisq)
+# lmer1a    0         1
+# indicates that the number of chlorotic leaves does not significantly explain variation in the data
 
 #No we need a post-hoc test to determine which treatments differ from one another:
 # the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
@@ -108,7 +77,7 @@ summary(lmer1g)
 # but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
-model_null <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ 1, 
+model_null <- clm(as.ordered(Rotted.Leaves) ~ 1, 
                   data = disease_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
@@ -124,11 +93,10 @@ model_null <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ 1,
 
 #Post Hoc Test - Tukey Test
 library(emmeans)
-posthoc <- emmeans(lmer1f, ~ Treatment)
+posthoc <- emmeans(lmer1b, ~ Treatment)
 summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
 disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
-# Change EHA15.I to EHA105.I
-disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+show(disease_treatments_cld)
