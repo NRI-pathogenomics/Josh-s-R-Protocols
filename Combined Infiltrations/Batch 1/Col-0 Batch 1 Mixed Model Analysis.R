@@ -99,7 +99,7 @@ anova(lmer1f, lmer1g)
 # Results indicate that treatment does explain a significant amount of variance in leaf damage
 
 #best fit model:
-summary(lmer1g)
+summary(lmer1f)
 
 #No we need a post-hoc test to determine which treatments differ from one another:
 # the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
