@@ -46,8 +46,6 @@ leaf_damage_cld <- cldList(P.adj ~ Comparison,
                data = dunn_pvals,
                threshold = 0.05)
 
-print(leaf_damage_cld)
-
 #Chlorosis
 KW.test <- kruskal.test(Agro..5.dpi.Chlorosis ~ Treatment, data = damage_scores)
 dunn_res <- FSA::dunnTest(x = damage_scores$Agro..5.dpi.Chlorosis,
@@ -63,6 +61,8 @@ chlorosis_cld <- cldList(P.adj ~ Comparison,
 
 print(chlorosis_cld)
 # Change EHA15.I to EHA105.I
-leaf_damage_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
+print(leaf_damage_cld)
 # Change EHA15.I to EHA105.I
-chlorosis_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+chlorosis_cld$Group[chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
+print(chlorosis_cld)
