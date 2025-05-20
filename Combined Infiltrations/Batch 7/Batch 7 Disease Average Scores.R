@@ -37,8 +37,11 @@ Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Unive
                        dec = ".", fill = TRUE, comment.char = "")
 ## Leaf Damage
 # Pre-process the data
-LD_Assay <- na.omit(Path_Assay)
-LD_Assay <- subset(LD_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
+LD_Assay <- subset(Path_Assay, select = -c(Random, Block.Rep, PS..0.dpi.Leaf.Damage, PS..0.dpi.Chlorosis,
+                                         PS..5.dpi.Leaf.Damage,
+                                         PS..5.dpi.Chlorosis,
+                                         Infiltrated.with.P.syringae, Fungus.gnats, Perforation)) #remove randomized block design calculations
+LD_Assay <- na.omit(LD_Assay)
 LD_Assay$Treatment <- gsub("-", ".", LD_Assay$Treatment)
 ## Calculate the Average Leaf Damage of each treatment
 # take the individual treatment names
