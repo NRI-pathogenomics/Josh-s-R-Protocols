@@ -111,8 +111,8 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   geom_errorbar(aes(ymin = `Leaf Damage Averages` - SE, ymax = `Leaf Damage Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
   theme_minimal() +
-  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 7 Average Leaf Damage Scores") +
-  scale_fill_brewer(palette = "Blues")  # nicer than all-blue
+  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 7 Average Leaf Damage Scores 5 dpi with Agrobacterium tumefaciens") +
+  scale_fill_brewer(palette = "RdPu")  # nicer than all-blue
 
 show(LD_plot)
 
@@ -199,8 +199,8 @@ CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Average
   geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
   theme_minimal() +
-  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 7 Average Chlorosis Scores") +
-  scale_fill_brewer(palette = "Reds")  # nicer than all-blue
+  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 7 Average Chlorosis Scores 5 dpi with Agrobacterium tumefaciens") +
+  scale_fill_brewer(palette = "PuBu")  # nicer than all-blue
 
 show(CL_plot)
 
