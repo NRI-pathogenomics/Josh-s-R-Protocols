@@ -62,3 +62,7 @@ chlorosis_cld <- cldList(P.adj ~ Comparison,
                            threshold = 0.05)
 
 print(chlorosis_cld)
+# Change EHA15.I to EHA105.I
+leaf_damage_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+# Change EHA15.I to EHA105.I
+chlorosis_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
