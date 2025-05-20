@@ -62,17 +62,17 @@ print(LD.Averages)
 for(i in 1:x){
   Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
   Data_Sub
-  ld.mean <- mean(as.numeric(Data_Sub$X5.dpi.Leaf.Damage))
+  ld.mean <- mean(as.numeric(Data_Sub$Agro..5.dpi.Leaf.Damage))
   LD.Averages$`Leaf Damage Averages`[i] <- ld.mean
 }
 
 
 ##Plot Data Here
 #Standard Error
-# Standard Error for  X5.dpi.Leaf.Damage
+# Standard Error for  Agro..5.dpi.Leaf.Damage
 for(i in 1:x){
   Data_Sub <- subset(LD_Assay, Treatment == treatments[i])
-  Ld.SE <- sd(Data_Sub$X5.dpi.Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$X5.dpi.Leaf.Damage))
+  Ld.SE <- sd(Data_Sub$Agro..5.dpi.Leaf.Damage, na.rm = TRUE) / sqrt(length(Data_Sub$Agro..5.dpi.Leaf.Damage))
   LD.Averages$SE[i] <- Ld.SE
 }
 
@@ -111,22 +111,25 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   geom_errorbar(aes(ymin = `Leaf Damage Averages` - SE, ymax = `Leaf Damage Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
   theme_minimal() +
-  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 2 Average Leaf Damage Scores") +
+  labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 7 Average Leaf Damage Scores") +
   scale_fill_brewer(palette = "Blues")  # nicer than all-blue
 
 show(LD_plot)
 
 ## Chlorosis
 # Pre-process the data
-Chlorosis_Assay <- na.omit(Path_Assay)
-Chlorosis_Assay  <- subset(Chlorosis_Assay, select = -c(Random, Block.Rep)) #remove randomized block design calculations
-Chlorosis_Assay$Treatment <- gsub("-", ".", Chlorosis_Assay$Treatment)
+Chlorosis_Assay <- subset(Path_Assay, select = -c(Random, Block.Rep, PS..0.dpi.Leaf.Damage, PS..0.dpi.Chlorosis,
+                                               PS..5.dpi.Leaf.Damage,
+                                               PS..5.dpi.Chlorosis,
+                                               Infiltrated.with.P.syringae, Fungus.gnats, Perforation)) #remove randomized block design calculations
+Chlorosis_Assay <- na.omit(LD_Assay)
+Chlorosis_Assay$Treatment <- gsub("-", ".", LD_Assay$Treatment)
 ## Calculate the Average Chlorosis of each treatment
 # take the individual treatment names
 treatments <- unique(Chlorosis_Assay$Treatment)
 #get the number of treatments
 x <- length(treatments)
-#Create Leaf Damage (LD) Averages data frame
+#Create Chlorosis assay (LD) Averages data frame
 # Define the column names
 column_names <- c("Treatments", "Chlorosis Averages")
 
@@ -140,7 +143,7 @@ print(Chlorosis.Averages)
 for(i in 1:x){
   Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
   Data_Sub
-  cl.mean <- mean(as.numeric(Data_Sub$X5.dpi.Chlorosis))
+  cl.mean <- mean(as.numeric(Data_Sub$Agro..5.dpi.Chlorosis))
   print(cl.mean)
   Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
 }
@@ -151,7 +154,7 @@ for(i in 1:x){
 # Standard Error for  Chlorosis
 for(i in 1:x){
   Data_Sub <- subset(Chlorosis_Assay, Treatment == treatments[i])
-  cl.SE <- sd(Data_Sub$X5.dpi.Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$X5.dpi.Chlorosis))
+  cl.SE <- sd(Data_Sub$Agro..5.dpi.Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$Agro..5.dpi.Chlorosis))
   Chlorosis.Averages$SE[i] <- cl.SE
 }
 
@@ -196,7 +199,7 @@ CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Average
   geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
   theme_minimal() +
-  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 2 Average Chlorosis Scores") +
+  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 7 Average Chlorosis Scores") +
   scale_fill_brewer(palette = "Reds")  # nicer than all-blue
 
 show(CL_plot)
