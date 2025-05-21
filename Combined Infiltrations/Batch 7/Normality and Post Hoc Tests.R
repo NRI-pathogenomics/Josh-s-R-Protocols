@@ -6,7 +6,7 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 scores.csv", 
+disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Combined.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
@@ -61,8 +61,8 @@ chlorosis_cld <- cldList(P.adj ~ Comparison,
 
 print(chlorosis_cld)
 # Change EHA15.I to EHA105.I
-leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
+leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
 print(leaf_damage_cld)
 # Change EHA15.I to EHA105.I
-chlorosis_cld$Group[chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
+chlorosis_cld$Group[chlorosis_cld$Group == "EHA105"] <- "EHA105"
 print(chlorosis_cld)
