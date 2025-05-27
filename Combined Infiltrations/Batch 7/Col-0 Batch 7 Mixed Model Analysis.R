@@ -38,68 +38,47 @@ disease_scores <- na.omit(disease_scores) #removes NA val, ues
 disease_scores <- subset(disease_scores, select = -c(Agro..1.dpi.Chlorosis, Agro..5.dpi.Chlorosis, Random, Block.Rep)) 
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
-#removes chlorosis as this test is focusing on leaf damage
-#randomized block design calculations and the block rep (not important for this model)
+disease_scores$Block <- as.factor(disease_scores$Block)
 
-# #The model - models for individual factors (Perforation, P.syringae infiltration and fungus gnats) to determine which of the two is more closely associated with leaf damage
-# 
-# # Model with only P. syringae (hypothesis: P.syringae are more closely associated with damage)
-# model_ps <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ Infiltrated.with.P.syringae, 
-#                 data = disease_scores)
-# 
-# # Model with only fungus gnats (hypothesis: fungus gnats are more closely associated with damage)
-# model_fg <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ Fungus.gnats, 
-#                 data = disease_scores)
-# 
-# # Model with only Perforation (hypothesis: Infiltration process is closely associated with damage)
-# model_pf <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ Perforation, 
-#                 data = disease_scores)
+# check the levels of all the factors in the data
+# Shows number of unique levels for each column
+sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
-lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae  + (1 | Fungus.gnats) + (1 | Perforation) + (1|PS..0.dpi.Leaf.Damage), data = disease_scores)
+#Dropped (1|Fungus gnats)
+lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation) + (1|PS..0.dpi.Leaf.Damage), data = disease_scores)
+
 summary(lmer1a)
 
 # Simpler Model (dropped PS..0.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation), data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
-# Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer1c <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
-summary(lmer1b)
-
-# Simpler Model (dropped Block as a Random effect)
-
-lmer1d <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+# Simpler Model (dropped Perforation)
+lmer1c <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block), data = disease_scores)
 summary(lmer1c)
-
 anova(lmer1b,lmer1c)
-# compare whether meodle with block is significantly different to the model without - if it is then Block is important 
-#It is in this case
+# Simpler Model (dropped Infiltrated with P.syringae)
 
-lmer1e <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = disease_scores)
-summary(lmer1e)
-anova(lmer1b,lmer1d)
-#Compare the model with Block and Fungus.gnats to the model with Block only
-#P.value indicates Fungus gnats is importance
-#Simpler model without the Perforation
+lmer1d <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment  + (1 | Block), data = disease_scores)
+summary(lmer1d)
 
-lmer1f <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-summary(lmer1f)
-anova(lmer1d,lmer1e)
-#Result indicates that perforation is not important - perforation does not explain a significant amount of variance in leaf damage
+anova(lmer1c,lmer1d)
+
 
 #Simplier model without Treatment
 
-lmer1g <- lmer(PS..5.dpi.Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
-anova(lmer1f, lmer1g)
+lmer1e <- lmer(PS..5.dpi.Leaf.Damage ~ (1 | Block), data = disease_scores)
+summary(lmer1e)
+anova(lmer1d, lmer1e)
 
-# Results indicate that treatment does explain a significant amount of variance in leaf damage
+# Results indicate that treatment does explain a significant amount of variance in leaf damage - so lmer1d is the best model
 
 #best fit model:
-summary(lmer1f)
+summary(lmer1d)
 
 #No we need a post-hoc test to determine which treatments differ from one another:
 # the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
@@ -124,7 +103,7 @@ model_null <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ 1,
 
 #Post Hoc Test - Tukey Test
 library(emmeans)
-posthoc <- emmeans(lmer1f, ~ Treatment)
+posthoc <- emmeans(lmer1d, ~ Treatment)
 summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
