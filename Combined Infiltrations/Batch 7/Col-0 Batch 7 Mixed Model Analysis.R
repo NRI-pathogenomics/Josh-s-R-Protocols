@@ -111,3 +111,74 @@ tukey_results <- as.data.frame(tukey_results)
 disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 # Change EHA15.I to EHA105.I
 disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+
+## Agro..5.dpi.Chlorosis Complete Model
+# data processing
+chlorosis_scores <- na.omit(disease_scores) #removes NA values
+chlorosis_scores <- subset(disease_scores, select = -c(PS..5.dpi.Leaf.Damage,Random, Block.Rep)) 
+chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
+#removes Leaf Damage as this test is focusing on Agro..5.dpi.Chlorosis
+#randomized block design calculations and the block rep (not important for this model)
+
+## Damage and Agro..5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+
+## Agro..5.dpi.Chlorosis Complete Model
+lmer2a <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|Agro..1.dpi.Chlorosis), data = chlorosis_scores)
+summary(lmer1a)
+# Simpler Model (dropped Agro..1.dpi.Chlorosis)
+lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+summary(lmer2b)
+
+anova(lmer2a, lmer2b)
+
+# Simpler Model (dropped Infiltrated.with.P.syringae)
+lmer2c <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+summary(lmer2c)
+
+anova(lmer2b,lmer2c)
+# compare whether model with block is significantly different to the model without - if it is then P.syringae is important 
+#results:
+#          Chisq | Pr(>Chisq)
+# lmer2a  0.9659 | 0.3257 - Indicates that "Infiltrated.with.P.syringae" does not significantly improve the model
+# Simpler Model (dropped Block as a Random effect)
+
+lmer2d <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+summary(lmer2d)
+anova(lmer2c,lmer2d)
+#    Chisq | Pr(>Chisq)
+# lmer2b 0 | 1 - results indicate "Block" does not significantly improve the model
+
+# Simpler model without Perforation
+lmer2e <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
+summary(lmer2e)
+anova(lmer2d,lmer2e)
+#    Chisq | Pr(>Chisq)
+# lmer2c 0 | 1 results indicate "Perforation" does not significantly improve the model   
+
+#Simpler model without Fungus gnats
+# had to use lm() as the formula has removed all random effects
+lmer2f <- lm(Agro..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+summary(lmer2f)
+anova(lmer2e,lmer2f)
+#results
+#       Chisq | Pr(>Chisq)
+# lmer2d    0 | 1 - results indicate that "Fungus gnats" doesn't significantly improve the model
+
+#best fit model:
+summary(lmer2e)
+
+#Now we need a post-hoc test to determine which treatments differ from one another:
+# the magnitude of T-values indicates that at least one of the treatments differs from the others in terms of Leaf Damage but the post-hoc test will reveal which treatment differs
+#In short: Treatment is a fixed effect and one or more treatment is behind the leaf damage
+#Fungus.gnat damage is accounted for as a random effect that causes variance in the data
+# but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
+
+
+#Post Hoc Test - Tukey Test
+library(emmeans)
+posthoc <- emmeans(lmer2e, ~ Treatment)
+summary(posthoc)
+tukey_results <- pairs(posthoc, adjust = "tukey")
+summary(tukey_results)
+tukey_results <- as.data.frame(tukey_results)
+chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
