@@ -30,11 +30,11 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
+disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-disease_scores <- na.omit(disease_scores) #removes NA val, ues
+disease_scores <- na.omit(disease_data) #removes NA val, ues
 disease_scores <- subset(disease_scores, select = -c(Agro..1.dpi.Chlorosis, Agro..5.dpi.Chlorosis, Random, Block.Rep)) 
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
@@ -114,25 +114,22 @@ disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA1
 
 ## Agro..5.dpi.Chlorosis Complete Model
 # data processing
-chlorosis_scores <- na.omit(disease_scores) #removes NA values
-chlorosis_scores <- subset(disease_scores, select = -c(PS..5.dpi.Leaf.Damage,Random, Block.Rep)) 
+chlorosis_scores <- na.omit(disease_data) #removes NA values
+chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..5.dpi.Leaf.Damage,Random, Block.Rep)) 
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 #removes Leaf Damage as this test is focusing on Agro..5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
 
 ## Damage and Agro..5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+sapply(chlorosis_scores, function(x) length(unique(x)))
 
-## Agro..5.dpi.Chlorosis Complete Model
-lmer2a <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|Agro..1.dpi.Chlorosis), data = chlorosis_scores)
-summary(lmer1a)
+## Agro..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
 # Simpler Model (dropped Agro..1.dpi.Chlorosis)
-lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2b)
 
-anova(lmer2a, lmer2b)
-
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2c <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2c <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Block)  + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2c)
 
 anova(lmer2b,lmer2c)
@@ -142,24 +139,18 @@ anova(lmer2b,lmer2c)
 # lmer2a  0.9659 | 0.3257 - Indicates that "Infiltrated.with.P.syringae" does not significantly improve the model
 # Simpler Model (dropped Block as a Random effect)
 
-lmer2d <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+lmer2d <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
-#    Chisq | Pr(>Chisq)
-# lmer2b 0 | 1 - results indicate "Block" does not significantly improve the model
 
 # Simpler model without Perforation
-lmer2e <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
+#had to use lm as all random factors had been removed
+lmer2e <- lm(Agro..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
 summary(lmer2e)
 anova(lmer2d,lmer2e)
 #    Chisq | Pr(>Chisq)
 # lmer2c 0 | 1 results indicate "Perforation" does not significantly improve the model   
 
-#Simpler model without Fungus gnats
-# had to use lm() as the formula has removed all random effects
-lmer2f <- lm(Agro..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
-summary(lmer2f)
-anova(lmer2e,lmer2f)
 #results
 #       Chisq | Pr(>Chisq)
 # lmer2d    0 | 1 - results indicate that "Fungus gnats" doesn't significantly improve the model
