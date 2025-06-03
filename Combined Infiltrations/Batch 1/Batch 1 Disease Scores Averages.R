@@ -137,7 +137,7 @@ for(i in 1:x){
   print(cl.mean)
   Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
 }
-
+print(Chlorosis.Averages)
 
 ##Plot Data Here
 #Standard Error
@@ -161,6 +161,9 @@ library(reshape2)
 
 
 # add cld letters to LD.averages
+# remove Ctrl-HP from the cld list
+chlorosis_cld <- as.data.frame(chlorosis_cld)
+chlorosis_cld <- chlorosis_cld %>% slice(-1)
 
 Chlorosis.Averages <- Chlorosis.Averages %>%
   arrange(Treatments)
@@ -172,8 +175,6 @@ Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
 column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
 colnames(Chlorosis.Averages) <- column_names
 
-# Count the number of records for each Treatment type
-ld_treatment_counts <- table(LD_Assay$Treatment)
 cl_treatment_counts <- table(Chlorosis_Assay$Treatment)
 
 # Plot with CLD labels
@@ -189,7 +190,7 @@ CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Average
   geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
   theme_minimal() +
-  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 7 Average Chlorosis Scores 5 dpi with Pseudomonas syringae") +
-  scale_fill_brewer(palette = "PuBu")  # nicer than all-blue
+  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 1 Average Chlorosis Scores") +
+  scale_fill_brewer(palette = "Reds")  # nicer than all-blue
 
 show(CL_plot)
