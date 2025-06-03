@@ -4,9 +4,9 @@
 # library(vcd)
 # 
 # # Calculate association measures
-# assocstats(table(disease_scores$Treatment, disease_scores$Infiltrated.with.P.syringae))
-# assocstats(table(disease_scores$Treatment, disease_scores$Fungus.gnats))
-# assocstats(table(disease_scores$Treatment, disease_scores$Perforation))
+# assocstats(table(damage_scores$Treatment, damage_scores$Infiltrated.with.P.syringae))
+# assocstats(table(damage_scores$Treatment, damage_scores$Fungus.gnats))
+# assocstats(table(damage_scores$Treatment, damage_scores$Perforation))
 # if(("dplyr" %in% all_packages)==FALSE){
 #   install.packages("dplyr")}
 # if(("agricolae" %in% all_packages)==FALSE){
@@ -34,10 +34,10 @@ disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-U
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-disease_scores <- na.omit(disease_scores) #removes NA values
-disease_scores <- subset(disease_scores, select = -c(Chlorosis,Random, Block.Rep)) 
-disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
-disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
+damage_scores <- na.omit(damage_scores) #removes NA values
+damage_scores <- subset(damage_scores, select = -c(Chlorosis,Random, Block.Rep)) 
+damage_scores$Treatment <- gsub("-", ".", damage_scores$Treatment)
+damage_scores <- subset(damage_scores, Treatment != "Ctrl.HP.I")
 #removes chlorosis as this test is focusing on leaf damage
 #randomized block design calculations and the block rep (not important for this model)
 
@@ -45,55 +45,55 @@ disease_scores <- subset(disease_scores, Treatment != "Ctrl.HP.I")
 # 
 # # Model with only P. syringae (hypothesis: P.syringae are more closely associated with damage)
 # model_ps <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Infiltrated.with.P.syringae, 
-#                 data = disease_scores)
+#                 data = damage_scores)
 # 
 # # Model with only fungus gnats (hypothesis: fungus gnats are more closely associated with damage)
 # model_fg <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Fungus.gnats, 
-#                 data = disease_scores)
+#                 data = damage_scores)
 # 
 # # Model with only Perforation (hypothesis: Infiltration process is closely associated with damage)
 # model_pf <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ Perforation, 
-#                 data = disease_scores)
+#                 data = damage_scores)
 
 #Complete Model
-lmer1a <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Leaf.Damage), data = disease_scores)
+lmer1a <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Leaf.Damage), data = damage_scores)
 summary(lmer1a)
 
 # Simpler Model (dropped X0.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1b <- lmer(X5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer1c <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1c <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1b)
 
 # Simpler Model (dropped Block as a Random effect)
 
-lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = disease_scores)
+lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
 summary(lmer1c)
 
 anova(lmer1b,lmer1c)
 # compare whether meodle with block is significantly different to the model without - if it is then Block is important 
 #It is in this case
 
-lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = disease_scores)
+lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Perforation), data = damage_scores)
 summary(lmer1e)
 anova(lmer1b,lmer1d)
 #Compare the model with Block and Fungus.gnats to the model with Block only
 #P.value indicates Fungus gnats is importance
 #Simpler model without the Perforation
 
-lmer1f <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
+lmer1f <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = damage_scores)
 summary(lmer1f)
 anova(lmer1d,lmer1e)
 #Result indicates that perforation is not important - perforation does not explain a significant amount of variance in leaf damage
 
 #Simplier model without Treatment
 
-lmer1g <- lmer(X5.dpi.Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = disease_scores)
+lmer1g <- lmer(X5.dpi.Leaf.Damage ~ (1 | Block) + (1 | Fungus.gnats), data = damage_scores)
 anova(lmer1f, lmer1g)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage
@@ -109,7 +109,7 @@ summary(lmer1f)
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
 model_null <- clm(as.ordered(X5.dpi.Leaf.Damage) ~ 1, 
-                  data = disease_scores)
+                  data = damage_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
 # anova(model_null, model_ps)
@@ -132,3 +132,67 @@ tukey_results <- as.data.frame(tukey_results)
 disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 # Change EHA15.I to EHA105.I
 disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+
+## X5.dpi.Chlorosis Complete Model
+# data processing
+chlorosis_scores <- na.omit(disease_scores) #removes NA values
+chlorosis_scores <- subset(disease_scores, select = -c(Random, Block.Rep)) 
+chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
+#removes Leaf Damage as this test is focusing on X5.dpi.Chlorosis
+#randomized block design calculations and the block rep (not important for this model)
+
+## Damage and X5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+
+## X5.dpi.Chlorosis Complete Model
+lmer2z <- lmer(Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
+summary(lmer2z)
+# Simpler Model (dropped (1 | Perforation))
+lmer2a <- lmer(Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats), data = chlorosis_scores)
+summary(lmer2a)
+
+anova(lmer2z, lmer2a)
+
+# Simpler Model (dropped Infiltrated.with.P.syringae)
+lmer2b <- lmer(Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats), data = chlorosis_scores)
+summary(lmer2b)
+
+anova(lmer2a,lmer2b)
+# Simpler model - dropped block
+lmer2c <- lmer(Chlorosis ~ Treatment + (1 | Fungus.gnats), data = chlorosis_scores)
+summary(lmer2c)
+anova(lmer2b,lmer2c)
+#    Chisq | Pr(>Chisq)
+# lmer2b 0 | 1 - results indicate "Block" does not significantly improve the model
+
+# Simpler model without any random effects
+lmer2d <- lm(Chlorosis ~ Treatment, data = chlorosis_scores)
+summary(lmer2d)
+anova(lmer2c,lmer2d)
+
+#best fit model:
+summary(lmer2d)
+
+#None of the random effects seem to matter- doing a KW and dunn posthoc test for the chlorosis data
+#Chlorosis
+KW.test <- kruskal.test(Chlorosis ~ Treatment, data = chlorosis_scores)
+dunn_res <- FSA::dunnTest(x = chlorosis_scores$Chlorosis,
+                          g = chlorosis_scores$Treatment,
+                          method = "bonferroni")
+# Get p-values
+dunn_pvals <- dunn_res$res
+
+# Generate compact letter display
+chlorosis_cld <- cldList(P.adj ~ Comparison,
+                         data = dunn_pvals,
+                         threshold = 0.05)
+
+print(chlorosis_cld)
+# Change EHA15.I to EHA105.I
+leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
+print(leaf_damage_cld)
+# Change EHA15.I to EHA105.I
+chlorosis_cld$Group[chlorosis_cld$Group == "EHA105"] <- "EHA105"
+print(chlorosis_cld)
+
+
+
