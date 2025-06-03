@@ -114,3 +114,82 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   scale_fill_brewer(palette = "Blues")  # nicer than all-blue
 
 show(LD_plot)
+
+## Chlorosis
+
+#get the number of treatments
+x <- length(treatments)
+#Create Chlorosis assay (LD) Averages data frame
+# Define the column names
+column_names <- c("Treatments", "Chlorosis Averages")
+
+# Create an empty data frame with the specified column names
+Chlorosis.Averages <- data.frame(matrix(ncol = length(column_names), nrow = x))
+colnames(Chlorosis.Averages) <- column_names
+#add the treatments to the Averages Data frame
+Chlorosis.Averages$Treatments <- as.data.frame(treatments)
+# Display the empty data frame
+print(Chlorosis.Averages)
+for(i in 1:x){
+  Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
+  Data_Sub
+  cl.mean <- mean(as.numeric(Data_Sub$Chlorosis))
+  print(cl.mean)
+  Chlorosis.Averages$`Chlorosis Averages`[i] <- cl.mean
+}
+
+
+##Plot Data Here
+#Standard Error
+# Standard Error for  Chlorosis
+for(i in 1:x){
+  Data_Sub <- subset(Path_Assay, Treatment == treatments[i])
+  cl.SE <- sd(Data_Sub$Chlorosis, na.rm = TRUE) / sqrt(length(Data_Sub$Chlorosis))
+  Chlorosis.Averages$SE[i] <- cl.SE
+}
+
+
+# Load required library
+library(ggplot2)
+library(reshape2)
+
+
+
+# Convert data and SE values to long format
+# If you haven't already installed reshape2
+# install.packages("reshape2")
+
+
+# add cld letters to LD.averages
+
+Chlorosis.Averages <- Chlorosis.Averages %>%
+  arrange(Treatments)
+
+chlorosis_cld <- chlorosis_cld %>%
+  arrange(`Group`)
+
+Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
+column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
+colnames(Chlorosis.Averages) <- column_names
+
+# Count the number of records for each Treatment type
+ld_treatment_counts <- table(LD_Assay$Treatment)
+cl_treatment_counts <- table(Chlorosis_Assay$Treatment)
+
+# Plot with CLD labels
+# To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
+Chlorosis.Averages$Treatments <- unlist(Chlorosis.Averages$Treatments)
+Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments)
+#ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
+# so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
+
+# Plot +
+CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Averages`, fill = Treatments)) +
+  geom_col(color = "black") +
+  geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
+  geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
+  theme_minimal() +
+  labs(y = "Average Chlorosis Score", title = "Col-0 Batch 7 Average Chlorosis Scores 5 dpi with Pseudomonas syringae") +
+  scale_fill_brewer(palette = "PuBu")  # nicer than all-blue
+
+show(CL_plot)
