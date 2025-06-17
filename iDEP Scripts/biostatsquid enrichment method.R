@@ -45,7 +45,5 @@ ggplot(plot_df, aes(x = reorder(Description, qscore), y = qscore, fill = FoldCha
   labs(
     x = NULL,
     y = expression(-log[10](FDR)),
-    fill = "Fold Change",
-    title = "Top 20 Enriched Pathways"
-  ) +
+    fill = "Fold Change") +
   theme_minimal(base_size = 14)
