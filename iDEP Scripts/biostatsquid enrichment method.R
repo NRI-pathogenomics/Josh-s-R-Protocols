@@ -1,13 +1,13 @@
 #biostatssquid enrichment plot method
-# For data management
-install.packages('tidyverse')
-BiocManager::install("clusterProfiler")
-BiocManager::install("org.Hs.eg.db")
-# For visualisation
-install.packages('pheatmap')
-install.packages("DOSE")
-install.packages("enrichplot")
-install.packages("ggupset")
+# # For data management
+# install.packages('tidyverse')
+# BiocManager::install("clusterProfiler")
+# BiocManager::install("org.Hs.eg.db")
+# # For visualisation
+# install.packages('pheatmap')
+# install.packages("DOSE")
+# install.packages("enrichplot")
+# install.packages("ggupset")
 # Load required libraries
 library(tidyverse)
 library(clusterProfiler)
@@ -35,10 +35,11 @@ enrichres_formatted <- enrichres_df %>%
 plot_df <- enrichres_formatted %>%
   mutate(qscore = -log10(p.adjust)) %>%
   arrange(desc(qscore)) %>%
-  slice_head(n = 20)  # Show top 20 pathways
+  slice_head(n = 20) %>%  # Show top 20 pathways
+  mutate(Description_wrapped = str_wrap(Description, width = 40))  # Wrap long names
 
 # Plot using ggplot2
-ggplot(plot_df, aes(x = reorder(Description, qscore), y = qscore, fill = FoldChange)) +
+ggplot(plot_df, aes(x = reorder(Description_wrapped, qscore), y = qscore, fill = FoldChange)) +
   geom_col() +
   coord_flip() +
   scale_fill_gradient(low = "blue", high = "red") +
