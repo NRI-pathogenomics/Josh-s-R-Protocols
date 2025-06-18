@@ -13,7 +13,7 @@ library(tidyverse)
 library(clusterProfiler)
 
 # Read the CSV
-enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/WT 0dpi-2dpi up.csv")
+enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/WT vs 1703 3dpi down.csv")
 
 # Format the enrichment results
 enrichres_formatted <- enrichres_df %>%
@@ -38,12 +38,13 @@ plot_df <- enrichres_formatted %>%
   slice_head(n = 20) %>%  # Show top 20 pathways
   mutate(Description_wrapped = str_wrap(Description, width = 40)) 
 # Plot using ggplot2
-ggplot(plot_df, aes(x = reorder(Description_wrapped, qscore), y = qscore, fill = FoldChange)) +
-  geom_col() +
-  coord_flip() +
-  scale_fill_gradient(low = "blue", high = "red") +
-  labs(
-    x = NULL,
-    y = expression(-log[10](FDR)),
-    fill = "Fold Change") +
-  theme_minimal(base_size = 14)
+plot <- ggplot(plot_df, aes(x = reorder(Description_wrapped, qscore), y = qscore, fill = FoldChange)) +
+    geom_col() +
+    coord_flip() +
+    scale_fill_gradient(low = "blue", high = "red") +
+    labs(
+      x = NULL,
+      y = expression(-log[10](FDR)),
+      fill = "Fold Change") +
+    theme_minimal(base_size = 14)
+show(plot)
