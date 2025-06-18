@@ -35,8 +35,13 @@ enrichres_formatted <- enrichres_df %>%
 plot_df <- enrichres_formatted %>%
   mutate(qscore = -log10(p.adjust)) %>%
   arrange(desc(qscore)) %>%
+<<<<<<< HEAD
   slice_head(n = 20) %>%  # Show top 20 pathways
   mutate(Description_wrapped = str_wrap(Description, width = 40))  # Wrap long names
+=======
+  slice_head(n = 20)  # Show top 20 pathways
+mutate(Description_wrapped = str_wrap(Description, width = 40))  # Wrap long names
+>>>>>>> 0069c7d8bccb4544301ea145f4dcf82c3b4c6e8e
 
 # Plot using ggplot2
 ggplot(plot_df, aes(x = reorder(Description_wrapped, qscore), y = qscore, fill = FoldChange)) +
