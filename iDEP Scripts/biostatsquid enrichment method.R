@@ -13,7 +13,7 @@ library(tidyverse)
 library(clusterProfiler)
 
 # Read the CSV
-enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/1703 0dpi-2dpi down.csv")
+enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/WT 0dpi-2dpi up.csv")
 
 # Format the enrichment results
 enrichres_formatted <- enrichres_df %>%
