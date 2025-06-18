@@ -1,19 +1,19 @@
 #biostatssquid enrichment plot method
 # For data management
-# install.packages('tidyverse')
-# BiocManager::install("clusterProfiler")
-# BiocManager::install("org.Hs.eg.db")
-# # For visualisation
-# install.packages('pheatmap')
-# install.packages("DOSE")
-# install.packages("enrichplot")
-# install.packages("ggupset")
+install.packages('tidyverse')
+BiocManager::install("clusterProfiler")
+BiocManager::install("org.Hs.eg.db")
+# For visualisation
+install.packages('pheatmap')
+install.packages("DOSE")
+install.packages("enrichplot")
+install.packages("ggupset")
 # Load required libraries
 library(tidyverse)
 library(clusterProfiler)
 
 # Read the CSV
-enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/1703 0dpi-2dpi down.csv")
+enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/1703 2dpi-3dpi up.csv")
 
 # Format the enrichment results
 enrichres_formatted <- enrichres_df %>%
