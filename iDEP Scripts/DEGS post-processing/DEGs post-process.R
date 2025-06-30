@@ -162,53 +162,101 @@ library(clusterProfiler)
 library(GO.db)
 library(org.At.tair.db)
 # sig_degs_0
-
-sig_degs0_enrichFrame <- enrichGO(gene = sig_degs_0$ensembl_ID,
+#split the sig_degs up into up and downregulated so you can analyse the GO enrichment in context of the direction genes are being regulated in
+sig_degs_0_up <- subset(sig_degs_0, `Up/Down` == "Up")
+sig_degs_0_down <- subset(sig_degs_0, `Up/Down` == "Down")
+#Upregulated genes enrichment
+sig_degs0_enrichFrame_up <- enrichGO(gene = sig_degs_0_up$ensembl_ID,
                                   OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
                                   keyType = "TAIR",        # Changed from "ENSEMBL"
                                   ont = "ALL",
                                   pAdjustMethod = "BH",
                                   pvalueCutoff = 0.05,
                                   qvalueCutoff = 0.2)
+#Downregulated genes enrichment
+sig_degs0_enrichFrame_down <- enrichGO(gene = sig_degs_0_down$ensembl_ID,
+                                     OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
+                                     keyType = "TAIR",        # Changed from "ENSEMBL"
+                                     ont = "ALL",
+                                     pAdjustMethod = "BH",
+                                     pvalueCutoff = 0.05,
+                                     qvalueCutoff = 0.2)
 #standard P-value used here as the sig_degs have already been filtered for significance at the 0.01 level
+
+sig_degs_2_up <- subset(sig_degs_2, `Up/Down` == "Up")
+sig_degs_2_down <- subset(sig_degs_2, `Up/Down` == "Down")
+#Upregulated genes enrichment
+sig_degs2_enrichFrame_up <- enrichGO(gene = sig_degs_2_up$ensembl_ID,
+                                     OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
+                                     keyType = "TAIR",        # Changed from "ENSEMBL"
+                                     ont = "ALL",
+                                     pAdjustMethod = "BH",
+                                     pvalueCutoff = 0.05,
+                                     qvalueCutoff = 0.2)
+#Downregulated genes enrichment
+sig_degs2_enrichFrame_down <- enrichGO(gene = sig_degs_2_down$ensembl_ID,
+                                       OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
+                                       keyType = "TAIR",        # Changed from "ENSEMBL"
+                                       ont = "ALL",
+                                       pAdjustMethod = "BH",
+                                       pvalueCutoff = 0.05,
+                                       qvalueCutoff = 0.2)
 
 # produce a dotplot of the top 25 genes based on P.adjust
 # Install enrichplot if needed
 if (!requireNamespace("enrichplot", quietly = TRUE)) {
   BiocManager::install("enrichplot")
 }
+#sig_degs_0
 library(enrichplot)
-dotplot(sig_degs0_enrichFrame ,
+dotplot(sig_degs0_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for WT vs 1703 at 0 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (WT vs 1703) at 0 d.p.i",
+        showCategory = 25,
+        label_format = 80
+)
+library(enrichplot)
+dotplot(sig_degs0_enrichFrame_down,
+        x = "GeneRatio",
+        color = "p.adjust",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (WT vs 1703) at 0 d.p.i",
         showCategory = 25,
         label_format = 80
 )
 # sig_degs_2
-sig_degs2_enrichFrame <- enrichGO(gene = sig_degs_2$ensembl_ID,
-                                  OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
-                                  keyType = "TAIR",        # Changed from "ENSEMBL"
-                                  ont = "ALL",
-                                  pAdjustMethod = "BH",
-                                  pvalueCutoff = 0.05,
-                                  qvalueCutoff = 0.2)
-#standard P-value used here as the sig_degs have already been filtered for significance at the 0.01 level
-
-# produce a dotplot of the top 25 genes based on P.adjust
-dotplot(sig_degs2_enrichFrame,
+library(enrichplot)
+dotplot(sig_degs2_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for WT vs 1703 at 2 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (WT vs 1703) at 2 d.p.i",
         showCategory = 25,
         label_format = 80
 )
+library(enrichplot)
+dotplot(sig_degs2_enrichFrame_down,
+        x = "GeneRatio",
+        color = "p.adjust",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (WT vs 1703) at 2 d.p.i",
+        showCategory = 25,
+        label_format = 80
+)
+
 # Finally export the results:
 # Export the results to CSV
-write.csv(sig_degs0_enrichFrame@result, 
-          file = "0dpi_GO_enrichment_results.csv", 
+#sig_degs_0_up/down
+write.csv(sig_degs0_enrichFrame_up@result, 
+          file = "upreg_0dpi_GO_enrichment_results.csv", 
           row.names = FALSE)
-# Export the results to CSV
-write.csv(sig_degs2_enrichFrame@result, 
-          file = "2dpi_GO_enrichment_results.csv", 
+
+write.csv(sig_degs0_enrichFrame_down@result, 
+          file = "downreg_0dpi_GO_enrichment_results.csv", 
+          row.names = FALSE)
+#sig_degs_2_up/down
+write.csv(sig_degs2_enrichFrame_up@result, 
+          file = "upreg_2dpi_GO_enrichment_results.csv", 
+          row.names = FALSE)
+
+write.csv(sig_degs2_enrichFrame_down@result, 
+          file = "downreg_2dpi_GO_enrichment_results.csv", 
           row.names = FALSE)
