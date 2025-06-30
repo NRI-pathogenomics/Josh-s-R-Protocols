@@ -1,6 +1,6 @@
 #DEGs post-process
 library(dplyr)
-
+library(VennDiagram)
 #get the 0dpi degs file
 degs_0 <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/DEGS post-processing/0dpi_fold_change_values_DESeq2.csv")
 
@@ -18,6 +18,18 @@ degs_0 <- degs_0[degs_0$`WT_0dpi.X1703_0dpi_adjPval` >= 0.01, ]
 # filter out rows that have NAs - as any rows that have NAs in the seperate files are irrelevant
 degs_0 <- na.omit(degs_0)
 
+# add Up/down to the degs_df
+x <- nrow(degs_0)
+degs_0$`Up/Down` <- character(length = x)
+for(i in 1:x){
+  if(degs_0$`WT_0dpi.X1703_0dpi_log2FC`[i] <= 0) {
+    degs_0$`Up/Down`[i] <- "Down"
+  }
+  if(degs_0$`WT_0dpi.X1703_0dpi_log2FC`[i] >= 0) {
+    degs_0$`Up/Down`[i] <- "Up"
+  }
+}
+
 #get the 2dpi degs file
 degs_2 <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/DEGS post-processing/2dpi_fold_change_values_DESeq2.csv")
 
@@ -34,3 +46,61 @@ degs_2 <- degs_2[degs_2$`WT_2dpi.X1703_2dpi_adjPval` >= 0.01, ]
 
 # filter out rows that have NAs - as any rows that have NAs in the seperate files are irrelevant
 degs_2 <- na.omit(degs_2)
+# add Up/down to the degs_df
+x <- nrow(degs_2)
+degs_2$`Up/Down` <- character(length = x)
+for(i in 1:x){
+  if(degs_2$`WT_2dpi.X1703_2dpi_log2FC`[i] <= 0) {
+    degs_2$`Up/Down`[i] <- "Down"
+  }
+  if(degs_2$`WT_2dpi.X1703_2dpi_log2FC`[i] >= 0) {
+    degs_2$`Up/Down`[i] <- "Up"
+  }
+}
+
+
+# Venn diagrams
+# Prepare a palette of 3 colors with R colorbrewer:
+# Venn diagrams
+# Prepare a palette of 3 colors with R colorbrewer:
+library(RColorBrewer)
+library(VennDiagram)
+library(grid)
+
+myCol <- brewer.pal(3, "Pastel2")
+
+# Filter for upregulated and downregulated genes
+upregulated_0 <- degs_0[degs_0$`Up/Down` == "Up", ]
+downregulated_0 <- degs_0[degs_0$`Up/Down` == "Down", ]
+upregulated_2 <- degs_2[degs_2$`Up/Down` == "Up", ]
+downregulated_2 <- degs_2[degs_2$`Up/Down` == "Down", ]
+
+# Extract Ensembl IDs
+up_genes_0 <- upregulated_0$ensembl_ID
+down_genes_0 <- downregulated_0$ensembl_ID
+up_genes_2 <- upregulated_2$ensembl_ID
+down_genes_2 <- downregulated_2$ensembl_ID
+
+# Simple downregulated genes comparison
+grid.newpage()
+draw.pairwise.venn(
+  area1 = length(down_genes_0),
+  area2 = length(down_genes_2), 
+  cross.area = length(intersect(down_genes_0, down_genes_2)),
+  category = c("1703 vs WT Downregulated 0 dpi", "1703 vs WT Downregulated 2 dpi"),
+  fill = myCol[1:2],
+  cat.pos = c(-20, 20),
+  cat.dist = 0.05
+)
+
+# Simple upregulated genes comparison  
+grid.newpage()
+draw.pairwise.venn(
+  area1 = length(up_genes_0),
+  area2 = length(up_genes_2), 
+  cross.area = length(intersect(up_genes_0, up_genes_2)),
+  category = c("1703 vs WT Upregulated 0 dpi", "1703 vs WT Upregulated 2 dpi"),
+  fill = myCol[1:2],
+  cat.pos = c(-20, 20),
+  cat.dist = 0.05
+)
