@@ -142,3 +142,63 @@ sig_degs_2 <- sig_degs_2 %>% arrange(WT_2dpi.X1703_2dpi_adjPval)
 #highest/lowest adjusted P.values
 hi_adj_P_value_0 <- head(sig_degs_0, n=25)
 hi_adj_P_value_2 <- head(sig_degs_2, n=25)
+
+## GO analysis
+#Install and load required R packages:  
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+  }
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
+  BiocManager::install("clusterProfiler")
+}
+# Install the correct Arabidopsis database if you haven't already
+if (!requireNamespace("org.At.tair.db", quietly = TRUE)) {
+  BiocManager::install("org.At.tair.db")
+}
+if (!requireNamespace("GO.db", quietly = TRUE)){
+  BiocManager::install("GO.db")}
+library(BiocManager)
+library(clusterProfiler)
+library(GO.db)
+library(org.At.tair.db)
+# sig_degs_0
+sig_degs0_enrichFrame <- enrichGO(gene = sig_degs_0$ensembl_ID,
+                                  OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
+                                  keyType = "TAIR",        # Changed from "ENSEMBL"
+                                  ont = "ALL",
+                                  pAdjustMethod = "BH",
+                                  pvalueCutoff = 0.05,
+                                  qvalueCutoff = 0.2)
+#standard P-value used here as the sig_degs have already been filtered for significance at the 0.01 level
+
+# produce a dotplot of the top 25 genes based on P.adjust
+# Install enrichplot if needed
+if (!requireNamespace("enrichplot", quietly = TRUE)) {
+  BiocManager::install("enrichplot")
+}
+library(enrichplot)
+enrichplot::dotplot(sig_degs0_enrichFrame ,
+        x = "GeneRatio",
+        color = "p.adjust",
+        title = "Top 25 of GO Enrichment for WT vs 1703 at 0 d.p.i",
+        showCategory = 15,
+        label_format = 80
+)
+# sig_degs_2
+sig_degs2_enrichFrame <- enrichGO(gene = sig_degs_2$ensembl_ID,
+                                  OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
+                                  keyType = "TAIR",        # Changed from "ENSEMBL"
+                                  ont = "ALL",
+                                  pAdjustMethod = "BH",
+                                  pvalueCutoff = 0.05,
+                                  qvalueCutoff = 0.2)
+#standard P-value used here as the sig_degs have already been filtered for significance at the 0.01 level
+
+# produce a dotplot of the top 25 genes based on P.adjust
+dotplot(sig_degs2_enrichFrame,
+        x = "GeneRatio",
+        color = "p.adjust",
+        title = "Top 25 of GO Enrichment for WT vs 1703 at 2 d.p.i",
+        showCategory = 15,
+        label_format = 80
+)
