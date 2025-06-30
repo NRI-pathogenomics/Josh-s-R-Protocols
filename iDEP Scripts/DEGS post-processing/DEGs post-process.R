@@ -177,11 +177,11 @@ if (!requireNamespace("enrichplot", quietly = TRUE)) {
   BiocManager::install("enrichplot")
 }
 library(enrichplot)
-enrichplot::dotplot(sig_degs0_enrichFrame ,
+dotplot(sig_degs0_enrichFrame ,
         x = "GeneRatio",
         color = "p.adjust",
         title = "Top 25 of GO Enrichment for WT vs 1703 at 0 d.p.i",
-        showCategory = 15,
+        showCategory = 25,
         label_format = 80
 )
 # sig_degs_2
@@ -199,6 +199,15 @@ dotplot(sig_degs2_enrichFrame,
         x = "GeneRatio",
         color = "p.adjust",
         title = "Top 25 of GO Enrichment for WT vs 1703 at 2 d.p.i",
-        showCategory = 15,
+        showCategory = 25,
         label_format = 80
 )
+# Finally export the results:
+# Export the results to CSV
+write.csv(sig_degs0_enrichFrame@result, 
+          file = "0dpi_GO_enrichment_results.csv", 
+          row.names = FALSE)
+# Export the results to CSV
+write.csv(sig_degs2_enrichFrame@result, 
+          file = "2dpi_GO_enrichment_results.csv", 
+          row.names = FALSE)
