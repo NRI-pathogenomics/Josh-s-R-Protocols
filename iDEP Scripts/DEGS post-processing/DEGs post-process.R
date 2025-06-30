@@ -82,25 +82,25 @@ up_genes_2 <- upregulated_2$ensembl_ID
 down_genes_2 <- downregulated_2$ensembl_ID
 
 # Simple downregulated genes comparison
-grid.newpage()
+grid.newpage()  # Creates a new blank plotting page/canvas to draw on
 draw.pairwise.venn(
-  area1 = length(down_genes_0),
-  area2 = length(down_genes_2), 
-  cross.area = length(intersect(down_genes_0, down_genes_2)),
-  category = c("1703 vs WT Downregulated 0 dpi", "1703 vs WT Downregulated 2 dpi"),
-  fill = myCol[1:2],
-  cat.pos = c(-20, 20),
-  cat.dist = 0.05
+  area1 = length(down_genes_0),  # Count total downregulated genes at 0 dpi (left circle size)
+  area2 = length(down_genes_2),  # Count total downregulated genes at 2 dpi (right circle size)
+  cross.area = length(intersect(down_genes_0, down_genes_2)),  # Count genes downregulated in BOTH conditions (overlap area)
+  category = c("1703 vs WT Downregulated 0 dpi", "1703 vs WT Downregulated 2 dpi"),  # Text labels for each circle
+  fill = myCol[1:2],  # Colors for the circles (first 2 colors from the Pastel2 palette)
+  cat.pos = c(-20, 20),  # Position of category labels in degrees (-20° for left, +20° for right)
+  cat.dist = 0.05  # Distance of category labels from the edge of circles (0.05 = close to circles)
 )
 
 # Simple upregulated genes comparison  
-grid.newpage()
+grid.newpage()  # Creates another new blank plotting page (clears previous plot)
 draw.pairwise.venn(
-  area1 = length(up_genes_0),
-  area2 = length(up_genes_2), 
-  cross.area = length(intersect(up_genes_0, up_genes_2)),
-  category = c("1703 vs WT Upregulated 0 dpi", "1703 vs WT Upregulated 2 dpi"),
-  fill = myCol[1:2],
-  cat.pos = c(-20, 20),
-  cat.dist = 0.05
+  area1 = length(up_genes_0),  # Count total upregulated genes at 0 dpi (left circle size)
+  area2 = length(up_genes_2),  # Count total upregulated genes at 2 dpi (right circle size)
+  cross.area = length(intersect(up_genes_0, up_genes_2)),  # Count genes upregulated in BOTH conditions (overlap area)
+  category = c("1703 vs WT Upregulated 0 dpi", "1703 vs WT Upregulated 2 dpi"),  # Text labels for each circle
+  fill = myCol[1:2],  # Same colors as downregulated plot for consistency
+  cat.pos = c(-20, 20),  # Same label positioning as downregulated plot
+  cat.dist = 0.05  # Same label distance as downregulated plot
 )
