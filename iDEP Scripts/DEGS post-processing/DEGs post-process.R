@@ -104,3 +104,41 @@ draw.pairwise.venn(
   cat.pos = c(-20, 20),  # Same label positioning as downregulated plot
   cat.dist = 0.05  # Same label distance as downregulated plot
 )
+
+#generate lists of the overlaps - genes we are not interested in
+# Calculate overlaps
+down_overlap <- as.list(intersect(down_genes_0, down_genes_2))
+up_overlap <- as.list(intersect(up_genes_0, up_genes_2))
+total_overlap <- c(up_overlap, down_overlap)
+
+#filter the up/down genes using the intersects
+sig_degs_0 <- degs_0[!degs_0$ensembl_ID %in% total_overlap, ] 
+sig_degs_2 <- degs_2[!degs_2$ensembl_ID %in% total_overlap, ] 
+
+## some genes will be downregulated on day 0 but upregulated in day 2 so if we rerun the intersect there may still be shared genes
+## since any shared genes remaining after filtration should be being regulated in opposing directions (they weren't part of the up/down intersects in the venn diagrams) they should be included in the data
+## just to check however, run this code and compare the genes - as long as their up/down values differ its fine
+
+# check_overlap <- intersect(sig_degs_0$ensembl_ID, sig_degs_2$ensembl_ID)
+# sig_degs_0[sig_degs_0$ensembl_ID %in% check_overlap, ]
+# sig_degs_2[sig_degs_2$ensembl_ID %in% check_overlap, ]
+
+# Identify a list of the top genes for LFC and adjusted P.value
+# order the datasets for highest/lowest LFC
+sig_degs_0 <- sig_degs_0 %>% arrange(desc(WT_0dpi.X1703_0dpi_log2FC))
+sig_degs_2 <- sig_degs_2 %>% arrange(desc(WT_2dpi.X1703_2dpi_log2FC))
+
+#highest/lowest LFCs
+hi_LFC_0 <- head(sig_degs_0, n=25)
+lo_LFC_0 <- tail(sig_degs_0, n=25)
+hi_LFC_2 <- head(sig_degs_2, n=25)
+lo_LFC_2 <- tail(sig_degs_2, n=25)
+
+#order the datasets for the most significant P.value
+#lower the P.value the more significant the change so asc needs to be used here, which is the default sort method for arrange
+sig_degs_0 <- sig_degs_0 %>% arrange(WT_0dpi.X1703_0dpi_adjPval)
+sig_degs_2 <- sig_degs_2 %>% arrange(WT_2dpi.X1703_2dpi_adjPval)
+
+#highest/lowest adjusted P.values
+hi_adj_P_value_0 <- head(sig_degs_0, n=25)
+hi_adj_P_value_2 <- head(sig_degs_2, n=25)
