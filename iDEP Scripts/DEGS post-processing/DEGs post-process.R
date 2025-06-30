@@ -162,6 +162,7 @@ library(clusterProfiler)
 library(GO.db)
 library(org.At.tair.db)
 # sig_degs_0
+
 sig_degs0_enrichFrame <- enrichGO(gene = sig_degs_0$ensembl_ID,
                                   OrgDb = org.At.tair.db,  # Changed from org.Hs.eg.db
                                   keyType = "TAIR",        # Changed from "ENSEMBL"
