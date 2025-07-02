@@ -34,7 +34,7 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
+disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 rescores.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
@@ -78,26 +78,17 @@ lmer1d <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Fungus.gnats), data = damag
 summary(lmer1d)
 anova(lmer1c,lmer1d)
 #results:
-#          Chisq | Pr(>Chisq)   
-# lmer1c: 6.7517 | 0.009366 ** - model c explains the model well, so inclusion of perforation does significantly improve the model
+#model c explains the model well, so inclusion of perforation does significantly improve the model
 
 #Simpler model without Fungus gnats
 
 lmer1e <- lmer(X5.dpi.Leaf.Damage ~ Treatment + (1 | Perforation), data = damage_scores)
 summary(lmer1e)
 anova(lmer1c,lmer1e)
-#results
-#         Chisq | Pr(>Chisq)    
-# lmer1c 20.48  | 6.025e-06 *** - shows the inclusion of fungus gnats significantly improves the model so lmer1c better fits
-# 
-# #Simplier model without Treatment
-# 
-# lmer1f <- lmer(X5.dpi.Leaf.Damage ~ (1 | Fungus.gnats) + (1 | Perforation), data = damage_scores)
-# anova(lmer1c, lmer1f)
-# #results
-# #            Chisq | Pr(>Chisq)
-# # lmer1c    1.4447 | 0.8364.   Results indicate that treatment does not explain a significant amount of variance in leaf damage
+#r 
+# lmer1c shows the inclusion of fungus gnats significantly improves the model so lmer1c better fits
 
+#cannot filter anymore effects as Treatment is fixed and we need it for emmeans         
 #best fit model:
 summary(lmer1c)
 
@@ -128,8 +119,10 @@ chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 ## Damage and X5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
 
 ## X5.dpi.Chlorosis Complete Model
-lmer2z <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Chlorosis), data = chlorosis_scores)
-summary(lmer1z)
+# lmer2z <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation) + (1|X0.dpi.Chlorosis), data = chlorosis_scores)
+# summary(lmer1z)
+# this doesnt work as chlorosis on 0 dpi is consistently 0
+
 # Simpler Model (dropped X0.dpi.Chlorosis)
 lmer2a <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2a)
