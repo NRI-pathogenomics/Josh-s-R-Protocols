@@ -109,7 +109,8 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
   theme_minimal() +
   labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 2 Average Leaf Damage Scores") +
-  scale_fill_brewer(palette = "Blues")  # nicer than all-blue
+  scale_fill_brewer(palette = "Blues")+
+  ylim(0, 10)  # Add this line
 
 show(LD_plot)
 
@@ -194,7 +195,8 @@ CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Average
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
   theme_minimal() +
   labs(y = "Average Chlorosis Score", title = "Col-0 Batch 2 Average Chlorosis Scores") +
-  scale_fill_brewer(palette = "Reds")  # nicer than all-blue
+  scale_fill_brewer(palette = "Reds") +
+  ylim(0, 10)  # Add this line
 
 show(CL_plot)
 
