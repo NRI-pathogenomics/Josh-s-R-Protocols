@@ -46,24 +46,24 @@ sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
 #Dropped (1|Fungus gnats)
-lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation) + (1|PS..0.dpi.Leaf.Damage), data = disease_scores)
+lmer1a <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation) + (1|Agro..1.dpi.Leaf.Damage), data = disease_scores)
 
 summary(lmer1a)
 
-# Simpler Model (dropped PS..0.dpi.Leaf.Damage as a random effect)
+# Simpler Model (dropped Agro..1.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation), data = disease_scores)
+lmer1b <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Perforation), data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
 # Simpler Model (dropped Perforation)
-lmer1c <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block), data = disease_scores)
+lmer1c <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment + Infiltrated.with.P.syringae + (1 | Block), data = disease_scores)
 summary(lmer1c)
 anova(lmer1b,lmer1c)
 # Simpler Model (dropped Infiltrated with P.syringae)
 
-lmer1d <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment  + (1 | Block), data = disease_scores)
+lmer1d <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment  + (1 | Block), data = disease_scores)
 summary(lmer1d)
 
 anova(lmer1c,lmer1d)
@@ -71,7 +71,7 @@ anova(lmer1c,lmer1d)
 
 #Simplier model without Treatment
 
-lmer1e <- lmer(PS..5.dpi.Leaf.Damage ~ (1 | Block), data = disease_scores)
+lmer1e <- lmer(Agro..5.dpi.Leaf.Damage ~ (1 | Block), data = disease_scores)
 summary(lmer1e)
 anova(lmer1d, lmer1e)
 
@@ -87,7 +87,7 @@ summary(lmer1d)
 # but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
-model_null <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ 1, 
+model_null <- clm(as.ordered(Agro..5.dpi.Leaf.Damage) ~ 1, 
                   data = disease_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
@@ -115,7 +115,7 @@ disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA1
 ## Agro..5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_data) #removes NA values
-chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..5.dpi.Leaf.Damage,Random, Block.Rep)) 
+chlorosis_scores <- subset(chlorosis_scores, select = -c(Agro..1.dpi.Leaf.Damage, Agro..5.dpi.Leaf.Damage, Random, Block.Rep))
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 #removes Leaf Damage as this test is focusing on Agro..5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
@@ -173,3 +173,4 @@ tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
 chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+
