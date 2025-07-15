@@ -18,7 +18,8 @@ print("Tests if observations within groups are more similar than between groups"
 grouping_factors <- c("Block", "Fungus.gnats", "Perforation")
 
 for(factor in grouping_factors) {
-  if(factor %in% names(disease_scores) && length(unique(disease_scores[[factor]])) > 1) {
+  if(factor %in% names(disease_scores) && 
+     length(unique(disease_scores[[factor]])) > 1) {
     
     # Fit null model (intercept only) with random effect
     tryCatch({
