@@ -30,7 +30,7 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
+disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Combined.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
