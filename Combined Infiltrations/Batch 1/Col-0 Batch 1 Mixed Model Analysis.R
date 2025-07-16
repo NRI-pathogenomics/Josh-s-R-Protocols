@@ -34,7 +34,7 @@ disease_scores <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-U
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-damage_scores <- na.omit(damage_scores) #removes NA values
+damage_scores <- na.omit(disease_scores) #removes NA values
 damage_scores <- subset(damage_scores, select = -c(Chlorosis,Random, Block.Rep)) 
 damage_scores$Treatment <- gsub("-", ".", damage_scores$Treatment)
 damage_scores <- subset(damage_scores, Treatment != "Ctrl.HP.I")
