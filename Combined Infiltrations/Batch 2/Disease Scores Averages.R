@@ -32,7 +32,7 @@ library(FSA)
 library(dunn.test)
 library(rcompanion)
 
-Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 rescores.csv", 
+Path_Assay <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 2/Batch 2 Scores.csv", 
                        header = TRUE, sep = ",", quote = "\"",
                        dec = ".", fill = TRUE, comment.char = "")
 ## Leaf Damage
@@ -109,7 +109,7 @@ LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, f
   geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
   theme_minimal() +
   labs(y = "Average Leaf Damage Score", title = "Col-0 Batch 2 Average Leaf Damage Scores") +
-  scale_fill_brewer(palette = "Blues")+
+  scale_fill_brewer(palette = "RdPu")+
   ylim(0, 10)  # Add this line
 
 show(LD_plot)
@@ -195,7 +195,7 @@ CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Average
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
   theme_minimal() +
   labs(y = "Average Chlorosis Score", title = "Col-0 Batch 2 Average Chlorosis Scores") +
-  scale_fill_brewer(palette = "Reds") +
+  scale_fill_brewer(palette = "PuBu") +
   ylim(0, 10)  # Add this line
 
 show(CL_plot)
