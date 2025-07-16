@@ -90,8 +90,10 @@ draw.pairwise.venn(
   category = c("1703 vs WT Downregulated 0 dpi", "1703 vs WT Downregulated 2 dpi"),  # Text labels for each circle
   fill = myCol[1:2],  # Colors for the circles (first 2 colors from the Pastel2 palette)
   cat.pos = c(-20, 20),  # Position of category labels in degrees (-20° for left, +20° for right)
-  cat.dist = 0.05  # Distance of category labels from the edge of circles (0.05 = close to circles)
-)
+  cat.dist = 0.05,  # Distance of category labels from the edge of circles (0.05 = close to circles)
+  cex = 1.5,
+  cat.cex = 1.5
+  )
 
 # Simple upregulated genes comparison  
 grid.newpage()  # Creates another new blank plotting page (clears previous plot)
@@ -102,7 +104,9 @@ draw.pairwise.venn(
   category = c("1703 vs WT Upregulated 0 dpi", "1703 vs WT Upregulated 2 dpi"),  # Text labels for each circle
   fill = myCol[1:2],  # Same colors as downregulated plot for consistency
   cat.pos = c(-20, 20),  # Same label positioning as downregulated plot
-  cat.dist = 0.05  # Same label distance as downregulated plot
+  cat.dist = 0.05,  # Same label distance as downregulated plot
+  cex = 1.5,
+  cat.cex = 1.5
 )
 
 #generate lists of the overlaps - genes we are not interested in
