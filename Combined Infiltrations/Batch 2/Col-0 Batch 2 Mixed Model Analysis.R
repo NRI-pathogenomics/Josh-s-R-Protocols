@@ -127,7 +127,7 @@ chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 lmer2a <- lmer(X5.dpi.Chlorosis ~ Treatment + Infiltrated.with.P.syringae + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
 summary(lmer2a)
 
-anova(lmer2z, lmer2a)
+# anova(lmer2z, lmer2a)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
 lmer2b <- lmer(X5.dpi.Chlorosis ~ Treatment + (1 | Block) + (1 | Fungus.gnats) + (1 | Perforation), data = chlorosis_scores)
