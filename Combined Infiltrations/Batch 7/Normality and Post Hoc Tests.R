@@ -66,3 +66,4 @@ print(leaf_damage_cld)
 # Change EHA15.I to EHA105.I
 chlorosis_cld$Group[chlorosis_cld$Group == "EHA105"] <- "EHA105"
 print(chlorosis_cld)
+
