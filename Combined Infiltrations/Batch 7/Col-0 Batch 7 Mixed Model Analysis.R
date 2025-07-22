@@ -34,9 +34,8 @@ disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Uni
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-disease_data <- subset(disease_data, select = -c(PS..0.dpi.Leaf.Damage,PS..0.dpi.Chlorosis, PS..5.dpi.Leaf.Damage, PS..5.dpi.Chlorosis, Infiltrated.with.P.syringae, Fungus.gnats, Perforation))
+ddisease_scores <- subset(disease_data, select = -c(PS..1.dpi.Chlorosis, Agro..5.dpi.Chlorosis, Random, Block.Rep)) 
 disease_scores <- na.omit(disease_data) #removes NA val, ues
-disease_scores <- subset(disease_scores, select = -c(Agro..1.dpi.Chlorosis, Agro..5.dpi.Chlorosis, Random, Block.Rep)) 
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 disease_scores$Block <- as.factor(disease_scores$Block)
 
@@ -46,19 +45,19 @@ sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
 #Dropped (1|Fungus gnats)
-lmer1a <- lmer1a <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment + Agro..1.dpi.Leaf.Damage + (1|Block), data = disease_scores)
+lmer1a <- lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + PS..1.dpi.Leaf.Damage + (1|Block), data = disease_scores)
 
 summary(lmer1a)
 
-# Simpler Model (dropped Agro..1.dpi.Leaf.Damage as a random effect)
+# Simpler Model (dropped PS..1.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(Agro..5.dpi.Leaf.Damage ~ Treatment + (1 | Block), data = disease_scores)
+lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block), data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
 # Simpler Model (dropped Block)
-lmer1c <- lm(Agro..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
+lmer1c <- lm(PS..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
 summary(lmer1c)
 anova(lmer1b,lmer1c)
 
@@ -74,7 +73,7 @@ summary(lmer1c)
 # but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
-model_null <- clm(as.ordered(Agro..5.dpi.Leaf.Damage) ~ 1, 
+model_null <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ 1, 
                   data = disease_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
@@ -102,7 +101,7 @@ leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold =
 ## Agro..5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_data) #removes NA values
-chlorosis_scores <- subset(chlorosis_scores, select = -c(Agro..1.dpi.Leaf.Damage, Agro..5.dpi.Leaf.Damage, Random, Block.Rep))
+chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..1.dpi.Leaf.Damage, PS..5.dpi.Leaf.Damage, Random, Block.Rep))
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 #removes Leaf Damage as this test is focusing on Agro..5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
@@ -111,8 +110,8 @@ chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 sapply(chlorosis_scores, function(x) length(unique(x)))
 
 ## Agro..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
-# Simpler Model (dropped Agro..1.dpi.Chlorosis)
-lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + Agro..1.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
+# Simpler Model (dropped PS..1.dpi.Chlorosis)
+lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + PS..1.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2b)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
