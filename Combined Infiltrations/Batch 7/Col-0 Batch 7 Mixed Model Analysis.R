@@ -144,5 +144,5 @@ tukey_results <- as.data.frame(tukey_results)
 B7_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 # Change EHA15.I to EHA105.I
-B7_chlorosis_cld$Group[B7_chlorosis_cld$Group == "EHA15"] <- "EHA105"
+B7_chlorosis_cld$Group[B7_chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
 print(B7_chlorosis_cld)
