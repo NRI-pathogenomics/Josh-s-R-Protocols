@@ -30,12 +30,12 @@ library(rcompanion)
 library(ordinal)
 library(lme4)
 # since the response variables are ordinal data
-disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Combined.csv", 
+disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-ddisease_scores <- subset(disease_data, select = -c(PS..1.dpi.Chlorosis, Agro..5.dpi.Chlorosis, Random, Block.Rep)) 
-disease_scores <- na.omit(disease_data) #removes NA val, ues
+disease_scores <- subset(disease_data, select = -c(PS..0.dpi.Chlorosis, PS..5.dpi.Chlorosis, Random, Block.Rep)) 
+disease_scores <- na.omit(disease_scores)
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 disease_scores$Block <- as.factor(disease_scores$Block)
 
@@ -45,11 +45,11 @@ sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
 #Dropped (1|Fungus gnats)
-lmer1a <- lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + PS..1.dpi.Leaf.Damage + (1|Block), data = disease_scores)
+lmer1a <- lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + PS..0.dpi.Leaf.Damage + (1|Block), data = disease_scores)
 
 summary(lmer1a)
 
-# Simpler Model (dropped PS..1.dpi.Leaf.Damage as a random effect)
+# Simpler Model (dropped PS..0.dpi.Leaf.Damage as a random effect)
 
 lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block), data = disease_scores)
 summary(lmer1b)
@@ -59,7 +59,7 @@ anova(lmer1a, lmer1b)
 # Simpler Model (dropped Block)
 lmer1c <- lm(PS..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
 summary(lmer1c)
-anova(lmer1b,lmer1c)
+anova(lmer1a,lmer1c)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage - so lmer1c is the best model
 
@@ -94,33 +94,33 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B7_leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 # # Change EHA15.I to EHA105.I
-# disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+B7_leaf_damage_cld$Group[B7_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 
-## Agro..5.dpi.Chlorosis Complete Model
+## PS..5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_data) #removes NA values
-chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..1.dpi.Leaf.Damage, PS..5.dpi.Leaf.Damage, Random, Block.Rep))
+chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..0.dpi.Leaf.Damage, PS..5.dpi.Leaf.Damage, Random, Block.Rep))
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
-#removes Leaf Damage as this test is focusing on Agro..5.dpi.Chlorosis
+#removes Leaf Damage as this test is focusing on PS..5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
 
-## Damage and Agro..5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+## Damage and PS..5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
 sapply(chlorosis_scores, function(x) length(unique(x)))
 
-## Agro..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
-# Simpler Model (dropped PS..1.dpi.Chlorosis)
-lmer2b <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + PS..1.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
+## PS..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
+# Simpler Model (dropped PS..0.dpi.Chlorosis)
+lmer2b <- lmer(PS..5.dpi.Chlorosis ~ Treatment + PS..0.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2b)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2c <- lmer(Agro..5.dpi.Chlorosis ~ Treatment + (1 | Block), data = chlorosis_scores)
+lmer2c <- lmer(PS..5.dpi.Chlorosis ~ Treatment + (1 | Block), data = chlorosis_scores)
 summary(lmer2c)
 
 anova(lmer2b,lmer2c)
 
-lmer2d <- lm(Agro..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+lmer2d <- lm(PS..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
 #results
@@ -136,16 +136,13 @@ summary(lmer2d)
 
 #Post Hoc Test - Tukey Test
 library(emmeans)
-posthoc <- emmeans(lmer2d, ~ Treatment)
+posthoc <- emmeans(lmer2c, ~ Treatment)
 summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B7_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 # Change EHA15.I to EHA105.I
-leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
-print(leaf_damage_cld)
-# Change EHA15.I to EHA105.I
-chlorosis_cld$Group[chlorosis_cld$Group == "EHA15"] <- "EHA105"
-print(chlorosis_cld)
+B7_chlorosis_cld$Group[B7_chlorosis_cld$Group == "EHA15"] <- "EHA105"
+print(B7_chlorosis_cld)
