@@ -179,6 +179,7 @@ tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
 B1_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
-
+# Change EHA15.I to EHA105.I
+B1_chlorosis_cld$Group[B1_chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
 
 
