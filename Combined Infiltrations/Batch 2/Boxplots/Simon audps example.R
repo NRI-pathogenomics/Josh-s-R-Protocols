@@ -55,7 +55,7 @@ box_audps <- ggplot(Batch_1, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = T
   theme_classic() +
   labs(title = "Col-0 Batch 1", subtitle = "Leaf Damage Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 # Chlorosis 
 B1_chlorosis_cld
 B1_chlorosis_summary <- Batch_1 %>%
@@ -71,7 +71,7 @@ box_audps <- ggplot(Batch_1, aes(x = Treatment, y = Chlorosis, fill = Treatment)
   theme_classic() +
   labs(title = "Col-0 Batch 1", subtitle = "Chlorosis Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 
 #Batch 2
 # Leaf Damage
@@ -89,7 +89,7 @@ box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = T
   theme_classic() +
   labs(title = "Col-0 Batch 2", subtitle = "Leaf Damage Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 # Chlorosis 
 B2_chlorosis_cld
 B2_chlorosis_summary <- Batch_2 %>%
@@ -105,7 +105,7 @@ box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Chlorosis, fill = Tre
   theme_classic() +
   labs(title = "Col-0 Batch 2", subtitle = "Chlorosis Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 
 #Batch 7
 # Leaf Damage
@@ -123,7 +123,7 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Leaf.Damage, fill 
   theme_classic() +
   labs(title = "Col-0 Batch 7", subtitle = "Leaf Damage Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 
 # Chlorosis 
 B7_chlorosis_cld
@@ -140,5 +140,5 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Chlorosis, fill = 
   theme_classic() +
   labs(title = "Col-0 Batch 7", subtitle = "Chlorosis Scores 5 d.p.i",
        x = "Treatment", y = "Disease Index Scores 0-10")
-box_audps
+print(box_audps)
 box_audps
