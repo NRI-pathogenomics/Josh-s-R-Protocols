@@ -129,9 +129,9 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-disease_treatments_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B1_leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 # Change EHA15.I to EHA105.I
-disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
+B1_leaf_damage_cld$Group[B1_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 
 ## X5.dpi.Chlorosis Complete Model
 # data processing
@@ -172,24 +172,13 @@ anova(lmer2c,lmer2d)
 #best fit model:
 summary(lmer2d)
 
-#None of the random effects seem to matter- doing a KW and dunn posthoc test for the chlorosis data
-#Chlorosis
-KW.test <- kruskal.test(Chlorosis ~ Treatment, data = chlorosis_scores)
-dunn_res <- FSA::dunnTest(x = chlorosis_scores$Chlorosis,
-                          g = chlorosis_scores$Treatment,
-                          method = "bonferroni")
-# Get p-values
-dunn_pvals <- dunn_res$res
-
-# Generate compact letter display
-chlorosis_cld <- cldList(P.adj ~ Comparison,
-                         data = dunn_pvals,
-                         threshold = 0.05)
-
-print(chlorosis_cld)
-# Change EHA15.I to EHA105.I
-chlorosis_cld$Group[chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
-print(chlorosis_cld)
+library(emmeans)
+posthoc <- emmeans(lmer2d, ~ Treatment)
+summary(posthoc)
+tukey_results <- pairs(posthoc, adjust = "tukey")
+summary(tukey_results)
+tukey_results <- as.data.frame(tukey_results)
+B1_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 
 
