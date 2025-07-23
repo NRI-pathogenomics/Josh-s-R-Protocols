@@ -22,10 +22,49 @@ Batch_7 <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Universi
 Batch_7 <- na.omit(Batch_7)
 Batch_7 <- subset(Batch_7, Treatment != "Ctrl.HP.I")
 #Batch 1
-box_audps <- ggplot(Batch_1, aes(x=Treatment, y=X0.dpi.Leaf.Damage, fill=Treatment)) +
+# Leaf Damage
+box_audps <- ggplot(Batch_1, aes(x=Treatment, y=X5.dpi.Leaf.Damage, fill=Treatment)) +
   geom_boxplot() +
   theme_classic() +
-  labs(title="Col-0 Batch 1", subtitle = "Leaf Damage Scores",  x ="Treatment", legend = "Treatment") +
-  theme(plot.title = element_text(size = 13, hjust=0.25, vjust = -7), plot.subtitle = element_text(size = 13, hjust=0.75)) +
-  labs(y=Batch_1$Treatment)
+  labs(title="Col-0 Batch 1", subtitle = "Leaf Damage Scores 5 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
+box_audps
+# Chlorosis 
+box_audps <- ggplot(Batch_1, aes(x=Treatment, y=Chlorosis, fill=Treatment)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title="Col-0 Batch 1", subtitle = "Chlorosis Scores 5 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
+box_audps
+
+#Batch 2
+# Leaf Damage
+box_audps <- ggplot(Batch_2, aes(x=Treatment, y=X5.dpi.Leaf.Damage, fill=Treatment)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title="Col-0 Batch 2", subtitle = "Leaf Damage Scores 5 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
+box_audps
+# Chlorosis 
+box_audps <- ggplot(Batch_2, aes(x=Treatment, y=X5.dpi.Chlorosis, fill=Treatment)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title="Col-0 Batch 2", subtitle = "Chlorosis Scores 5 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
+box_audps
+
+#Batch 7
+# Leaf Damage
+box_audps <- ggplot(Batch_7, aes(x=Treatment, y=PS..5.dpi.Leaf.Damage, fill=Treatment)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title="Col-0 Batch 7", subtitle = "Leaf Damage Scores 5 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
+box_audps
+# Chlorosis 
+box_audps <- ggplot(Batch_7, aes(x=Treatment, y=PS..5.dpi.Chlorosis, fill=Treatment)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title="Col-0 Batch 7", subtitle = "Chlorosis Scores 7 d.p.i",  x ="Treatment", legend = "Treatment") +
+  labs(y="Disease Index Scores 0-10")
 box_audps
