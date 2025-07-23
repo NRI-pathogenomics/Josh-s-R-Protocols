@@ -106,7 +106,7 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B2_leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 ## X5.dpi.Chlorosis Complete Model
 # data processing
@@ -179,4 +179,10 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B2_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+
+# Change EHA15.I to EHA105.I
+B2_leaf_damage_cld$Group[B2_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
+print(B2_leaf_damage_cld)
+B2_chlorosis_cld$Group[B2_chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
+print(B2_chlorosis_cld)
