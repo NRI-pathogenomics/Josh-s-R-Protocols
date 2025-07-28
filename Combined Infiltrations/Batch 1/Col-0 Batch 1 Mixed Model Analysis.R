@@ -182,4 +182,7 @@ B1_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold 
 # Change EHA15.I to EHA105.I
 B1_chlorosis_cld$Group[B1_chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
 
+#Print the formula
+B1_leaf_damage_formula <- formula(lmer1f)
+B1_chlorosis_formula <- formula(lmer2d)
 

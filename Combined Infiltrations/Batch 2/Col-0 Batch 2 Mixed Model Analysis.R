@@ -186,3 +186,7 @@ B2_leaf_damage_cld$Group[B2_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 print(B2_leaf_damage_cld)
 B2_chlorosis_cld$Group[B2_chlorosis_cld$Group == "EHA15.I"] <- "EHA105.I"
 print(B2_chlorosis_cld)
+
+#Print the formula
+B2_leaf_damage_formula <- formula(lmer1c)
+B2_chlorosis_formula <- formula(lmer2e)
