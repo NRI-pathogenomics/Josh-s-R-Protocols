@@ -10,16 +10,14 @@ library(FSA)
 library(dunn.test)
 library(rcompanion)
 
-Batch_7 <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
+Batch_7 <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Agro.csv", 
                     header = TRUE, sep = ",", quote = "\"",
                     dec = ".", fill = TRUE, comment.char = "")
-Batch_7 <- na.omit(Batch_7)
-Batch_7$Treatment[Batch_7$Treatment == "Ctrl-HP-I"] <- "Ctrl.HP.I"
-Batch_7$Treatment[Batch_7$Treatment == "EHA105-I"] <- "EHA105.I"
-Batch_7$Treatment[Batch_7$Treatment == "Water-I"] <- "Water.I"
-Batch_7$Treatment[Batch_7$Treatment == "GFP-I"] <- "GFP.I"
-Batch_7$Treatment[Batch_7$Treatment == "GFP-M"] <- "GFP.M"
 
+Batch_7$Treatment[Batch_7$Treatment == "Ctrl-HP"] <- "Ctrl.HP"
+# data processing
+Batch_7 <- subset(Batch_7, select = -c(PS..0.dpi.Leaf.Damage,PS..0.dpi.Chlorosis, PS..5.dpi.Leaf.Damage, PS..5.dpi.Chlorosis, Infiltrated.with.P.syringae, Fungus.gnats, Perforation))
+Batch_7 <- na.omit(Batch_7) #removes NA val, ues
 
 #Batch 7
 # Leaf Damage

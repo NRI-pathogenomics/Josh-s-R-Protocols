@@ -95,7 +95,7 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B7_leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 # # Change EHA15.I to EHA105.I
 # disease_treatments_cld$Group[disease_treatments_cld$Group == "EHA15.I"] <- "EHA105.I"
 
@@ -142,13 +142,13 @@ summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
 tukey_results <- as.data.frame(tukey_results)
-chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
+B7_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 # Change EHA15.I to EHA105.I
-leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
+B7_leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
 print(leaf_damage_cld)
 # Change EHA15.I to EHA105.I
-chlorosis_cld$Group[chlorosis_cld$Group == "EHA15"] <- "EHA105"
+B7_chlorosis_cld$Group[chlorosis_cld$Group == "EHA15"] <- "EHA105"
 print(chlorosis_cld)
 
 B7_leaf_damage_formula <- formula(lmer1c)
