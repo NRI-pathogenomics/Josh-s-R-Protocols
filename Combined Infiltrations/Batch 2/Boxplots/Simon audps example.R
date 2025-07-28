@@ -53,7 +53,7 @@ box_audps <- ggplot(Batch_1, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = T
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 1", subtitle = "Leaf Damage Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 1 Leaf Damage Scores 5 d.p.i", subtitle = B1_leaf_damage_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 # Chlorosis 
@@ -69,7 +69,7 @@ box_audps <- ggplot(Batch_1, aes(x = Treatment, y = Chlorosis, fill = Treatment)
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 1", subtitle = "Chlorosis Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 1 Chlorosis Scores 5 d.p.i", subtitle = B1_chlorosis_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 
@@ -87,7 +87,7 @@ box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = T
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 2", subtitle = "Leaf Damage Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 2 Leaf Damage Scores 5 d.p.i", subtitle = B2_leaf_damage_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 # Chlorosis 
@@ -103,7 +103,7 @@ box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Chlorosis, fill = Tre
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 2", subtitle = "Chlorosis Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 2 Chlorosis Scores 5 d.p.i", subtitle = B2_chlorosis_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 
@@ -121,7 +121,7 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Leaf.Damage, fill 
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 7", subtitle = "Leaf Damage Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 7 Leaf Damage Scores 5 d.p.i", subtitle = B7_leaf_damage_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 
@@ -138,7 +138,7 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Chlorosis, fill = 
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
             size = 5, fontface = "bold") +
   theme_classic() +
-  labs(title = "Col-0 Batch 7", subtitle = "Chlorosis Scores 5 d.p.i",
+  labs(title = "Col-0 Batch 7 Chlorosis Scores 5 d.p.i", subtitle = B7_chlorosis_formula,
        x = "Treatment", y = "Disease Index Scores 0-10")
 print(box_audps)
 box_audps
