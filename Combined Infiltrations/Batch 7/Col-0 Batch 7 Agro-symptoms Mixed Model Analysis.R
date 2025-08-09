@@ -145,11 +145,11 @@ tukey_results <- as.data.frame(tukey_results)
 B7_chlorosis_cld <- cldList(p.value ~ contrast, data = tukey_results, threshold = 0.05)
 
 # Change EHA15.I to EHA105.I
-B7_leaf_damage_cld$Group[leaf_damage_cld$Group == "EHA15"] <- "EHA105"
-print(leaf_damage_cld)
+B7_leaf_damage_cld$Group[B7_leaf_damage_cld$Group == "EHA15"] <- "EHA105"
+print(B7_leaf_damage_cld)
 # Change EHA15.I to EHA105.I
-B7_chlorosis_cld$Group[chlorosis_cld$Group == "EHA15"] <- "EHA105"
-print(chlorosis_cld)
+B7_chlorosis_cld$Group[B7_chlorosis_cld$Group == "EHA15"] <- "EHA105"
+print(B7_chlorosis_cld)
 
 B7_leaf_damage_formula <- formula(lmer1c)
 B7_chlorosis_formula <- formula(lmer2d)
