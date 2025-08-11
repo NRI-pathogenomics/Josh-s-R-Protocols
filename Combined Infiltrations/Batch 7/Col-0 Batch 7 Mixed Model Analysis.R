@@ -34,7 +34,7 @@ disease_data <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-Uni
                            header = TRUE, sep = ",", quote = "\"",
                            dec = ".", fill = TRUE, comment.char = "")
 # data processing
-disease_scores <- subset(disease_data, select = -c(PS..0.dpi.Chlorosis, PS..5.dpi.Chlorosis, Random, Block.Rep)) 
+disease_scores <- subset(disease_data, select = -c(Random, Block.Rep)) 
 disease_scores <- na.omit(disease_scores)
 disease_scores$Treatment <- gsub("-", ".", disease_scores$Treatment)
 disease_scores$Block <- as.factor(disease_scores$Block)
@@ -45,23 +45,28 @@ sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
 #Dropped (1|Fungus gnats)
-lmer1a <- lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + PS..0.dpi.Leaf.Damage + (1|Block), data = disease_scores)
+lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage + PS..0.dpi.Leaf.Damage + (1|Block), data = disease_scores)
 
 summary(lmer1a)
 
 # Simpler Model (dropped PS..0.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment + (1 | Block), data = disease_scores)
+lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage + (1 | Block), data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
 # Simpler Model (dropped Block)
-lmer1c <- lm(PS..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
+lmer1c <- lm(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage, data = disease_scores)
 summary(lmer1c)
 anova(lmer1a,lmer1c)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage - so lmer1c is the best model
+
+# Simpler Model (dropped Agro..5.dpi.Leaf.Damage)
+lmer1d <- lm(PS..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
+summary(lmer1d)
+anova(lmer1c,lmer1d)
 
 #best fit model:
 summary(lmer1c)
@@ -101,7 +106,7 @@ B7_leaf_damage_cld$Group[B7_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 ## PS..5.dpi.Chlorosis Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_data) #removes NA values
-chlorosis_scores <- subset(chlorosis_scores, select = -c(PS..0.dpi.Leaf.Damage, PS..5.dpi.Leaf.Damage, Random, Block.Rep))
+chlorosis_scores <- subset(chlorosis_scores, select = -c(Random, Block.Rep))
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
 #removes Leaf Damage as this test is focusing on PS..5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
@@ -111,18 +116,22 @@ sapply(chlorosis_scores, function(x) length(unique(x)))
 
 ## PS..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
 # Simpler Model (dropped PS..0.dpi.Chlorosis)
-lmer2b <- lmer(PS..5.dpi.Chlorosis ~ Treatment + PS..0.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
+lmer2b <- lmer(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis + PS..0.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2b)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2c <- lmer(PS..5.dpi.Chlorosis ~ Treatment + (1 | Block), data = chlorosis_scores)
+lmer2c <- lmer(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2c)
 
 anova(lmer2b,lmer2c)
 
-lmer2d <- lm(PS..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+lmer2d <- lm(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis, data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
+
+lmer2e <- lm(PS..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+summary(lmer2e)
+anova(lmer2d,lmer2e)
 #results
 
 summary(lmer2d)
@@ -136,7 +145,7 @@ summary(lmer2d)
 
 #Post Hoc Test - Tukey Test
 library(emmeans)
-posthoc <- emmeans(lmer2c, ~ Treatment)
+posthoc <- emmeans(lmer2d, ~ Treatment)
 summary(posthoc)
 tukey_results <- pairs(posthoc, adjust = "tukey")
 summary(tukey_results)
@@ -149,4 +158,4 @@ print(B7_chlorosis_cld)
 
 #Print the formula
 B7_leaf_damage_formula <- formula(lmer1c)
-B7_chlorosis_formula <- formula(lmer2c)
+B7_chlorosis_formula <- formula(lmer2d)
