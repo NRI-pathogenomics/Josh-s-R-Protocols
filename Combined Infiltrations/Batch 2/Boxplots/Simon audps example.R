@@ -57,7 +57,7 @@ for(i in 1:counter){
 }
 Rep_Count_B2
 
-Batch_7 <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 Disease.csv", 
+Batch_7 <- read.csv(file="/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/Combined Infiltrations/Batch 7/Batch 7 diff.csv", 
                     header = TRUE, sep = ",", quote = "\"",
                     dec = ".", fill = TRUE, comment.char = "")
 Batch_7 <- na.omit(Batch_7)
@@ -166,10 +166,10 @@ print(box_audps)
 B7_leaf_damage_cld
 B7_leaf_damage_summary <- Batch_7 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(PS..5.dpi.Leaf.Damage)) %>%
+  summarise(Max = max(Leaf.Damage.Difference)) %>%
   left_join(B7_leaf_damage_cld, by = c("Treatment" = "Group"))
 
-box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Leaf.Damage, fill = Treatment)) +
+box_audps <- ggplot(Batch_7, aes(x = Treatment, y = Leaf.Damage.Difference, fill = Treatment)) +
   geom_boxplot() +
   geom_text(data = B7_leaf_damage_summary,
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
@@ -179,17 +179,17 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Leaf.Damage, fill 
             size = 4, color = "black") +
   theme_classic() +
   labs(title = "Col-0 Batch 7 Leaf Damage Scores 5 d.p.i", subtitle = B7_leaf_damage_formula,
-       x = "Treatment", y = "Disease Index Scores 0-10")
+       x = "Treatment", y = "Difference between A.tumefaciens and P.syringae Disease Index Scores 0-10")
 print(box_audps)
 
 # Chlorosis 
 B7_chlorosis_cld
 B7_chlorosis_summary <- Batch_7 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(PS..5.dpi.Chlorosis)) %>%
+  summarise(Max = max(Chlorosis.Difference)) %>%
   left_join(B7_chlorosis_cld, by = c("Treatment" = "Group"))
 
-box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Chlorosis, fill = Treatment)) +
+box_audps <- ggplot(Batch_7, aes(x = Treatment, y = Chlorosis.Difference, fill = Treatment)) +
   geom_boxplot() +
   geom_text(data = B7_chlorosis_summary,
             aes(x = Treatment, y = Max + 0.5, label = Letter),  # adjust y offset as needed
@@ -199,6 +199,6 @@ box_audps <- ggplot(Batch_7, aes(x = Treatment, y = PS..5.dpi.Chlorosis, fill = 
             size = 4, color = "black") +
   theme_classic() +
   labs(title = "Col-0 Batch 7 Chlorosis Scores 5 d.p.i", subtitle = B7_chlorosis_formula,
-       x = "Treatment", y = "Disease Index Scores 0-10")
+       x = "Treatment", y = "Difference between A.tumefaciens and P.syringae Disease Index Scores 0-10")
 print(box_audps)
 box_audps
