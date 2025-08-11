@@ -134,3 +134,4 @@ print(B7_chlorosis_cld)
 #Print the formula
 B7_leaf_damage_formula <- formula(lmer1c)
 B7_chlorosis_formula <- formula(lmer2d)
+
