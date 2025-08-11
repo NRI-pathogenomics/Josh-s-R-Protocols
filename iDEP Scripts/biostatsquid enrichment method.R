@@ -11,6 +11,7 @@
 # Load required libraries
 library(tidyverse)
 library(clusterProfiler)
+library(dplyr)
 
 # Read the CSV
 enrichres_df <- read.csv("/Users/joshhoti/Library/CloudStorage/OneDrive-UniversityofKent/Postgraduate/Josh R Protocols/iDEP Scripts/WT vs 1703 3dpi down.csv")
@@ -29,7 +30,7 @@ enrichres_formatted <- enrichres_df %>%
     Count = nGenes,
     FoldChange = Fold.enriched
   ) %>%
-  select(ID, Description, GeneRatio, BgRatio, pvalue, p.adjust, qvalue, geneID, Count, FoldChange)
+  dplyr::select(ID, Description, GeneRatio, BgRatio, pvalue, p.adjust, qvalue, geneID, Count, FoldChange)
 
 # Create a data frame for ggplot
 plot_df <- enrichres_formatted %>%
