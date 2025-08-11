@@ -211,39 +211,65 @@ sig_degs2_enrichFrame_down <- enrichGO(gene = sig_degs_2_down$ensembl_ID,
 if (!requireNamespace("enrichplot", quietly = TRUE)) {
   BiocManager::install("enrichplot")
 }
-#sig_degs_0
+# sig_degs_0
 library(enrichplot)
+library(ggplot2)
+
 dotplot(sig_degs0_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Upregulated Genes (WT vs 1703) at 0 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (Col-0 vs AT1703) at 0 d.p.i",
         showCategory = 25,
         label_format = 80
+) + theme(
+  plot.title = element_text(size = 16, face = "bold"),
+  axis.title = element_text(size = 14),
+  axis.text = element_text(size = 12),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12)
 )
-library(enrichplot)
+
 dotplot(sig_degs0_enrichFrame_down,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Downregulated Genes (WT vs 1703) at 0 d.p.i",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (Col-0 vs AT1703) at 0 d.p.i",
         showCategory = 25,
         label_format = 80
+) + theme(
+  plot.title = element_text(size = 16, face = "bold"),
+  axis.title = element_text(size = 14),
+  axis.text = element_text(size = 12),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12)
 )
+
 # sig_degs_2
-library(enrichplot)
 dotplot(sig_degs2_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Upregulated Genes (WT vs 1703) at 2 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (Col-0 vs AT1703) at 2 d.p.i",
         showCategory = 25,
         label_format = 80
+) + theme(
+  plot.title = element_text(size = 16, face = "bold"),
+  axis.title = element_text(size = 14),
+  axis.text = element_text(size = 12),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12)
 )
-library(enrichplot)
+
 dotplot(sig_degs2_enrichFrame_down,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Downregulated Genes (WT vs 1703) at 2 d.p.i",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (Col-0 vs AT1703) at 2 d.p.i",
         showCategory = 25,
         label_format = 80
+) + theme(
+  plot.title = element_text(size = 16, face = "bold"),
+  axis.title = element_text(size = 14),
+  axis.text = element_text(size = 12),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12)
 )
 
 # Finally export the results:
