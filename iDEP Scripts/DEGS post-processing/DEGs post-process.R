@@ -218,7 +218,7 @@ library(ggplot2)
 dotplot(sig_degs0_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Upregulated Genes (Col-0 vs AT1703) at 0 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (AT1703 vs Col-0) at 0 d.p.i",
         showCategory = 25,
         label_format = 80
 ) + theme(
@@ -232,7 +232,7 @@ dotplot(sig_degs0_enrichFrame_up,
 dotplot(sig_degs0_enrichFrame_down,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Downregulated Genes (Col-0 vs AT1703) at 0 d.p.i",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (AT1703 vs Col-0) at 0 d.p.i",
         showCategory = 25,
         label_format = 80
 ) + theme(
@@ -247,7 +247,7 @@ dotplot(sig_degs0_enrichFrame_down,
 dotplot(sig_degs2_enrichFrame_up,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Upregulated Genes (Col-0 vs AT1703) at 2 d.p.i",
+        title = "Top 25 of GO Enrichment for Upregulated Genes (AT1703 vs Col-0) at 2 d.p.i",
         showCategory = 25,
         label_format = 80
 ) + theme(
@@ -261,7 +261,7 @@ dotplot(sig_degs2_enrichFrame_up,
 dotplot(sig_degs2_enrichFrame_down,
         x = "GeneRatio",
         color = "p.adjust",
-        title = "Top 25 of GO Enrichment for Downregulated Genes (Col-0 vs AT1703) at 2 d.p.i",
+        title = "Top 25 of GO Enrichment for Downregulated Genes (AT1703 vs Col-0) at 2 d.p.i",
         showCategory = 25,
         label_format = 80
 ) + theme(
