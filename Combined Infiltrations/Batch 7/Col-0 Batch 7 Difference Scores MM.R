@@ -20,26 +20,26 @@ sapply(disease_scores, function(x) length(unique(x)))
 
 #Complete Model
 #Dropped (1|Fungus gnats)
-lmer1a <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage + PS..0.dpi.Leaf.Damage + (1|Block), data = disease_scores)
+lmer1a <- lmer(Leaf.Damage.Difference ~ Treatment * Agro..5.dpi.Leaf.Damage + PS..0.dpi.Leaf.Damage + (1|Block), data = disease_scores)
 
 summary(lmer1a)
 
 # Simpler Model (dropped PS..0.dpi.Leaf.Damage as a random effect)
 
-lmer1b <- lmer(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage + (1 | Block), data = disease_scores)
+lmer1b <- lmer(Leaf.Damage.Difference ~ Treatment * Agro..5.dpi.Leaf.Damage + (1 | Block), data = disease_scores)
 summary(lmer1b)
 
 anova(lmer1a, lmer1b)
 
 # Simpler Model (dropped Block)
-lmer1c <- lm(PS..5.dpi.Leaf.Damage ~ Treatment * Agro..5.dpi.Leaf.Damage, data = disease_scores)
+lmer1c <- lm(Leaf.Damage.Difference ~ Treatment * Agro..5.dpi.Leaf.Damage, data = disease_scores)
 summary(lmer1c)
 anova(lmer1a,lmer1c)
 
 # Results indicate that treatment does explain a significant amount of variance in leaf damage - so lmer1c is the best model
 
 # Simpler Model (dropped Agro..5.dpi.Leaf.Damage)
-lmer1d <- lm(PS..5.dpi.Leaf.Damage ~ Treatment, data = disease_scores)
+lmer1d <- lm(Leaf.Damage.Difference ~ Treatment, data = disease_scores)
 summary(lmer1d)
 anova(lmer1c,lmer1d)
 
@@ -53,7 +53,7 @@ summary(lmer1c)
 # but depending on the results of the post-hoc test, if one of the infected/agroinfiltrated treatments differs signficantly from the others then it/they are the reason for leaf degradation - ergo the stats will show if P.syringae presence is behind leaf degredation
 
 # Null model (hypothesis: neither factor is more closely associated with damage)
-model_null <- clm(as.ordered(PS..5.dpi.Leaf.Damage) ~ 1, 
+model_null <- clm(as.ordered(Leaf.Damage.Difference) ~ 1, 
                   data = disease_scores)
 
 # # Compare using likelihood ratio tests using a default P.value of < 0.05
@@ -78,33 +78,33 @@ B7_leaf_damage_cld <- cldList(p.value ~ contrast, data = tukey_results, threshol
 # # Change EHA15.I to EHA105.I
 B7_leaf_damage_cld$Group[B7_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 
-## PS..5.dpi.Chlorosis Complete Model
+## Chlorosis.Difference Complete Model
 # data processing
 chlorosis_scores <- na.omit(disease_data) #removes NA values
 chlorosis_scores <- subset(chlorosis_scores, select = -c(Random, Block.Rep))
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
-#removes Leaf Damage as this test is focusing on PS..5.dpi.Chlorosis
+#removes Leaf Damage as this test is focusing on Chlorosis.Difference
 #randomized block design calculations and the block rep (not important for this model)
 
-## Damage and PS..5.dpi.Chlorosis scores are RESPONSE variables so they will be modeled separately for the cld test
+## Damage and Chlorosis.Difference scores are RESPONSE variables so they will be modeled separately for the cld test
 sapply(chlorosis_scores, function(x) length(unique(x)))
 
-## PS..5.dpi.Chlorosis Complete Model (Dropped (1|Fungus.gnats))
+## Chlorosis.Difference Complete Model (Dropped (1|Fungus.gnats))
 # Simpler Model (dropped PS..0.dpi.Chlorosis)
-lmer2b <- lmer(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis + PS..0.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
+lmer2b <- lmer(Chlorosis.Difference ~ Treatment * Agro..5.dpi.Chlorosis + PS..0.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2b)
 
 # Simpler Model (dropped Infiltrated.with.P.syringae)
-lmer2c <- lmer(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
+lmer2c <- lmer(Chlorosis.Difference ~ Treatment * Agro..5.dpi.Chlorosis + (1 | Block), data = chlorosis_scores)
 summary(lmer2c)
 
 anova(lmer2b,lmer2c)
 
-lmer2d <- lm(PS..5.dpi.Chlorosis ~ Treatment * Agro..5.dpi.Chlorosis, data = chlorosis_scores)
+lmer2d <- lm(Chlorosis.Difference ~ Treatment * Agro..5.dpi.Chlorosis, data = chlorosis_scores)
 summary(lmer2d)
 anova(lmer2c,lmer2d)
 
-lmer2e <- lm(PS..5.dpi.Chlorosis ~ Treatment, data = chlorosis_scores)
+lmer2e <- lm(Chlorosis.Difference ~ Treatment, data = chlorosis_scores)
 summary(lmer2e)
 anova(lmer2d,lmer2e)
 #results
