@@ -85,7 +85,7 @@ for(i in 1:x){
 LD.Averages <- LD.Averages %>%
   arrange(Treatments)
 
-disease_treatments_cld <- disease_treatments_cld %>%
+disease_treatments_cld <- B1_leaf_damage_cld %>%
   arrange(`Group`)
 
 LD.Averages <- cbind(LD.Averages, disease_treatments_cld$Letter)
@@ -161,9 +161,9 @@ library(reshape2)
 
 
 # add cld letters to LD.averages
-# remove Ctrl-HP from the cld list
-chlorosis_cld <- as.data.frame(chlorosis_cld)
-chlorosis_cld <- chlorosis_cld %>% slice(-1)
+
+chlorosis_cld <- as.data.frame(B1_chlorosis_cld)
+
 
 Chlorosis.Averages <- Chlorosis.Averages %>%
   arrange(Treatments)

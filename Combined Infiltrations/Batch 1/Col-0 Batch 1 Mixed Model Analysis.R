@@ -138,6 +138,8 @@ B1_leaf_damage_cld$Group[B1_leaf_damage_cld$Group == "EHA15.I"] <- "EHA105.I"
 chlorosis_scores <- na.omit(disease_scores) #removes NA values
 chlorosis_scores <- subset(disease_scores, select = -c(Random, Block.Rep)) 
 chlorosis_scores$Treatment <- gsub("-", ".", chlorosis_scores$Treatment)
+chlorosis_scores <- subset(chlorosis_scores, Treatment != "Ctrl.HP.I")
+
 #removes Leaf Damage as this test is focusing on X5.dpi.Chlorosis
 #randomized block design calculations and the block rep (not important for this model)
 
