@@ -105,7 +105,7 @@ LD.Averages$Treatments <- factor(LD.Averages$Treatments)
 #ggplot needs a character vector for axes values but directly converting Treatments to a factor causes ggplot to interpret Treatments as one value
 # so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
 # Plot +
-LD_plot <- ggplot(LD.Averages, aes(x = Treatments, y = `Leaf Damage Averages`, fill = Treatments)) +
+LD_plot <- ggplot(damage_scores, aes(x = Treatment, y = `Leaf Damage Averages`, fill = Treatments)) +
   geom_boxplot(color = "black") +
   geom_errorbar(aes(ymin = `Leaf Damage Averages` - SE, ymax = `Leaf Damage Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Leaf Damage Averages` + SE + 1), size = 5) +
@@ -175,7 +175,7 @@ Chlorosis.Averages <- cbind(Chlorosis.Averages, chlorosis_cld$Letter)
 column_names <- c("Treatments", "Chlorosis Averages", "SE", "CLD")
 colnames(Chlorosis.Averages) <- column_names
 
-cl_treatment_counts <- table(Chlorosis_Assay$Treatment)
+
 
 # Plot with CLD labels
 # To make sure ggplot2 treats the treatments in the correct order and discrete categories, convert it to factor like this:
@@ -185,7 +185,7 @@ Chlorosis.Averages$Treatments <- factor(Chlorosis.Averages$Treatments)
 # so the column needs to be converted into characters data type first and then converted to a factor - making Treatments a character vector
 
 # Plot +
-CL_plot <- ggplot(Chlorosis.Averages, aes(x = Treatments, y = `Chlorosis Averages`, fill = Treatments)) +
+CL_plot <- ggplot(chlorosis_scores, aes(x = Treatment, y = `Chlorosis Averages`, fill = Treatments)) +
   geom_boxplot(color = "black") +
   geom_errorbar(aes(ymin = `Chlorosis Averages` - SE, ymax = `Chlorosis Averages` + SE), width = 0.2) +
   geom_text(aes(label = CLD, y = `Chlorosis Averages` + SE + 1), size = 5) +
