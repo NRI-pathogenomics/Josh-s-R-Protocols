@@ -86,7 +86,12 @@ Rep_Count_B7
 B1_leaf_damage_cld
 B1_leaf_damage_summary <- Batch_1 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(X5.dpi.Leaf.Damage)) %>%
+  summarise(
+    Average = mean(X5.dpi.Leaf.Damage, na.rm = TRUE),
+    SE = sd(X5.dpi.Leaf.Damage, na.rm = TRUE) / sqrt(n()),
+    Max = max(X5.dpi.Leaf.Damage, na.rm = TRUE),
+    Min = min(X5.dpi.Leaf.Damage, na.rm = TRUE)
+  ) %>%
   left_join(B1_leaf_damage_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_1, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = Treatment)) +
@@ -105,7 +110,12 @@ print(box_audps)
 B1_chlorosis_cld
 B1_chlorosis_summary <- Batch_1 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(Chlorosis)) %>%
+  summarise(
+    Average = mean(Chlorosis, na.rm = TRUE),
+    SE = sd(Chlorosis, na.rm = TRUE) / sqrt(n()),
+    Max = max(Chlorosis, na.rm = TRUE),
+    Min = min(Chlorosis, na.rm = TRUE)
+  ) %>%
   left_join(B1_chlorosis_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_1, aes(x = Treatment, y = Chlorosis, fill = Treatment)) +
@@ -124,10 +134,15 @@ print(box_audps)
 #Batch 2
 # Leaf Damage
 B2_leaf_damage_cld
-B2_leaf_damage_summary <- Batch_2 %>%
+B2_chlorosis_summary <- Batch_2 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(X5.dpi.Leaf.Damage)) %>%
-  left_join(B2_leaf_damage_cld, by = c("Treatment" = "Group"))
+  summarise(
+    Average = mean(X5.dpi.Leaf.Damage, na.rm = TRUE),
+    SE = sd(X5.dpi.Leaf.Damage, na.rm = TRUE) / sqrt(n()),
+    Max = max(X5.dpi.Leaf.Damage, na.rm = TRUE),
+    Min = min(X5.dpi.Leaf.Damage, na.rm = TRUE)
+  ) %>%
+  left_join(B2_chlorosis_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = Treatment)) +
   geom_boxplot() +
@@ -145,7 +160,12 @@ print(box_audps)
 B2_chlorosis_cld
 B2_chlorosis_summary <- Batch_2 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(X5.dpi.Chlorosis)) %>%
+  summarise(
+    Average = mean(X5.dpi.Chlorosis, na.rm = TRUE),
+    SE = sd(X5.dpi.Chlorosis, na.rm = TRUE) / sqrt(n()),
+    Max = max(X5.dpi.Chlorosis, na.rm = TRUE),
+    Min = min(X5.dpi.Chlorosis, na.rm = TRUE)
+  ) %>%
   left_join(B2_chlorosis_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Chlorosis, fill = Treatment)) +
@@ -166,7 +186,12 @@ print(box_audps)
 B7_leaf_damage_cld
 B7_leaf_damage_summary <- Batch_7 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(Leaf.Damage.Difference)) %>%
+  summarise(
+    Average = mean(Leaf.Damage.Difference, na.rm = TRUE),
+    SE = sd(Leaf.Damage.Difference, na.rm = TRUE) / sqrt(n()),
+    Max = max(Leaf.Damage.Difference, na.rm = TRUE),
+    Min = min(Leaf.Damage.Difference, na.rm = TRUE)
+  ) %>%
   left_join(B7_leaf_damage_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_7, aes(x = Treatment, y = Leaf.Damage.Difference, fill = Treatment)) +
@@ -186,7 +211,12 @@ print(box_audps)
 B7_chlorosis_cld
 B7_chlorosis_summary <- Batch_7 %>%
   group_by(Treatment) %>%
-  summarise(Max = max(Chlorosis.Difference)) %>%
+  summarise(
+    Average = mean(Chlorosis.Difference, na.rm = TRUE),
+    SE = sd(Chlorosis.Difference, na.rm = TRUE) / sqrt(n()),
+    Max = max(Chlorosis.Difference, na.rm = TRUE),
+    Min = min(Chlorosis.Difference, na.rm = TRUE)
+  ) %>%
   left_join(B7_chlorosis_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_7, aes(x = Treatment, y = Chlorosis.Difference, fill = Treatment)) +
