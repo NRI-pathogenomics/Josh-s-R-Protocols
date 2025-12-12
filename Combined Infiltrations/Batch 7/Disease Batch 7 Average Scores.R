@@ -92,10 +92,10 @@ library(reshape2)
 LD.Averages <- LD.Averages %>%
   arrange(Treatments)
 
-leaf_damage_cld <- leaf_damage_cld %>%
+B7_leaf_damage_cld <- B7_leaf_damage_cld %>%
   arrange(`Group`)
 
-LD.Averages <- cbind(LD.Averages, leaf_damage_cld$Letter)
+LD.Averages <- cbind(LD.Averages, B7_leaf_damage_cld$Letter)
 column_names <- c("Treatments", "Leaf Damage Averages", "SE", "CLD")
 colnames(LD.Averages) <- column_names
 # Plot with CLD labels
