@@ -134,7 +134,7 @@ print(box_audps)
 #Batch 2
 # Leaf Damage
 B2_leaf_damage_cld
-B2_chlorosis_summary <- Batch_2 %>%
+B2_leaf_damage_summary <- Batch_2 %>%
   group_by(Treatment) %>%
   summarise(
     Average = mean(X5.dpi.Leaf.Damage, na.rm = TRUE),
@@ -142,7 +142,7 @@ B2_chlorosis_summary <- Batch_2 %>%
     Max = max(X5.dpi.Leaf.Damage, na.rm = TRUE),
     Min = min(X5.dpi.Leaf.Damage, na.rm = TRUE)
   ) %>%
-  left_join(B2_chlorosis_cld, by = c("Treatment" = "Group"))
+  left_join(B2_leaf_damage_cld, by = c("Treatment" = "Group"))
 
 box_audps <- ggplot(Batch_2, aes(x = Treatment, y = X5.dpi.Leaf.Damage, fill = Treatment)) +
   geom_boxplot() +
